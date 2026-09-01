@@ -17,7 +17,7 @@
   const navbar = document.getElementById('navbar');
   const handleScrollNav = () => {
     if (!navbar) return;
-    navbar.classList.toggle('scrolled', window.scrollY > 40);
+    navbar.classList.toggle('scrolled', window.scrollY > 30);
   };
   window.addEventListener('scroll', handleScrollNav, { passive: true });
   handleScrollNav();
@@ -38,6 +38,7 @@
       navToggle.setAttribute('aria-expanded', 'true');
     }
     document.body.classList.add('drawer-open');
+    initIcons();
   }
 
   function closeMobileDrawer() {
@@ -63,11 +64,17 @@
   }
 
   if (mobileNavClose) {
-    mobileNavClose.addEventListener('click', closeMobileDrawer);
+    mobileNavClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeMobileDrawer();
+    });
   }
 
   if (mobileNavBackdrop) {
-    mobileNavBackdrop.addEventListener('click', closeMobileDrawer);
+    mobileNavBackdrop.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeMobileDrawer();
+    });
   }
 
   // Close drawer when any mobile nav link is clicked
@@ -89,7 +96,7 @@
   const desktopLinks = document.querySelectorAll('.desktop-nav .nav-link');
 
   function updateActiveNav() {
-    const scrollPos = window.scrollY + 180;
+    const scrollPos = window.scrollY + 160;
     sections.forEach((section) => {
       const top = section.offsetTop;
       const height = section.offsetHeight;
@@ -124,7 +131,7 @@
         revealObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 
   animatedElements.forEach((el) => revealObserver.observe(el));
 
@@ -154,7 +161,7 @@
       requestAnimationFrame(runCounter);
       counterObserver.unobserve(el);
     });
-  }, { threshold: 0.4 });
+  }, { threshold: 0.3 });
 
   counters.forEach((c) => counterObserver.observe(c));
 
@@ -167,7 +174,7 @@
         skillObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.25 });
+  }, { threshold: 0.2 });
 
   skillBars.forEach((bar) => skillObserver.observe(bar));
 
@@ -175,7 +182,7 @@
   const backToTopBtn = document.getElementById('backToTop');
   if (backToTopBtn) {
     window.addEventListener('scroll', () => {
-      backToTopBtn.classList.toggle('visible', window.scrollY > 450);
+      backToTopBtn.classList.toggle('visible', window.scrollY > 400);
     }, { passive: true });
 
     backToTopBtn.addEventListener('click', () => {
@@ -192,15 +199,15 @@
     const initCanvas = () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
-      const count = Math.min(Math.floor((width * height) / 20000), 75);
+      const count = Math.min(Math.floor((width * height) / 22000), 70);
 
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.28,
-        vy: (Math.random() - 0.5) * 0.28,
-        r: Math.random() * 1.4 + 0.4,
-        alpha: Math.random() * 0.4 + 0.12
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        r: Math.random() * 1.3 + 0.4,
+        alpha: Math.random() * 0.38 + 0.12
       }));
     };
 
@@ -230,11 +237,11 @@
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 110) {
+          if (dist < 105) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(6, 182, 212, ${0.06 * (1 - dist / 110)})`;
+            ctx.strokeStyle = `rgba(6, 182, 212, ${0.055 * (1 - dist / 105)})`;
             ctx.stroke();
           }
         }
@@ -253,7 +260,10 @@
     });
   }
 
-  // Initial icon setup
-  document.addEventListener('DOMContentLoaded', initIcons);
+  // Initial execution
   initIcons();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initIcons);
+  }
+  window.addEventListener('load', initIcons);
 })();

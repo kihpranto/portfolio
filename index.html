@@ -11,6 +11,13 @@
   <!-- Lucide Premium Icons -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Critical Anti-FOUC & Drawer Fixed Geometry */
+    .mobile-nav-backdrop { position: fixed; inset: 0; z-index: 10000; opacity: 0; visibility: hidden; pointer-events: none; }
+    .mobile-nav-drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 10001; transform: translateX(100%); pointer-events: none; }
+    .mobile-nav-backdrop.active { opacity: 1; visibility: visible; pointer-events: auto; }
+    .mobile-nav-drawer.active { transform: translateX(0); pointer-events: auto; }
+  </style>
 </head>
 <body>
   <!-- Ambient Glowing Mesh Background Orbs -->
@@ -855,10 +862,5 @@
   </button>
 
   <script src="script.js"></script>
-  <script>
-    if (window.lucide) {
-      lucide.createIcons();
-    }
-  </script>
 </body>
 </html>
