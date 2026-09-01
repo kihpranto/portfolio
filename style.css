@@ -623,7 +623,7 @@ img, svg {
   border-left: 1px solid rgba(6, 182, 212, 0.25);
   box-shadow: -15px 0 50px rgba(0, 0, 0, 0.8), var(--glass-highlight);
   z-index: 10001;
-  display: flex;
+  display: none;
   flex-direction: column;
   transform: translateX(100%);
   transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1808,6 +1808,9 @@ img, svg {
   }
   .nav-cta {
     display: none;
+  }
+  .mobile-nav-drawer {
+    display: flex;
   }
 }
 
