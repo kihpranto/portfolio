@@ -1426,34 +1426,50 @@ img, svg {
 .sk-bars {
   display: flex;
   flex-direction: column;
-  gap: 13px;
+  gap: 16px;
 }
 
-.sk-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12.5px;
-  font-weight: 500;
-  color: #cbd5e1;
-  margin-bottom: 5px;
+.sk-bar {
+  margin-bottom: 2px;
 }
 
-.sk-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
+.sk-info, .bar-info {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 7px;
+  width: 100%;
 }
 
-.sk-pct {
-  color: var(--cyan);
-  font-weight: 700;
+.sk-label, .bar-name {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px;
+  flex: 1;
+  line-height: 1.4;
+  white-space: normal;
+}
+
+.sk-pct, .bar-pct {
+  display: inline-block !important;
+  color: var(--cyan) !important;
+  font-weight: 800 !important;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  flex-shrink: 0;
+  margin-left: auto;
+  text-align: right;
+  letter-spacing: 0.02em;
 }
 
 .bar-track {
   width: 100%;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.05);
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: var(--pill);
   overflow: hidden;
 }
@@ -1464,8 +1480,9 @@ img, svg {
   border-radius: var(--pill);
   width: 0;
   transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 0 8px rgba(6, 182, 212, 0.45);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
 }
+
 
 .comp-tags {
   display: flex;
