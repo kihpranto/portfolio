@@ -1826,7 +1826,7 @@ img, svg {
     border-radius: var(--rad-sm);
   }
   .logo-info {
-    display: none;
+    display: none !important;
   }
   .hero {
     padding: 85px 14px 35px;
@@ -1890,3 +1890,4 @@ img, svg {
     padding: 10px 12px;
   }
 }
+
