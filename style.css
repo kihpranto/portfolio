@@ -260,15 +260,69 @@ img {
   width: 100%;
   max-width: 1220px;
   border-radius: var(--border-radius-lg);
-  padding: 10px 20px;
+  padding: 12px 24px;
   transition: all var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated gradient border shimmer on the navbar */
+.navbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--border-radius-lg);
+  padding: 1px;
+  background: linear-gradient(
+    120deg,
+    transparent 25%,
+    rgba(6, 182, 212, 0.3) 40%,
+    rgba(59, 130, 246, 0.3) 50%,
+    rgba(139, 92, 246, 0.3) 60%,
+    transparent 75%
+  );
+  background-size: 250% 100%;
+  animation: navBorderShimmer 5s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes navBorderShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Inner glass glow aura */
+.navbar::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60%;
+  height: 120%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(6, 182, 212, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: navInnerPulse 6s ease-in-out infinite;
+}
+
+@keyframes navInnerPulse {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
 }
 
 .navbar.scrolled {
-  background: rgba(6, 9, 20, 0.88);
-  border-color: rgba(6, 182, 212, 0.25);
-  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(6, 182, 212, 0.12), var(--glass-highlight);
-  padding: 8px 18px;
+  background: rgba(6, 9, 20, 0.85);
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow:
+    0 18px 50px -12px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(6, 182, 212, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.12);
+  padding: 10px 22px;
 }
 
 .nav-container {
@@ -276,65 +330,94 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  position: relative;
+  z-index: 1;
 }
 
-/* Upgraded Tech Logo Badge */
+/* ——— KIH Logo Monogram with Spinning Ring ——— */
 .nav-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   cursor: pointer;
 }
 
 .logo-badge {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 14px;
-  background: rgba(6, 182, 212, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(6, 182, 212, 0.35);
-  border-radius: var(--border-radius-sm);
-  box-shadow: 0 0 16px rgba(6, 182, 212, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(6, 182, 212, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   transition: all var(--transition-smooth);
+  flex-shrink: 0;
 }
 
-.logo-bracket {
-  color: var(--accent-cyan);
+.logo-monogram {
+  position: relative;
+  z-index: 2;
   font-family: var(--font-mono);
-  font-weight: 700;
+  font-weight: 900;
   font-size: 16px;
-}
-
-.logo-code {
+  letter-spacing: 0.08em;
   color: #ffffff;
-  font-family: var(--font-mono);
-  font-weight: 800;
-  font-size: 16px;
-  letter-spacing: 0.06em;
-  margin: 0 2px;
+  text-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
+}
+
+.logo-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: var(--accent-cyan);
+  border-right-color: var(--accent-blue);
+  animation: logoSpin 4s linear infinite;
+  z-index: 1;
+}
+
+@keyframes logoSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .logo-glow {
   position: absolute;
-  inset: -1px;
-  border-radius: var(--border-radius-sm);
-  background: var(--gradient-primary);
-  opacity: 0;
-  z-index: -1;
-  transition: opacity var(--transition-fast);
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.25) 0%, transparent 70%);
+  opacity: 0.5;
+  z-index: 0;
+  animation: logoPulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes logoPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.15); }
 }
 
 .nav-logo:hover .logo-badge {
-  transform: translateY(-2px);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 25px rgba(6, 182, 212, 0.45);
+  transform: scale(1.08);
+  background: rgba(6, 182, 212, 0.12);
+}
+
+.nav-logo:hover .logo-ring {
+  animation-duration: 1.5s;
+  border-top-color: #38bdf8;
+  border-right-color: #8b5cf6;
 }
 
 .nav-logo:hover .logo-glow {
-  opacity: 0.3;
+  opacity: 1;
+  transform: scale(1.3);
+}
+
+.nav-logo:hover .logo-monogram {
+  text-shadow: 0 0 20px rgba(6, 182, 212, 0.9);
 }
 
 .logo-title-group {
@@ -1453,10 +1536,21 @@ img {
 }
 
 .footer-logo {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-monogram {
   font-family: var(--font-mono);
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: 0.1em;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
 }
 
 .footer-text {
