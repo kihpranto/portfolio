@@ -8,589 +8,374 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Premium Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Ambient Glowing Background Mesh Orbs -->
+  <!-- Ambient Glowing Orbs -->
   <div class="ambient-glows" aria-hidden="true">
     <div class="glow-orb orb-1"></div>
     <div class="glow-orb orb-2"></div>
     <div class="glow-orb orb-3"></div>
-    <div class="glow-orb orb-4"></div>
   </div>
-
-  <!-- Animated Background Particles Canvas -->
   <canvas id="particles" aria-hidden="true"></canvas>
 
-  <!-- Top Glassy Navigation -->
+  <!-- ═══ NAVIGATION ═══ -->
   <header class="header-wrapper">
-    <nav class="navbar glass-panel" id="navbar">
-      <div class="nav-container">
-        <!-- Upgraded Tech Logo Badge -->
-        <a href="#home" class="nav-logo" aria-label="Kazi Md Ikramul Hassan Home">
-          <div class="logo-badge">
-            <span class="logo-monogram">KIH</span>
-            <span class="logo-glow"></span>
+    <nav class="navbar glass-nav" id="navbar">
+      <div class="nav-inner">
+        <a href="#home" class="nav-logo">
+          <div class="logo-circle">
+            <span class="logo-text">KIH</span>
             <span class="logo-ring"></span>
+            <span class="logo-pulse"></span>
           </div>
-          <div class="logo-title-group">
+          <div class="logo-info">
             <span class="logo-name">Ikramul Hassan</span>
-            <span class="logo-tag">Business Analyst</span>
+            <span class="logo-role">Business Analyst</span>
           </div>
         </a>
-
-        <!-- Mobile Navigation Toggle -->
-        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
-
-        <!-- Navigation Links -->
         <ul class="nav-links" id="navLinks">
-          <li><a href="#home" class="nav-link active">Home</a></li>
-          <li><a href="#about" class="nav-link">About</a></li>
-          <li><a href="#experience" class="nav-link">Experience</a></li>
-          <li><a href="#projects" class="nav-link">Projects</a></li>
-          <li><a href="#skills" class="nav-link">Skills</a></li>
-          <li><a href="#education" class="nav-link">Education</a></li>
-          <li><a href="#contact" class="nav-link">Contact</a></li>
+          <li><a href="#home" class="nav-link active"><i data-lucide="home" class="nav-icon"></i>Home</a></li>
+          <li><a href="#about" class="nav-link"><i data-lucide="user" class="nav-icon"></i>About</a></li>
+          <li><a href="#experience" class="nav-link"><i data-lucide="briefcase" class="nav-icon"></i>Experience</a></li>
+          <li><a href="#projects" class="nav-link"><i data-lucide="folder-kanban" class="nav-icon"></i>Projects</a></li>
+          <li><a href="#skills" class="nav-link"><i data-lucide="cpu" class="nav-icon"></i>Skills</a></li>
+          <li><a href="#education" class="nav-link"><i data-lucide="graduation-cap" class="nav-icon"></i>Education</a></li>
+          <li><a href="#contact" class="nav-link"><i data-lucide="mail" class="nav-icon"></i>Contact</a></li>
         </ul>
-
-        <!-- Glass CTA Button -->
-        <a href="mailto:kihpranto@yahoo.com" class="nav-cta btn-glass-glow">
-          <span class="cta-shine"></span>
-          <span class="cta-text">✉️ Hire Me</span>
+        <a href="mailto:kihpranto@yahoo.com" class="nav-cta glass-btn-glow">
+          <i data-lucide="send" class="cta-icon"></i>
+          <span>Hire Me</span>
         </a>
       </div>
     </nav>
   </header>
 
-  <!-- Hero Section -->
+  <!-- ═══ HERO ═══ -->
   <section class="hero" id="home">
-    <div class="hero-container">
+    <div class="hero-grid container">
       <div class="hero-content">
         <div class="hero-badge glass-badge" data-animate="fade-up">
-          <span class="badge-dot"></span>
-          <span>AVAILABLE FOR OPPORTUNITIES</span>
+          <span class="pulse-dot"></span>
+          <span>Available for Opportunities</span>
         </div>
         <h1 class="hero-title" data-animate="fade-up" data-delay="100">
           Transforming Operations With
           <span class="gradient-text">Data Intelligence & Automation</span>
         </h1>
-        <p class="hero-description" data-animate="fade-up" data-delay="200">
+        <p class="hero-desc" data-animate="fade-up" data-delay="200">
           I'm <strong>Kazi Md Ikramul (Pranto) Hassan</strong> — an Executive Business Analyst with 5+ years building enterprise Power Platform solutions, interactive Power BI ecosystems, and automated data pipelines that drive measurable business impact.
         </p>
-        <div class="hero-actions" data-animate="fade-up" data-delay="300">
-          <a href="mailto:kihpranto@yahoo.com" class="btn btn-primary btn-glass-glow">
-            <span class="btn-icon">✉️</span> Get In Touch
+        <div class="hero-btns" data-animate="fade-up" data-delay="300">
+          <a href="mailto:kihpranto@yahoo.com" class="btn btn-primary glass-btn-glow">
+            <i data-lucide="mail"></i> Get In Touch
           </a>
           <a href="#projects" class="btn btn-ghost glass-btn">
-            <span class="btn-icon">🚀</span> View Projects
+            <i data-lucide="rocket"></i> View Projects
           </a>
         </div>
-        <div class="hero-stats glass-stats" data-animate="fade-up" data-delay="400">
-          <div class="stat">
-            <span class="stat-number" data-count="5">0</span><span class="stat-plus">+</span>
-            <span class="stat-label">Years Experience</span>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat">
-            <span class="stat-number" data-count="25">0</span><span class="stat-plus">+</span>
-            <span class="stat-label">Solutions Deployed</span>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat">
-            <span class="stat-number" data-count="100">0</span><span class="stat-plus">%</span>
-            <span class="stat-label">Data Traceability</span>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat">
-            <span class="stat-number" data-count="6">0</span>
-            <span class="stat-label">Departments Served</span>
-          </div>
+        <div class="hero-stats glass-card-sm" data-animate="fade-up" data-delay="400">
+          <div class="stat-item"><span class="stat-num" data-count="5">0</span><span class="stat-sym">+</span><span class="stat-lbl">Years Experience</span></div>
+          <div class="stat-sep"></div>
+          <div class="stat-item"><span class="stat-num" data-count="25">0</span><span class="stat-sym">+</span><span class="stat-lbl">Solutions Deployed</span></div>
+          <div class="stat-sep"></div>
+          <div class="stat-item"><span class="stat-num" data-count="100">0</span><span class="stat-sym">%</span><span class="stat-lbl">Data Traceability</span></div>
+          <div class="stat-sep"></div>
+          <div class="stat-item"><span class="stat-num" data-count="6">0</span><span class="stat-lbl">Departments Served</span></div>
         </div>
       </div>
-      <div class="hero-card" data-animate="fade-left" data-delay="200">
-        <div class="card-glow"></div>
-        <div class="card-content glass-card">
-          <div class="card-avatar">
-            <div class="avatar-ring"></div>
-            <div class="avatar-text">KIH</div>
+      <div class="hero-card-wrap" data-animate="fade-left" data-delay="200">
+        <div class="hero-card glass-card">
+          <div class="hc-avatar">
+            <div class="hc-ring"></div>
+            <div class="hc-initials">KIH</div>
           </div>
-          <h3 class="card-name">Kazi Md Ikramul Hassan</h3>
-          <p class="card-role">Executive — Business Analyst</p>
-          <div class="card-details">
-            <div class="card-detail"><span class="detail-icon">🏢</span> Brandix Bangladesh Limited</div>
-            <div class="card-detail"><span class="detail-icon">📍</span> Cumilla, Bangladesh</div>
-            <div class="card-detail"><span class="detail-icon">✉️</span> kihpranto@yahoo.com</div>
-            <div class="card-detail"><span class="detail-icon">📞</span> +880 1832 961 609</div>
+          <h3 class="hc-name">Kazi Md Ikramul Hassan</h3>
+          <p class="hc-role">Executive — Business Analyst</p>
+          <div class="hc-details">
+            <div class="hc-row"><i data-lucide="building-2"></i>Brandix Bangladesh Limited</div>
+            <div class="hc-row"><i data-lucide="map-pin"></i>Cumilla, Bangladesh</div>
+            <div class="hc-row"><i data-lucide="mail"></i>kihpranto@yahoo.com</div>
+            <div class="hc-row"><i data-lucide="phone"></i>+880 1832 961 609</div>
           </div>
-          <div class="card-divider"></div>
-          <p class="card-stack-label">Core Stack</p>
-          <div class="card-pills">
-            <span class="pill glass-pill">📊 Power BI</span>
-            <span class="pill glass-pill">📱 Power Apps</span>
-            <span class="pill glass-pill">⚡ Power Automate</span>
-            <span class="pill glass-pill">🗃️ SQL</span>
-            <span class="pill glass-pill">🐍 Python</span>
-            <span class="pill glass-pill">📈 Excel & VBA</span>
+          <hr class="hc-divider">
+          <p class="hc-stack-label">Core Stack</p>
+          <div class="hc-pills">
+            <span class="pill glass-pill"><i data-lucide="bar-chart-3"></i>Power BI</span>
+            <span class="pill glass-pill"><i data-lucide="smartphone"></i>Power Apps</span>
+            <span class="pill glass-pill"><i data-lucide="zap"></i>Power Automate</span>
+            <span class="pill glass-pill"><i data-lucide="database"></i>SQL</span>
+            <span class="pill glass-pill"><i data-lucide="code-2"></i>Python</span>
+            <span class="pill glass-pill"><i data-lucide="table-2"></i>Excel & VBA</span>
           </div>
         </div>
       </div>
     </div>
-    <div class="hero-scroll-indicator">
-      <span>Scroll to explore</span>
-      <div class="scroll-line"></div>
-    </div>
+    <div class="scroll-indicator"><span>Scroll</span><div class="scroll-bar"></div></div>
   </section>
 
-  <!-- About Section -->
+  <!-- ═══ ABOUT ═══ -->
   <section class="section section-alt" id="about">
     <div class="container">
-      <div class="section-header" data-animate="fade-up">
-        <span class="section-badge glass-badge">About Me</span>
-        <h2 class="section-title">Who I Am</h2>
-        <p class="section-subtitle">A snapshot of my professional identity and what drives me.</p>
-      </div>
+      <header class="sec-header" data-animate="fade-up">
+        <span class="sec-badge glass-badge"><i data-lucide="user"></i>About Me</span>
+        <h2 class="sec-title">Who I Am</h2>
+        <p class="sec-sub">A snapshot of my professional identity and what drives me.</p>
+      </header>
       <div class="about-grid" data-animate="fade-up" data-delay="100">
         <div class="about-text glass-card">
           <p>I'm an <strong>Executive Business Analyst & MIS Professional</strong> with a passion for transforming complex operational challenges into elegant, data-driven digital solutions.</p>
-          <p>Over the past 5+ years, I've worked across <strong>manufacturing, consumer electronics, and hospitality</strong> industries — designing enterprise-grade Power Platform applications, building real-time BI ecosystems, and automating workflows that have eliminated manual bottlenecks and paper-based processes.</p>
-          <p>My approach combines <strong>deep technical proficiency</strong> in Power BI (DAX, Power Query, Star Schema modeling), Power Apps (Canvas with multi-tier RBAC), Power Automate, SQL, Python, and VBA with a <strong>strategic mindset</strong> focused on cross-functional collaboration and measurable ROI.</p>
+          <p>Over the past 5+ years, I've worked across <strong>manufacturing, consumer electronics, and hospitality</strong> — designing enterprise-grade Power Platform applications, building real-time BI ecosystems, and automating workflows.</p>
+          <p>My approach combines <strong>deep technical proficiency</strong> in Power BI (DAX, Power Query, Star Schema modeling), Power Apps (Canvas with multi-tier RBAC), Power Automate, SQL, Python, and VBA with a <strong>strategic mindset</strong> focused on measurable ROI.</p>
           <p>Currently at <strong>Brandix Bangladesh Limited</strong>, I architect digital systems spanning Production, IE, QA, HR, Finance & IT — serving as a bridge between business needs and technology solutions.</p>
         </div>
         <div class="about-highlights">
-          <div class="highlight-card glass-card">
-            <span class="highlight-icon">🎯</span>
-            <h4>Mission</h4>
-            <p>Empower organizations with intelligent data systems that drive operational excellence and informed decision-making.</p>
-          </div>
-          <div class="highlight-card glass-card">
-            <span class="highlight-icon">💡</span>
-            <h4>Philosophy</h4>
-            <p>Every manual process is an automation opportunity. Every spreadsheet is a dashboard waiting to happen.</p>
-          </div>
-          <div class="highlight-card glass-card">
-            <span class="highlight-icon">🌍</span>
-            <h4>Impact</h4>
-            <p>100% data traceability, 70% faster request turnaround, and zero paper-based processes in my current organization.</p>
-          </div>
+          <div class="highlight glass-card"><i data-lucide="target" class="hl-icon"></i><h4>Mission</h4><p>Empower organizations with intelligent data systems that drive operational excellence and informed decision-making.</p></div>
+          <div class="highlight glass-card"><i data-lucide="lightbulb" class="hl-icon"></i><h4>Philosophy</h4><p>Every manual process is an automation opportunity. Every spreadsheet is a dashboard waiting to happen.</p></div>
+          <div class="highlight glass-card"><i data-lucide="globe" class="hl-icon"></i><h4>Impact</h4><p>100% data traceability, 70% faster request turnaround, and zero paper-based processes.</p></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Experience Section -->
+  <!-- ═══ EXPERIENCE ═══ -->
   <section class="section" id="experience">
     <div class="container">
-      <div class="section-header" data-animate="fade-up">
-        <span class="section-badge glass-badge">Career Timeline</span>
-        <h2 class="section-title">Professional Experience</h2>
-        <p class="section-subtitle">Building digital operations from the ground up across industries.</p>
-      </div>
+      <header class="sec-header" data-animate="fade-up">
+        <span class="sec-badge glass-badge"><i data-lucide="briefcase"></i>Career Timeline</span>
+        <h2 class="sec-title">Professional Experience</h2>
+        <p class="sec-sub">Building digital operations from the ground up across industries.</p>
+      </header>
       <div class="timeline">
-        <!-- Job 1 -->
-        <div class="timeline-item" data-animate="fade-up">
-          <div class="timeline-marker">
-            <div class="marker-dot active"></div>
-            <div class="marker-line"></div>
-          </div>
-          <div class="exp-card glass-card">
-            <div class="exp-header">
-              <span class="exp-date glass-badge">April 2024 — Present</span>
-              <span class="exp-badge current">Current Role</span>
-            </div>
-            <h3 class="exp-role">Executive, Data Processing Business Analyst</h3>
-            <p class="exp-company">🏢 Brandix Bangladesh Limited — Manufacturing & Apparel Tech</p>
-            <ul class="exp-list">
-              <li>Architect cross-functional digital systems for Production, IE, QA, HR, Finance & IT departments</li>
-              <li>Design & deploy enterprise Power Apps with 6-tier role-based access control (Requester → Super User)</li>
-              <li>Build real-time Power BI dashboards with complex DAX for production, cutting, finishing & QA KPIs</li>
-              <li>Automate operational workflows (transport, approvals, overtime alerts) via Power Automate</li>
-              <li>Audit data quality & integrity across facility — ensuring 100% component traceability</li>
+        <div class="tl-item" data-animate="fade-up">
+          <div class="tl-marker"><div class="tl-dot active"></div><div class="tl-line"></div></div>
+          <div class="tl-card glass-card">
+            <div class="tl-head"><span class="tl-date glass-badge">April 2024 — Present</span><span class="tl-current">Current</span></div>
+            <h3 class="tl-role">Executive, Data Processing Business Analyst</h3>
+            <p class="tl-company"><i data-lucide="building-2"></i>Brandix Bangladesh Limited — Manufacturing & Apparel Tech</p>
+            <ul class="tl-list">
+              <li>Architect cross-functional digital systems for Production, IE, QA, HR, Finance & IT</li>
+              <li>Design & deploy enterprise Power Apps with 6-tier role-based access control</li>
+              <li>Build real-time Power BI dashboards with complex DAX for production KPIs</li>
+              <li>Automate workflows (transport, approvals, overtime alerts) via Power Automate</li>
+              <li>Audit data quality & integrity — ensuring 100% component traceability</li>
               <li>Serve as Regional Trainer on Advanced Excel for Brandix Bangladesh</li>
             </ul>
-            <div class="exp-tags">
-              <span class="tag glass-pill">Power Apps</span>
-              <span class="tag glass-pill">Power BI</span>
-              <span class="tag glass-pill">Power Automate</span>
-              <span class="tag glass-pill">DAX</span>
-              <span class="tag glass-pill">SQL</span>
-              <span class="tag glass-pill">VBA</span>
-              <span class="tag glass-pill">Office Script</span>
-            </div>
+            <div class="tl-tags"><span class="tag glass-pill">Power Apps</span><span class="tag glass-pill">Power BI</span><span class="tag glass-pill">Power Automate</span><span class="tag glass-pill">DAX</span><span class="tag glass-pill">SQL</span><span class="tag glass-pill">VBA</span></div>
           </div>
         </div>
-        <!-- Job 2 -->
-        <div class="timeline-item" data-animate="fade-up" data-delay="100">
-          <div class="timeline-marker">
-            <div class="marker-dot"></div>
-            <div class="marker-line"></div>
-          </div>
-          <div class="exp-card glass-card">
-            <div class="exp-header">
-              <span class="exp-date glass-badge">August 2021 — March 2024</span>
-            </div>
-            <h3 class="exp-role">Executive, MIS & Administration</h3>
-            <p class="exp-company">🏢 Halima Electronics — Consumer Electronics</p>
-            <ul class="exp-list">
-              <li>Built automated models for daily sales tracking, revenue collections & monthly commission calculations</li>
-              <li>Conducted regional sales movement & market demographic analyses for executive strategy</li>
-              <li>Analyzed debtor aging schedules to recover overdue balances & optimize corporate cash flows</li>
-              <li>Supervised day-to-day office administration & enforced company policy compliance</li>
+        <div class="tl-item" data-animate="fade-up" data-delay="100">
+          <div class="tl-marker"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-card glass-card">
+            <div class="tl-head"><span class="tl-date glass-badge">Aug 2021 — Mar 2024</span></div>
+            <h3 class="tl-role">Executive, MIS & Administration</h3>
+            <p class="tl-company"><i data-lucide="building-2"></i>Halima Electronics — Consumer Electronics</p>
+            <ul class="tl-list">
+              <li>Built automated models for daily sales tracking, revenue collections & commissions</li>
+              <li>Conducted regional sales movement & market demographic analyses</li>
+              <li>Analyzed debtor aging schedules to optimize corporate cash flows</li>
+              <li>Supervised day-to-day office administration & policy compliance</li>
             </ul>
-            <div class="exp-tags">
-              <span class="tag glass-pill">MIS Reporting</span>
-              <span class="tag glass-pill">Financial Modeling</span>
-              <span class="tag glass-pill">Advanced Excel</span>
-              <span class="tag glass-pill">Data Auditing</span>
-            </div>
+            <div class="tl-tags"><span class="tag glass-pill">MIS Reporting</span><span class="tag glass-pill">Financial Modeling</span><span class="tag glass-pill">Advanced Excel</span></div>
           </div>
         </div>
-        <!-- Job 3 -->
-        <div class="timeline-item" data-animate="fade-up" data-delay="200">
-          <div class="timeline-marker">
-            <div class="marker-dot"></div>
-          </div>
-          <div class="exp-card glass-card">
-            <div class="exp-header">
-              <span class="exp-date glass-badge">March 2021 — July 2021</span>
-            </div>
-            <h3 class="exp-role">Assistant, Finance & Accounts</h3>
-            <p class="exp-company">🏢 Hotel Grand Park, Barisal — Hospitality</p>
-            <ul class="exp-list">
+        <div class="tl-item" data-animate="fade-up" data-delay="200">
+          <div class="tl-marker"><div class="tl-dot"></div></div>
+          <div class="tl-card glass-card">
+            <div class="tl-head"><span class="tl-date glass-badge">Mar 2021 — Jul 2021</span></div>
+            <h3 class="tl-role">Assistant, Finance & Accounts</h3>
+            <p class="tl-company"><i data-lucide="building-2"></i>Hotel Grand Park, Barisal — Hospitality</p>
+            <ul class="tl-list">
               <li>Managed corporate accounts, daily cash flow & banking operations</li>
               <li>Verified vendor bills against procurement records for audit accuracy</li>
-              <li>Generated daily executive management reports, purchase invoices & payment vouchers</li>
+              <li>Generated daily executive management reports & payment vouchers</li>
             </ul>
-            <div class="exp-tags">
-              <span class="tag glass-pill">Financial Analysis</span>
-              <span class="tag glass-pill">Cash Flow</span>
-              <span class="tag glass-pill">Audit Controls</span>
-            </div>
+            <div class="tl-tags"><span class="tag glass-pill">Financial Analysis</span><span class="tag glass-pill">Cash Flow</span><span class="tag glass-pill">Audit Controls</span></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Projects Section -->
+  <!-- ═══ PROJECTS ═══ -->
   <section class="section section-alt" id="projects">
     <div class="container">
-      <div class="section-header" data-animate="fade-up">
-        <span class="section-badge glass-badge">Portfolio</span>
-        <h2 class="section-title">Key Projects & Implementations</h2>
-        <p class="section-subtitle">Enterprise-grade solutions engineered to eliminate manual bottlenecks.</p>
-      </div>
+      <header class="sec-header" data-animate="fade-up">
+        <span class="sec-badge glass-badge"><i data-lucide="folder-kanban"></i>Portfolio</span>
+        <h2 class="sec-title">Key Projects & Implementations</h2>
+        <p class="sec-sub">Enterprise-grade solutions engineered to eliminate manual bottlenecks.</p>
+      </header>
       <div class="projects-grid">
-        <div class="project-card glass-card" data-animate="fade-up">
-          <div class="project-icon">🛡️</div>
-          <span class="project-category">Power Apps — Enterprise Security</span>
-          <h3 class="project-title">Multi-Role Enterprise Canvas Application</h3>
-          <p class="project-desc">Architected a centralized Power App with dynamic 6-tier RBAC (Requester, HOD, Approver, Planner, Accounts, Super User). Each role sees tailored screens, data scopes, and approval capabilities.</p>
-          <div class="project-chips">
-            <span class="chip glass-chip">Power Apps</span>
-            <span class="chip glass-chip">Canvas Apps</span>
-            <span class="chip glass-chip">RBAC</span>
-            <span class="chip glass-chip">SharePoint</span>
-          </div>
+        <div class="proj-card glass-card" data-animate="fade-up">
+          <div class="proj-icon-wrap"><i data-lucide="shield-check"></i></div>
+          <span class="proj-cat">Power Apps — Enterprise Security</span>
+          <h3 class="proj-title">Multi-Role Enterprise Canvas Application</h3>
+          <p class="proj-desc">Architected a centralized Power App with dynamic 6-tier RBAC. Each role sees tailored screens, data scopes, and approval capabilities.</p>
+          <div class="proj-chips"><span class="chip glass-chip">Power Apps</span><span class="chip glass-chip">Canvas Apps</span><span class="chip glass-chip">RBAC</span><span class="chip glass-chip">SharePoint</span></div>
         </div>
-        <div class="project-card glass-card" data-animate="fade-up" data-delay="100">
-          <div class="project-icon">⚡</div>
-          <span class="project-category">Power Automate — Operations</span>
-          <h3 class="project-title">End-to-End Workflow Automation Engine</h3>
-          <p class="project-desc">Automated transport dispatch, requisition approval chains, and multi-stage validation. Reduced request turnaround by 70% and eliminated 100% of paper-based processes.</p>
-          <div class="project-chips">
-            <span class="chip glass-chip">Power Automate</span>
-            <span class="chip glass-chip">Approval Flows</span>
-            <span class="chip glass-chip">Adaptive Cards</span>
-            <span class="chip glass-chip">M365</span>
-          </div>
+        <div class="proj-card glass-card" data-animate="fade-up" data-delay="100">
+          <div class="proj-icon-wrap"><i data-lucide="workflow"></i></div>
+          <span class="proj-cat">Power Automate — Operations</span>
+          <h3 class="proj-title">End-to-End Workflow Automation Engine</h3>
+          <p class="proj-desc">Automated transport dispatch, approval chains, and multi-stage validation. Reduced turnaround by 70% and eliminated 100% paper processes.</p>
+          <div class="proj-chips"><span class="chip glass-chip">Power Automate</span><span class="chip glass-chip">Approval Flows</span><span class="chip glass-chip">M365</span></div>
         </div>
-        <div class="project-card glass-card" data-animate="fade-up" data-delay="200">
-          <div class="project-icon">📊</div>
-          <span class="project-category">Power BI — Analytics</span>
-          <h3 class="project-title">Production & Quality KPI Dashboard Suite</h3>
-          <p class="project-desc">Built executive dashboards consolidating cutting, assembly, finishing & QA telemetry. Advanced DAX time-intelligence measures with automated Power Query ETL refreshes.</p>
-          <div class="project-chips">
-            <span class="chip glass-chip">Power BI</span>
-            <span class="chip glass-chip">DAX</span>
-            <span class="chip glass-chip">Power Query</span>
-            <span class="chip glass-chip">Star Schema</span>
-          </div>
+        <div class="proj-card glass-card" data-animate="fade-up" data-delay="200">
+          <div class="proj-icon-wrap"><i data-lucide="bar-chart-3"></i></div>
+          <span class="proj-cat">Power BI — Analytics</span>
+          <h3 class="proj-title">Production & Quality KPI Dashboard Suite</h3>
+          <p class="proj-desc">Executive dashboards consolidating cutting, assembly, finishing & QA telemetry. Advanced DAX time-intelligence with automated ETL.</p>
+          <div class="proj-chips"><span class="chip glass-chip">Power BI</span><span class="chip glass-chip">DAX</span><span class="chip glass-chip">Power Query</span><span class="chip glass-chip">Star Schema</span></div>
         </div>
-        <div class="project-card glass-card" data-animate="fade-up">
-          <div class="project-icon">🔔</div>
-          <span class="project-category">Monitoring — Real-Time Alerts</span>
-          <h3 class="project-title">Overtime & SLA Breach Alert System</h3>
-          <p class="project-desc">Intelligent monitoring engine that tracks employee overtime and pending approvals. Triggers instant Teams/Outlook notifications with actionable cards when thresholds are breached.</p>
-          <div class="project-chips">
-            <span class="chip glass-chip">Power Automate</span>
-            <span class="chip glass-chip">Teams Webhooks</span>
-            <span class="chip glass-chip">Outlook API</span>
-          </div>
+        <div class="proj-card glass-card" data-animate="fade-up">
+          <div class="proj-icon-wrap"><i data-lucide="bell-ring"></i></div>
+          <span class="proj-cat">Monitoring — Real-Time Alerts</span>
+          <h3 class="proj-title">Overtime & SLA Breach Alert System</h3>
+          <p class="proj-desc">Intelligent monitoring engine tracking overtime and pending approvals. Instant Teams/Outlook notifications with actionable cards.</p>
+          <div class="proj-chips"><span class="chip glass-chip">Power Automate</span><span class="chip glass-chip">Teams Webhooks</span><span class="chip glass-chip">Outlook API</span></div>
         </div>
-        <div class="project-card glass-card" data-animate="fade-up" data-delay="100">
-          <div class="project-icon">🔄</div>
-          <span class="project-category">Data Engineering — ETL</span>
-          <h3 class="project-title">Single Source of Truth Data Pipeline</h3>
-          <p class="project-desc">Consolidated legacy spreadsheets, SharePoint lists & SQL tables into a normalized star-schema repository. Engineered scripts to eradicate data entry errors and duplication.</p>
-          <div class="project-chips">
-            <span class="chip glass-chip">SQL</span>
-            <span class="chip glass-chip">Python</span>
-            <span class="chip glass-chip">Office Script</span>
-            <span class="chip glass-chip">Data Modeling</span>
-          </div>
+        <div class="proj-card glass-card" data-animate="fade-up" data-delay="100">
+          <div class="proj-icon-wrap"><i data-lucide="database"></i></div>
+          <span class="proj-cat">Data Engineering — ETL</span>
+          <h3 class="proj-title">Single Source of Truth Data Pipeline</h3>
+          <p class="proj-desc">Consolidated legacy spreadsheets, SharePoint lists & SQL tables into a normalized star-schema repository.</p>
+          <div class="proj-chips"><span class="chip glass-chip">SQL</span><span class="chip glass-chip">Python</span><span class="chip glass-chip">Office Script</span><span class="chip glass-chip">Data Modeling</span></div>
         </div>
-        <div class="project-card glass-card" data-animate="fade-up" data-delay="200">
-          <div class="project-icon">📈</div>
-          <span class="project-category">Excel Automation — Finance</span>
-          <h3 class="project-title">Commission & Financial Reporting Engine</h3>
-          <p class="project-desc">VBA-powered financial models for regional distribution: automated monthly sales commissions, incentive calculations, and dynamic debtor aging dashboards.</p>
-          <div class="project-chips">
-            <span class="chip glass-chip">Excel VBA</span>
-            <span class="chip glass-chip">Financial Modeling</span>
-            <span class="chip glass-chip">Pivot Tables</span>
-          </div>
+        <div class="proj-card glass-card" data-animate="fade-up" data-delay="200">
+          <div class="proj-icon-wrap"><i data-lucide="trending-up"></i></div>
+          <span class="proj-cat">Excel Automation — Finance</span>
+          <h3 class="proj-title">Commission & Financial Reporting Engine</h3>
+          <p class="proj-desc">VBA-powered financial models: automated monthly sales commissions, incentive calculations, and dynamic debtor aging dashboards.</p>
+          <div class="proj-chips"><span class="chip glass-chip">Excel VBA</span><span class="chip glass-chip">Financial Modeling</span><span class="chip glass-chip">Pivot Tables</span></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Skills Section -->
+  <!-- ═══ SKILLS ═══ -->
   <section class="section" id="skills">
     <div class="container">
-      <div class="section-header" data-animate="fade-up">
-        <span class="section-badge glass-badge">Toolbox</span>
-        <h2 class="section-title">Technical Skills</h2>
-        <p class="section-subtitle">Technologies and methodologies I leverage daily to deliver results.</p>
-      </div>
+      <header class="sec-header" data-animate="fade-up">
+        <span class="sec-badge glass-badge"><i data-lucide="cpu"></i>Toolbox</span>
+        <h2 class="sec-title">Technical Skills</h2>
+        <p class="sec-sub">Technologies and methodologies I leverage daily to deliver results.</p>
+      </header>
       <div class="skills-grid" data-animate="fade-up" data-delay="100">
-        <!-- Data Analytics -->
-        <div class="skill-category glass-card">
-          <h3 class="skill-cat-title"><span>📊</span> Data Analytics & BI</h3>
-          <div class="skill-bars">
-            <div class="skill-bar">
-              <div class="skill-info"><span>Power BI (DAX, Power Query, Modeling)</span><span class="skill-pct">95%</span></div>
-              <div class="bar-track"><div class="bar-fill" data-width="95"></div></div>
-            </div>
-            <div class="skill-bar">
-              <div class="skill-info"><span>SQL (Queries, Joins, Views)</span><span class="skill-pct">90%</span></div>
-              <div class="bar-track"><div class="bar-fill" data-width="90"></div></div>
-            </div>
-            <div class="skill-bar">
-              <div class="skill-info"><span>Advanced Excel (VBA, Macros, Pivots)</span><span class="skill-pct">98%</span></div>
-              <div class="bar-track"><div class="bar-fill" data-width="98"></div></div>
-            </div>
-            <div class="skill-bar">
-              <div class="skill-info"><span>Google Sheets & Apps Script</span><span class="skill-pct">88%</span></div>
-              <div class="bar-track"><div class="bar-fill" data-width="88"></div></div>
-            </div>
+        <div class="skill-cat glass-card">
+          <h3 class="sk-title"><i data-lucide="bar-chart-3"></i>Data Analytics & BI</h3>
+          <div class="sk-bars">
+            <div class="sk-bar"><div class="sk-info"><span>Power BI (DAX, Power Query, Modeling)</span><span class="sk-pct">95%</span></div><div class="bar-track"><div class="bar-fill" data-width="95"></div></div></div>
+            <div class="sk-bar"><div class="sk-info"><span>SQL (Queries, Joins, Views)</span><span class="sk-pct">90%</span></div><div class="bar-track"><div class="bar-fill" data-width="90"></div></div></div>
+            <div class="sk-bar"><div class="sk-info"><span>Advanced Excel (VBA, Macros, Pivots)</span><span class="sk-pct">98%</span></div><div class="bar-track"><div class="bar-fill" data-width="98"></div></div></div>
+            <div class="sk-bar"><div class="sk-info"><span>Google Sheets & Apps Script</span><span class="sk-pct">88%</span></div><div class="bar-track"><div class="bar-fill" data-width="88"></div></div></div>
           </div>
         </div>
-        <!-- Low-Code -->
-        <div class="skill-category glass-card">
-          <h3 class="skill-cat-title"><span>⚙️</span> Low-Code & Automation</h3>
-          <div class="skill-bars">
-            <div class="skill-bar">
-              <div class="skill-info"><span>Power Apps (Canvas, RBAC)</span><span class="skill-pct">92%</span></div>
-              <div class="bar-track"><div class="bar-fill" data-width="92"></div></div>
-            </div>
-            <div class="skill-bar">
-              <div class="skill-info"><span>Power Automate (Workflows & Alerts)</span><span class="skill-pct">94%</span></div>
-              <div class="bar-track"><div class="bar-fill" data-width="94"></div></div>
-            </div>
-            <div class="skill-bar">
-              <div class="skill-info"><span>Office Script & Web Integration</span><span class="skill-pct">86%</span></div>
-              <div class="bar-track"><div class="bar-fill" data-width="86"></div></div>
-            </div>
-            <div class="skill-bar">
-              <div class="skill-info"><span>Python & Data Science Basics</span><span class="skill-pct">80%</span></div>
-              <div class="bar-track"><div class="bar-fill" data-width="80"></div></div>
-            </div>
+        <div class="skill-cat glass-card">
+          <h3 class="sk-title"><i data-lucide="settings"></i>Low-Code & Automation</h3>
+          <div class="sk-bars">
+            <div class="sk-bar"><div class="sk-info"><span>Power Apps (Canvas, RBAC)</span><span class="sk-pct">92%</span></div><div class="bar-track"><div class="bar-fill" data-width="92"></div></div></div>
+            <div class="sk-bar"><div class="sk-info"><span>Power Automate (Workflows & Alerts)</span><span class="sk-pct">94%</span></div><div class="bar-track"><div class="bar-fill" data-width="94"></div></div></div>
+            <div class="sk-bar"><div class="sk-info"><span>Office Script & Web Integration</span><span class="sk-pct">86%</span></div><div class="bar-track"><div class="bar-fill" data-width="86"></div></div></div>
+            <div class="sk-bar"><div class="sk-info"><span>Python & Data Science Basics</span><span class="sk-pct">80%</span></div><div class="bar-track"><div class="bar-fill" data-width="80"></div></div></div>
           </div>
         </div>
-        <!-- Core Competencies -->
-        <div class="skill-category full-width glass-card">
-          <h3 class="skill-cat-title"><span>🎯</span> Core Competencies</h3>
-          <div class="competency-tags">
-            <span class="comp-tag glass-pill">✅ MIS Executive Reporting</span>
-            <span class="comp-tag glass-pill">🔄 Process Automation</span>
-            <span class="comp-tag glass-pill">📋 Data Validation & Auditing</span>
-            <span class="comp-tag glass-pill">📊 KPI Monitoring & Dashboards</span>
-            <span class="comp-tag glass-pill">👥 Cross-Functional Leadership</span>
-            <span class="comp-tag glass-pill">🎓 Systems Onboarding & Training</span>
-            <span class="comp-tag glass-pill">💰 Debtor Aging Analysis</span>
-            <span class="comp-tag glass-pill">📐 Business Requirement Mapping</span>
-            <span class="comp-tag glass-pill">🔐 RBAC & Access Management</span>
-            <span class="comp-tag glass-pill">📦 ETL Pipeline Design</span>
+        <div class="skill-cat full-w glass-card">
+          <h3 class="sk-title"><i data-lucide="target"></i>Core Competencies</h3>
+          <div class="comp-tags">
+            <span class="comp glass-pill"><i data-lucide="file-text"></i>MIS Executive Reporting</span>
+            <span class="comp glass-pill"><i data-lucide="repeat"></i>Process Automation</span>
+            <span class="comp glass-pill"><i data-lucide="clipboard-check"></i>Data Validation & Auditing</span>
+            <span class="comp glass-pill"><i data-lucide="activity"></i>KPI Monitoring & Dashboards</span>
+            <span class="comp glass-pill"><i data-lucide="users"></i>Cross-Functional Leadership</span>
+            <span class="comp glass-pill"><i data-lucide="book-open"></i>Systems Onboarding & Training</span>
+            <span class="comp glass-pill"><i data-lucide="wallet"></i>Debtor Aging Analysis</span>
+            <span class="comp glass-pill"><i data-lucide="layout"></i>Business Requirement Mapping</span>
+            <span class="comp glass-pill"><i data-lucide="lock"></i>RBAC & Access Management</span>
+            <span class="comp glass-pill"><i data-lucide="git-branch"></i>ETL Pipeline Design</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Education Section -->
+  <!-- ═══ EDUCATION ═══ -->
   <section class="section section-alt" id="education">
     <div class="container">
-      <div class="section-header" data-animate="fade-up">
-        <span class="section-badge glass-badge">Qualifications</span>
-        <h2 class="section-title">Education & Certifications</h2>
-        <p class="section-subtitle">Academic credentials, professional certifications, and leadership.</p>
-      </div>
+      <header class="sec-header" data-animate="fade-up">
+        <span class="sec-badge glass-badge"><i data-lucide="graduation-cap"></i>Qualifications</span>
+        <h2 class="sec-title">Education & Certifications</h2>
+        <p class="sec-sub">Academic credentials, professional certifications, and leadership.</p>
+      </header>
       <div class="edu-grid" data-animate="fade-up" data-delay="100">
-        <!-- Education -->
         <div class="edu-card glass-card">
-          <h3 class="edu-card-title"><span>🎓</span> Education</h3>
+          <h3 class="edu-title"><i data-lucide="graduation-cap"></i>Education</h3>
           <div class="edu-timeline">
-            <div class="edu-item">
-              <div class="edu-dot primary"></div>
-              <div class="edu-content">
-                <span class="edu-year glass-badge">Batch-21</span>
-                <h4>PGD in Human Resource Management</h4>
-                <p>Academy of Business Professionals (ABP)</p>
-              </div>
-            </div>
-            <div class="edu-item">
-              <div class="edu-dot secondary"></div>
-              <div class="edu-content">
-                <span class="edu-year glass-badge">Graduated 2020</span>
-                <h4>BBA — Major in Management</h4>
-                <p>National University, Bangladesh</p>
-              </div>
-            </div>
+            <div class="edu-item"><div class="edu-dot cyan"></div><div class="edu-body"><span class="edu-year glass-badge">Batch-21</span><h4>PGD in Human Resource Management</h4><p>Academy of Business Professionals (ABP)</p></div></div>
+            <div class="edu-item"><div class="edu-dot blue"></div><div class="edu-body"><span class="edu-year glass-badge">Graduated 2020</span><h4>BBA — Major in Management</h4><p>National University, Bangladesh</p></div></div>
           </div>
         </div>
-        <!-- Certifications -->
         <div class="edu-card glass-card">
-          <h3 class="edu-card-title"><span>🏅</span> Certifications & Training</h3>
+          <h3 class="edu-title"><i data-lucide="award"></i>Certifications & Training</h3>
           <div class="cert-list">
-            <div class="cert-item highlight glass-card">
-              <span class="cert-icon">🎓</span>
-              <div>
-                <h4>Trainer, Executive Skill Dept — Excel</h4>
-                <p>Brandix Bangladesh Region (2026–Present)</p>
-              </div>
-            </div>
-            <div class="cert-item glass-card">
-              <span class="cert-icon">🧠</span>
-              <div>
-                <h4>Agentic AI for Organizations</h4>
-                <p>Brandix Digital Operation</p>
-              </div>
-            </div>
-            <div class="cert-item glass-card">
-              <span class="cert-icon">📊</span>
-              <div>
-                <h4>Microsoft Power BI for Professionals</h4>
-                <p>Ostad</p>
-              </div>
-            </div>
-            <div class="cert-item glass-card">
-              <span class="cert-icon">🐍</span>
-              <div>
-                <h4>Data Science: Python & ML</h4>
-                <p>Ostad</p>
-              </div>
-            </div>
-            <div class="cert-item glass-card">
-              <span class="cert-icon">🎨</span>
-              <div>
-                <h4>Adobe Creative Suite</h4>
-                <p>ICT Division — Learning & Earning</p>
-              </div>
-            </div>
+            <div class="cert-item highlight glass-card"><i data-lucide="book-open" class="cert-ic"></i><div><h4>Trainer, Executive Skill Dept — Excel</h4><p>Brandix Bangladesh Region (2026–Present)</p></div></div>
+            <div class="cert-item glass-card"><i data-lucide="brain" class="cert-ic"></i><div><h4>Agentic AI for Organizations</h4><p>Brandix Digital Operation</p></div></div>
+            <div class="cert-item glass-card"><i data-lucide="bar-chart-3" class="cert-ic"></i><div><h4>Microsoft Power BI for Professionals</h4><p>Ostad</p></div></div>
+            <div class="cert-item glass-card"><i data-lucide="code-2" class="cert-ic"></i><div><h4>Data Science: Python & ML</h4><p>Ostad</p></div></div>
+            <div class="cert-item glass-card"><i data-lucide="palette" class="cert-ic"></i><div><h4>Adobe Creative Suite</h4><p>ICT Division — Learning & Earning</p></div></div>
           </div>
         </div>
-        <!-- Leadership -->
-        <div class="edu-card full-width glass-card">
-          <h3 class="edu-card-title"><span>🏅</span> Leadership & Volunteer</h3>
-          <div class="leadership-grid">
-            <div class="leader-item glass-card">
-              <h4>Deputy Office Secretary</h4>
-              <p>Bangladesh Youth Cadets Forum (National)</p>
-              <span class="leader-badge glass-badge">2022–2024</span>
-            </div>
-            <div class="leader-item glass-card">
-              <h4>Finance Secretary</h4>
-              <p>Bangladesh Youth Cadets Forum (Comilla)</p>
-              <span class="leader-badge glass-badge">2019–2023</span>
-            </div>
-            <div class="leader-item glass-card">
-              <h4>Ex-Cadet Sergeant</h4>
-              <p>Bangladesh National Cadet Corps (BNCC)</p>
-              <span class="leader-badge glass-badge">2013–2015</span>
-            </div>
-            <div class="leader-item glass-card">
-              <h4>Certified Workshops</h4>
-              <p>Fire Safety (FSCD) & Illustration (ICT)</p>
-              <span class="leader-badge glass-badge">2019–2020</span>
-            </div>
+        <div class="edu-card full-w glass-card">
+          <h3 class="edu-title"><i data-lucide="award"></i>Leadership & Volunteer</h3>
+          <div class="lead-grid">
+            <div class="lead-item glass-card"><h4>Deputy Office Secretary</h4><p>Bangladesh Youth Cadets Forum (National)</p><span class="lead-badge glass-badge">2022–2024</span></div>
+            <div class="lead-item glass-card"><h4>Finance Secretary</h4><p>Bangladesh Youth Cadets Forum (Comilla)</p><span class="lead-badge glass-badge">2019–2023</span></div>
+            <div class="lead-item glass-card"><h4>Ex-Cadet Sergeant</h4><p>Bangladesh National Cadet Corps (BNCC)</p><span class="lead-badge glass-badge">2013–2015</span></div>
+            <div class="lead-item glass-card"><h4>Certified Workshops</h4><p>Fire Safety (FSCD) & Illustration (ICT)</p><span class="lead-badge glass-badge">2019–2020</span></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section class="section contact-section" id="contact">
+  <!-- ═══ CONTACT ═══ -->
+  <section class="section" id="contact">
     <div class="container">
-      <div class="section-header" data-animate="fade-up">
-        <span class="section-badge glass-badge">Connect</span>
-        <h2 class="section-title">Let's Build Something Exceptional</h2>
-        <p class="section-subtitle">Whether it's automated workflows, Power BI dashboards, or enterprise apps — I'm ready to help transform your operations.</p>
-      </div>
+      <header class="sec-header" data-animate="fade-up">
+        <span class="sec-badge glass-badge"><i data-lucide="mail"></i>Connect</span>
+        <h2 class="sec-title">Let's Build Something Exceptional</h2>
+        <p class="sec-sub">Whether it's automated workflows, Power BI dashboards, or enterprise apps — I'm ready to help.</p>
+      </header>
       <div class="contact-grid" data-animate="fade-up" data-delay="100">
-        <a href="mailto:kihpranto@yahoo.com" class="contact-card glass-card">
-          <span class="contact-icon">✉️</span>
-          <h4>Email</h4>
-          <p>kihpranto@yahoo.com</p>
-        </a>
-        <a href="tel:+8801832961609" class="contact-card glass-card">
-          <span class="contact-icon">📞</span>
-          <h4>Phone</h4>
-          <p>+880 1832 961 609</p>
-        </a>
-        <div class="contact-card glass-card">
-          <span class="contact-icon">📍</span>
-          <h4>Location</h4>
-          <p>Cumilla, Bangladesh</p>
-        </div>
-        <a href="tel:+8801711160763" class="contact-card glass-card">
-          <span class="contact-icon">📱</span>
-          <h4>Alt Phone</h4>
-          <p>+880 1711 160 763</p>
-        </a>
+        <a href="mailto:kihpranto@yahoo.com" class="contact-card glass-card"><i data-lucide="mail" class="cc-icon"></i><h4>Email</h4><p>kihpranto@yahoo.com</p></a>
+        <a href="tel:+8801832961609" class="contact-card glass-card"><i data-lucide="phone" class="cc-icon"></i><h4>Phone</h4><p>+880 1832 961 609</p></a>
+        <div class="contact-card glass-card"><i data-lucide="map-pin" class="cc-icon"></i><h4>Location</h4><p>Cumilla, Bangladesh</p></div>
+        <a href="tel:+8801711160763" class="contact-card glass-card"><i data-lucide="smartphone" class="cc-icon"></i><h4>Alt Phone</h4><p>+880 1711 160 763</p></a>
       </div>
       <div class="contact-cta" data-animate="fade-up" data-delay="200">
-        <a href="mailto:kihpranto@yahoo.com" class="btn btn-primary btn-lg btn-glass-glow">
-          <span class="btn-icon">✉️</span> Send Me an Email
-        </a>
+        <a href="mailto:kihpranto@yahoo.com" class="btn btn-primary btn-lg glass-btn-glow"><i data-lucide="send"></i> Send Me an Email</a>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ═══ FOOTER ═══ -->
   <footer class="footer glass-footer">
     <div class="container">
-      <div class="footer-content">
-        <div class="footer-logo">
-          <span class="footer-monogram">KIH</span>
-        </div>
-        <p class="footer-text">© 2026 Kazi Md Ikramul (Pranto) Hassan — Built with 💻 & ☕</p>
-        <div class="footer-links">
-          <a href="#home">Home</a>
-          <a href="#about">About</a>
-          <a href="#experience">Experience</a>
-          <a href="#projects">Projects</a>
-          <a href="#contact">Contact</a>
-        </div>
+      <div class="footer-inner">
+        <div class="footer-logo"><span class="footer-mono">KIH</span></div>
+        <p class="footer-copy">© 2026 Kazi Md Ikramul (Pranto) Hassan — Built with <i data-lucide="heart" style="width:14px;height:14px;color:var(--accent-cyan);vertical-align:middle"></i></p>
+        <div class="footer-links"><a href="#home">Home</a><a href="#about">About</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#contact">Contact</a></div>
       </div>
     </div>
   </footer>
 
-  <!-- Back to Top -->
-  <button class="back-to-top btn-glass-glow" id="backToTop" aria-label="Back to top">↑</button>
+  <button class="back-top glass-btn-glow" id="backToTop" aria-label="Back to top"><i data-lucide="arrow-up"></i></button>
 
   <script src="script.js"></script>
+  <script>lucide.createIcons();</script>
 </body>
 </html>
