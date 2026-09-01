@@ -1,152 +1,259 @@
-/* ═══════════════════════════════════════════
-   KIH Portfolio — Core Script
-   Glassmorphism 2.0 + Premium Icons
-   ═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════
+   KAZI MD IKRAMUL HASSAN (KIH) — CORE INTERACTIVE JAVASCRIPT
+   Mobile Drawer • Scroll-Spy • Counter Animation • Particles
+   ═══════════════════════════════════════════════════════════════ */
 
 (function () {
   'use strict';
 
-  /* ─── Scroll Navbar Glass ─── */
-  const navbar = document.getElementById('navbar');
-  const onScroll = () => {
-    if (!navbar) return;
-    navbar.classList.toggle('scrolled', window.scrollY > 50);
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  /* ─── Mobile Menu ─── */
-  const toggle = document.getElementById('navToggle');
-  const links = document.getElementById('navLinks');
-  if (toggle && links) {
-    toggle.addEventListener('click', () => {
-      toggle.classList.toggle('active');
-      links.classList.toggle('active');
-      document.body.style.overflow = links.classList.contains('active') ? 'hidden' : '';
-    });
-    links.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', () => {
-      toggle.classList.remove('active');
-      links.classList.remove('active');
-      document.body.style.overflow = '';
-    }));
+  /* ─── Initialize Lucide Icons ─── */
+  function initIcons() {
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      window.lucide.createIcons();
+    }
   }
 
-  /* ─── Active Link on Scroll ─── */
+  /* ─── Sticky Glass Navbar on Scroll ─── */
+  const navbar = document.getElementById('navbar');
+  const handleScrollNav = () => {
+    if (!navbar) return;
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  };
+  window.addEventListener('scroll', handleScrollNav, { passive: true });
+  handleScrollNav();
+
+  /* ─── Mobile Sidebar Navigation Drawer ─── */
+  const navToggle = document.getElementById('navToggle');
+  const mobileNavDrawer = document.getElementById('mobileNavDrawer');
+  const mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
+  const mobileNavClose = document.getElementById('mobileNavClose');
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+  function openMobileDrawer() {
+    if (!mobileNavDrawer || !mobileNavBackdrop) return;
+    mobileNavDrawer.classList.add('active');
+    mobileNavBackdrop.classList.add('active');
+    if (navToggle) {
+      navToggle.classList.add('active');
+      navToggle.setAttribute('aria-expanded', 'true');
+    }
+    document.body.classList.add('drawer-open');
+  }
+
+  function closeMobileDrawer() {
+    if (!mobileNavDrawer || !mobileNavBackdrop) return;
+    mobileNavDrawer.classList.remove('active');
+    mobileNavBackdrop.classList.remove('active');
+    if (navToggle) {
+      navToggle.classList.remove('active');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+    document.body.classList.remove('drawer-open');
+  }
+
+  if (navToggle) {
+    navToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (mobileNavDrawer && mobileNavDrawer.classList.contains('active')) {
+        closeMobileDrawer();
+      } else {
+        openMobileDrawer();
+      }
+    });
+  }
+
+  if (mobileNavClose) {
+    mobileNavClose.addEventListener('click', closeMobileDrawer);
+  }
+
+  if (mobileNavBackdrop) {
+    mobileNavBackdrop.addEventListener('click', closeMobileDrawer);
+  }
+
+  // Close drawer when any mobile nav link is clicked
+  mobileNavLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      closeMobileDrawer();
+    });
+  });
+
+  // Close on Escape key press
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMobileDrawer();
+    }
+  });
+
+  /* ─── Active Section Highlight (Scroll-Spy) ─── */
   const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-link');
-  const updateActive = () => {
-    const y = window.scrollY + 160;
-    sections.forEach(s => {
-      const t = s.offsetTop, h = s.offsetHeight, id = s.getAttribute('id');
-      if (y >= t && y < t + h) {
-        navLinks.forEach(l => {
-          l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+  const desktopLinks = document.querySelectorAll('.desktop-nav .nav-link');
+
+  function updateActiveNav() {
+    const scrollPos = window.scrollY + 180;
+    sections.forEach((section) => {
+      const top = section.offsetTop;
+      const height = section.offsetHeight;
+      const id = section.getAttribute('id');
+
+      if (scrollPos >= top && scrollPos < top + height) {
+        // Desktop nav update
+        desktopLinks.forEach((link) => {
+          const href = link.getAttribute('href');
+          link.classList.toggle('active', href === `#${id}`);
+        });
+
+        // Mobile nav update
+        mobileNavLinks.forEach((link) => {
+          const href = link.getAttribute('href');
+          link.classList.toggle('active', href === `#${id}`);
         });
       }
     });
-  };
-  window.addEventListener('scroll', updateActive, { passive: true });
+  }
+  window.addEventListener('scroll', updateActiveNav, { passive: true });
 
   /* ─── Scroll Reveal Animations ─── */
-  const animEls = document.querySelectorAll('[data-animate]');
-  const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const delay = parseInt(e.target.dataset.delay || '0');
-        setTimeout(() => e.target.classList.add('visible'), delay);
-        revealObs.unobserve(e.target);
+  const animatedElements = document.querySelectorAll('[data-animate]');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const delay = parseInt(entry.target.dataset.delay || '0', 10);
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, delay);
+        revealObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  animEls.forEach(el => revealObs.observe(el));
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-  /* ─── Stat Counter ─── */
+  animatedElements.forEach((el) => revealObserver.observe(el));
+
+  /* ─── Stat Counter Increment Animation ─── */
   const counters = document.querySelectorAll('[data-count]');
-  const counterObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const el = e.target;
-      const end = parseInt(el.dataset.count);
-      const dur = 1800;
-      const start = performance.now();
-      const run = (now) => {
-        const p = Math.min((now - start) / dur, 1);
-        const ease = 1 - Math.pow(1 - p, 4);
-        el.textContent = Math.round(ease * end);
-        if (p < 1) requestAnimationFrame(run);
-      };
-      requestAnimationFrame(run);
-      counterObs.unobserve(el);
-    });
-  }, { threshold: 0.5 });
-  counters.forEach(c => counterObs.observe(c));
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const targetCount = parseInt(el.dataset.count, 10);
+      const duration = 1800;
+      const startTime = performance.now();
 
-  /* ─── Skill Bars ─── */
-  const bars = document.querySelectorAll('.bar-fill');
-  const barObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.width = e.target.dataset.width + '%';
-        barObs.unobserve(e.target);
+      const runCounter = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 4);
+        el.textContent = Math.round(easeOut * targetCount);
+
+        if (progress < 1) {
+          requestAnimationFrame(runCounter);
+        } else {
+          el.textContent = targetCount;
+        }
+      };
+
+      requestAnimationFrame(runCounter);
+      counterObserver.unobserve(el);
+    });
+  }, { threshold: 0.4 });
+
+  counters.forEach((c) => counterObserver.observe(c));
+
+  /* ─── Animated Skill Bars ─── */
+  const skillBars = document.querySelectorAll('.bar-fill');
+  const skillObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.style.width = `${entry.target.dataset.width}%`;
+        skillObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.3 });
-  bars.forEach(b => barObs.observe(b));
+  }, { threshold: 0.25 });
 
-  /* ─── Back to Top ─── */
-  const btt = document.getElementById('backToTop');
-  if (btt) {
+  skillBars.forEach((bar) => skillObserver.observe(bar));
+
+  /* ─── Back to Top Button ─── */
+  const backToTopBtn = document.getElementById('backToTop');
+  if (backToTopBtn) {
     window.addEventListener('scroll', () => {
-      btt.classList.toggle('visible', window.scrollY > 500);
+      backToTopBtn.classList.toggle('visible', window.scrollY > 450);
     }, { passive: true });
-    btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }
 
-  /* ─── Particle Canvas ─── */
+  /* ─── Ambient Interactive Particle Canvas ─── */
   const canvas = document.getElementById('particles');
   if (canvas) {
     const ctx = canvas.getContext('2d');
-    let w, h, pts;
-    const init = () => {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-      const count = Math.min(Math.floor((w * h) / 18000), 80);
-      pts = Array.from({ length: count }, () => ({
-        x: Math.random() * w, y: Math.random() * h,
-        vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25,
-        r: Math.random() * 1.3 + .3,
-        a: Math.random() * .4 + .1
+    let width, height, particles;
+
+    const initCanvas = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      const count = Math.min(Math.floor((width * height) / 20000), 75);
+
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.28,
+        vy: (Math.random() - 0.5) * 0.28,
+        r: Math.random() * 1.4 + 0.4,
+        alpha: Math.random() * 0.4 + 0.12
       }));
     };
-    const draw = () => {
-      ctx.clearRect(0, 0, w, h);
-      pts.forEach(p => {
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
-        if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+
+    const drawParticles = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw particle dots
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(6,182,212,${p.a})`;
+        ctx.fillStyle = `rgba(6, 182, 212, ${p.alpha})`;
         ctx.fill();
       });
-      for (let i = 0; i < pts.length; i++) {
-        for (let j = i + 1; j < pts.length; j++) {
-          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+
+      // Draw connecting filaments
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
+
+          if (dist < 110) {
             ctx.beginPath();
-            ctx.moveTo(pts[i].x, pts[i].y);
-            ctx.lineTo(pts[j].x, pts[j].y);
-            ctx.strokeStyle = `rgba(6,182,212,${.07 * (1 - dist / 120)})`;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(6, 182, 212, ${0.06 * (1 - dist / 110)})`;
             ctx.stroke();
           }
         }
       }
-      requestAnimationFrame(draw);
+
+      requestAnimationFrame(drawParticles);
     };
-    init();
-    draw();
-    let rT;
-    window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(init, 200); });
+
+    initCanvas();
+    drawParticles();
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(initCanvas, 200);
+    });
   }
+
+  // Initial icon setup
+  document.addEventListener('DOMContentLoaded', initIcons);
+  initIcons();
 })();

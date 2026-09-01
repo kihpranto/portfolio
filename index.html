@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Ambient Glowing Orbs -->
+  <!-- Ambient Glowing Mesh Background Orbs -->
   <div class="ambient-glows" aria-hidden="true">
     <div class="glow-orb orb-1"></div>
     <div class="glow-orb orb-2"></div>
@@ -21,11 +21,12 @@
   </div>
   <canvas id="particles" aria-hidden="true"></canvas>
 
-  <!-- ═══ NAVIGATION ═══ -->
+  <!-- ═══ DESKTOP & TOP NAVIGATION BAR ═══ -->
   <header class="header-wrapper">
     <nav class="navbar glass-nav" id="navbar">
       <div class="nav-inner">
-        <a href="#home" class="nav-logo">
+        <!-- Upgraded KIH Monogram Logo -->
+        <a href="#home" class="nav-logo" aria-label="KIH Home">
           <div class="logo-circle">
             <span class="logo-text">KIH</span>
             <span class="logo-ring"></span>
@@ -36,27 +37,119 @@
             <span class="logo-role">Business Analyst</span>
           </div>
         </a>
-        <button class="nav-toggle" id="navToggle" aria-label="Menu">
-          <span></span><span></span><span></span>
-        </button>
-        <ul class="nav-links" id="navLinks">
-          <li><a href="#home" class="nav-link active"><i data-lucide="home" class="nav-icon"></i>Home</a></li>
-          <li><a href="#about" class="nav-link"><i data-lucide="user" class="nav-icon"></i>About</a></li>
-          <li><a href="#experience" class="nav-link"><i data-lucide="briefcase" class="nav-icon"></i>Experience</a></li>
-          <li><a href="#projects" class="nav-link"><i data-lucide="folder-kanban" class="nav-icon"></i>Projects</a></li>
-          <li><a href="#skills" class="nav-link"><i data-lucide="cpu" class="nav-icon"></i>Skills</a></li>
-          <li><a href="#education" class="nav-link"><i data-lucide="graduation-cap" class="nav-icon"></i>Education</a></li>
-          <li><a href="#contact" class="nav-link"><i data-lucide="mail" class="nav-icon"></i>Contact</a></li>
+
+        <!-- Desktop Navigation Links -->
+        <ul class="nav-links desktop-nav" id="desktopNav">
+          <li><a href="#home" class="nav-link active"><i data-lucide="home" class="nav-icon"></i><span>Home</span></a></li>
+          <li><a href="#about" class="nav-link"><i data-lucide="user" class="nav-icon"></i><span>About</span></a></li>
+          <li><a href="#experience" class="nav-link"><i data-lucide="briefcase" class="nav-icon"></i><span>Experience</span></a></li>
+          <li><a href="#projects" class="nav-link"><i data-lucide="folder-kanban" class="nav-icon"></i><span>Projects</span></a></li>
+          <li><a href="#skills" class="nav-link"><i data-lucide="cpu" class="nav-icon"></i><span>Skills</span></a></li>
+          <li><a href="#education" class="nav-link"><i data-lucide="graduation-cap" class="nav-icon"></i><span>Education</span></a></li>
+          <li><a href="#contact" class="nav-link"><i data-lucide="mail" class="nav-icon"></i><span>Contact</span></a></li>
         </ul>
-        <a href="mailto:kihpranto@yahoo.com" class="nav-cta glass-btn-glow">
-          <i data-lucide="send" class="cta-icon"></i>
-          <span>Hire Me</span>
-        </a>
+
+        <!-- Top Right Action Area -->
+        <div class="nav-actions">
+          <a href="mailto:kihpranto@yahoo.com" class="nav-cta glass-btn-glow">
+            <i data-lucide="send" class="cta-icon"></i>
+            <span>Hire Me</span>
+          </a>
+          <!-- Mobile Hamburger Toggle -->
+          <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+            <span class="bar bar-1"></span>
+            <span class="bar bar-2"></span>
+            <span class="bar bar-3"></span>
+          </button>
+        </div>
       </div>
     </nav>
   </header>
 
-  <!-- ═══ HERO ═══ -->
+  <!-- ═══ MOBILE GLASS SIDEBAR DRAWER & BACKDROP ═══ -->
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop" aria-hidden="true"></div>
+  <aside class="mobile-nav-drawer glass-sidebar" id="mobileNavDrawer" aria-label="Mobile Navigation Sidebar">
+    <div class="mobile-nav-header">
+      <div class="mobile-logo">
+        <div class="logo-circle small">
+          <span class="logo-text">KIH</span>
+        </div>
+        <div class="logo-info">
+          <span class="logo-name">Ikramul Hassan</span>
+          <span class="logo-role">Business Analyst</span>
+        </div>
+      </div>
+      <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close navigation menu">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation List with Tab Names and Icons -->
+    <ul class="mobile-nav-links" id="mobileNavLinks">
+      <li>
+        <a href="#home" class="mobile-nav-link active">
+          <span class="link-icon-wrap"><i data-lucide="home"></i></span>
+          <span class="tab-name">Home</span>
+          <span class="active-glow"></span>
+        </a>
+      </li>
+      <li>
+        <a href="#about" class="mobile-nav-link">
+          <span class="link-icon-wrap"><i data-lucide="user"></i></span>
+          <span class="tab-name">About Me</span>
+          <span class="active-glow"></span>
+        </a>
+      </li>
+      <li>
+        <a href="#experience" class="mobile-nav-link">
+          <span class="link-icon-wrap"><i data-lucide="briefcase"></i></span>
+          <span class="tab-name">Experience</span>
+          <span class="active-glow"></span>
+        </a>
+      </li>
+      <li>
+        <a href="#projects" class="mobile-nav-link">
+          <span class="link-icon-wrap"><i data-lucide="folder-kanban"></i></span>
+          <span class="tab-name">Projects</span>
+          <span class="active-glow"></span>
+        </a>
+      </li>
+      <li>
+        <a href="#skills" class="mobile-nav-link">
+          <span class="link-icon-wrap"><i data-lucide="cpu"></i></span>
+          <span class="tab-name">Skills & Tech Stack</span>
+          <span class="active-glow"></span>
+        </a>
+      </li>
+      <li>
+        <a href="#education" class="mobile-nav-link">
+          <span class="link-icon-wrap"><i data-lucide="graduation-cap"></i></span>
+          <span class="tab-name">Education</span>
+          <span class="active-glow"></span>
+        </a>
+      </li>
+      <li>
+        <a href="#contact" class="mobile-nav-link">
+          <span class="link-icon-wrap"><i data-lucide="mail"></i></span>
+          <span class="tab-name">Contact</span>
+          <span class="active-glow"></span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="mobile-nav-footer">
+      <a href="mailto:kihpranto@yahoo.com" class="btn btn-primary glass-btn-glow mobile-cta-btn">
+        <i data-lucide="send"></i>
+        <span>Hire Me Now</span>
+      </a>
+      <div class="mobile-quick-contact">
+        <span><i data-lucide="phone"></i> +880 1832 961 609</span>
+        <span><i data-lucide="mail"></i> kihpranto@yahoo.com</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══ HERO SECTION ═══ -->
   <section class="hero" id="home">
     <div class="hero-grid container">
       <div class="hero-content">
@@ -89,6 +182,8 @@
           <div class="stat-item"><span class="stat-num" data-count="6">0</span><span class="stat-lbl">Departments Served</span></div>
         </div>
       </div>
+
+      <!-- Hero Profile Glass Card with Official Software Logos -->
       <div class="hero-card-wrap" data-animate="fade-left" data-delay="200">
         <div class="hero-card glass-card">
           <div class="hc-avatar">
@@ -104,14 +199,64 @@
             <div class="hc-row"><i data-lucide="phone"></i>+880 1832 961 609</div>
           </div>
           <hr class="hc-divider">
-          <p class="hc-stack-label">Core Stack</p>
+          <p class="hc-stack-label">Core Tech Stack</p>
           <div class="hc-pills">
-            <span class="pill glass-pill"><i data-lucide="bar-chart-3"></i>Power BI</span>
-            <span class="pill glass-pill"><i data-lucide="smartphone"></i>Power Apps</span>
-            <span class="pill glass-pill"><i data-lucide="zap"></i>Power Automate</span>
-            <span class="pill glass-pill"><i data-lucide="database"></i>SQL</span>
-            <span class="pill glass-pill"><i data-lucide="code-2"></i>Python</span>
-            <span class="pill glass-pill"><i data-lucide="table-2"></i>Excel & VBA</span>
+            <!-- Official Power BI Logo -->
+            <span class="pill glass-pill">
+              <svg class="tech-logo" viewBox="0 0 32 32" aria-hidden="true">
+                <path d="M26 4v24a2 2 0 01-2 2h-4V2h4a2 2 0 012 2z" fill="#E8B000"/>
+                <path d="M19 10v18a2 2 0 01-2 2h-4V8h4a2 2 0 012 2z" fill="#F2C811"/>
+                <path d="M13 16v12a2 2 0 01-2 2H7a2 2 0 01-2-2V18a2 2 0 012-2h6z" fill="#FAD837"/>
+              </svg>
+              <span>Power BI</span>
+            </span>
+            <!-- Official Power Apps Logo -->
+            <span class="pill glass-pill">
+              <svg class="tech-logo" viewBox="0 0 32 32" aria-hidden="true">
+                <path fill="#742774" d="M19.7 3.5l8.8 5.1c.9.5 1.5 1.5 1.5 2.5v10.8c0 1.1-.6 2-1.5 2.5l-8.8 5.1c-1 .6-2.2.6-3.2 0l-8.8-5.1c-.9-.5-1.5-1.5-1.5-2.5V11.1c0-1.1.6-2 1.5-2.5l8.8-5.1c1-.6 2.2-.6 3.2 0z"/>
+                <path fill="#BA2870" d="M16 7.8l7.5 4.3v8.7L16 25.1l-7.5-4.3v-8.7L16 7.8z"/>
+                <path fill="#EA388A" d="M16 11.5l4.3 2.5v5L16 21.5l-4.3-2.5v-5L16 11.5z"/>
+              </svg>
+              <span>Power Apps</span>
+            </span>
+            <!-- Official Power Automate Logo -->
+            <span class="pill glass-pill">
+              <svg class="tech-logo" viewBox="0 0 32 32" aria-hidden="true">
+                <path fill="#0066FF" d="M16 2L2 10.5l6.8 4.2L16 10.4l7.2 4.3L30 10.5 16 2z"/>
+                <path fill="#0078D4" d="M2 10.5v11L8.8 26v-11.3L2 10.5z"/>
+                <path fill="#2899F5" d="M16 10.4v19.6l7.2-4.2V6.2L16 10.4z"/>
+                <path fill="#00B294" d="M8.8 14.7v11.3l7.2 4V10.4L8.8 14.7z"/>
+              </svg>
+              <span>Power Automate</span>
+            </span>
+            <!-- Official SQL Server / SQL Logo -->
+            <span class="pill glass-pill">
+              <svg class="tech-logo" viewBox="0 0 32 32" aria-hidden="true">
+                <ellipse cx="16" cy="7" rx="11" ry="4" fill="#2899F5"/>
+                <path fill="#005A9E" d="M5 7v6c0 2.2 4.9 4 11 4s11-1.8 11-4V7c0 2.2-4.9 4-11 4S5 9.2 5 7z"/>
+                <path fill="#004578" d="M5 13v6c0 2.2 4.9 4 11 4s11-1.8 11-4v-6c0 2.2-4.9 4-11 4S5 15.2 5 13z"/>
+                <path fill="#0078D4" d="M5 19v6c0 2.2 4.9 4 11 4s11-1.8 11-4v-6c0 2.2-4.9 4-11 4S5 21.2 5 19z"/>
+              </svg>
+              <span>SQL Server</span>
+            </span>
+            <!-- Official Python Logo -->
+            <span class="pill glass-pill">
+              <svg class="tech-logo" viewBox="0 0 32 32" aria-hidden="true">
+                <path fill="#3776AB" d="M15.9 3c-6.8 0-6.4 3-6.4 3l.01 3.1h6.5v.9H5.8S2 9.5 2 16.4c0 6.8 3.3 6.6 3.3 6.6h2v-2.8s-.1-3.3 3.3-3.3h5.7s3.2.1 3.2-3.1V6.2s.5-3.2-3.6-3.2zm-3.6 2c.7 0 1.2.5 1.2 1.2 0 .7-.5 1.2-1.2 1.2-.7 0-1.2-.5-1.2-1.2 0-.7.5-1.2 1.2-1.2z"/>
+                <path fill="#FFD43B" d="M16.1 29c6.8 0 6.4-3 6.4-3l-.01-3.1h-6.5v-.9h10.2s3.8.5 3.8-6.4c0-6.8-3.3-6.6-3.3-6.6h-2v2.8s.1 3.3-3.3 3.3h-5.7s-3.2-.1-3.2 3.1v7.6s-.5 3.2 3.6 3.2zm3.6-2c-.7 0-1.2-.5-1.2-1.2 0-.7.5-1.2 1.2-1.2.7 0 1.2.5 1.2 1.2 0 .7-.5 1.2-1.2 1.2z"/>
+              </svg>
+              <span>Python</span>
+            </span>
+            <!-- Official Excel & VBA Logo -->
+            <span class="pill glass-pill">
+              <svg class="tech-logo" viewBox="0 0 32 32" aria-hidden="true">
+                <path fill="#107C41" d="M19 4h9a2 2 0 012 2v20a2 2 0 01-2 2h-9V4z"/>
+                <path fill="#21A366" d="M19 4H8a2 2 0 00-2 2v20a2 2 0 002 2h11V4z"/>
+                <path fill="#107C41" d="M3 8a1 1 0 011-1h13a1 1 0 011 1v16a1 1 0 01-1 1H4a1 1 0 01-1-1V8z"/>
+                <path fill="#fff" d="M7.5 11l2.5 4.5-2.5 4.5h2l1.5-3 1.5 3h2l-2.5-4.5 2.5-4.5h-2l-1.5 3-1.5-3h-2z"/>
+              </svg>
+              <span>Excel & VBA</span>
+            </span>
           </div>
         </div>
       </div>
@@ -119,7 +264,7 @@
     <div class="scroll-indicator"><span>Scroll</span><div class="scroll-bar"></div></div>
   </section>
 
-  <!-- ═══ ABOUT ═══ -->
+  <!-- ═══ ABOUT ME SECTION ═══ -->
   <section class="section section-alt" id="about">
     <div class="container">
       <header class="sec-header" data-animate="fade-up">
@@ -135,15 +280,27 @@
           <p>Currently at <strong>Brandix Bangladesh Limited</strong>, I architect digital systems spanning Production, IE, QA, HR, Finance & IT — serving as a bridge between business needs and technology solutions.</p>
         </div>
         <div class="about-highlights">
-          <div class="highlight glass-card"><i data-lucide="target" class="hl-icon"></i><h4>Mission</h4><p>Empower organizations with intelligent data systems that drive operational excellence and informed decision-making.</p></div>
-          <div class="highlight glass-card"><i data-lucide="lightbulb" class="hl-icon"></i><h4>Philosophy</h4><p>Every manual process is an automation opportunity. Every spreadsheet is a dashboard waiting to happen.</p></div>
-          <div class="highlight glass-card"><i data-lucide="globe" class="hl-icon"></i><h4>Impact</h4><p>100% data traceability, 70% faster request turnaround, and zero paper-based processes.</p></div>
+          <div class="highlight glass-card">
+            <i data-lucide="target" class="hl-icon"></i>
+            <h4>Mission</h4>
+            <p>Empower organizations with intelligent data systems that drive operational excellence and informed decision-making.</p>
+          </div>
+          <div class="highlight glass-card">
+            <i data-lucide="lightbulb" class="hl-icon"></i>
+            <h4>Philosophy</h4>
+            <p>Every manual process is an automation opportunity. Every spreadsheet is a dashboard waiting to happen.</p>
+          </div>
+          <div class="highlight glass-card">
+            <i data-lucide="globe" class="hl-icon"></i>
+            <h4>Impact</h4>
+            <p>100% data traceability, 70% faster request turnaround, and zero paper-based processes.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ EXPERIENCE ═══ -->
+  <!-- ═══ EXPERIENCE SECTION ═══ -->
   <section class="section" id="experience">
     <div class="container">
       <header class="sec-header" data-animate="fade-up">
@@ -166,9 +323,32 @@
               <li>Audit data quality & integrity — ensuring 100% component traceability</li>
               <li>Serve as Regional Trainer on Advanced Excel for Brandix Bangladesh</li>
             </ul>
-            <div class="tl-tags"><span class="tag glass-pill">Power Apps</span><span class="tag glass-pill">Power BI</span><span class="tag glass-pill">Power Automate</span><span class="tag glass-pill">DAX</span><span class="tag glass-pill">SQL</span><span class="tag glass-pill">VBA</span></div>
+            <div class="tl-tags">
+              <span class="tag glass-pill">
+                <svg class="tech-logo sm" viewBox="0 0 32 32"><path fill="#742774" d="M19.7 3.5l8.8 5.1c.9.5 1.5 1.5 1.5 2.5v10.8c0 1.1-.6 2-1.5 2.5l-8.8 5.1c-1 .6-2.2.6-3.2 0l-8.8-5.1c-.9-.5-1.5-1.5-1.5-2.5V11.1c0-1.1.6-2 1.5-2.5l8.8-5.1c1-.6 2.2-.6 3.2 0z"/><path fill="#BA2870" d="M16 7.8l7.5 4.3v8.7L16 25.1l-7.5-4.3v-8.7L16 7.8z"/><path fill="#EA388A" d="M16 11.5l4.3 2.5v5L16 21.5l-4.3-2.5v-5L16 11.5z"/></svg>
+                Power Apps
+              </span>
+              <span class="tag glass-pill">
+                <svg class="tech-logo sm" viewBox="0 0 32 32"><path d="M26 4v24a2 2 0 01-2 2h-4V2h4a2 2 0 012 2z" fill="#E8B000"/><path d="M19 10v18a2 2 0 01-2 2h-4V8h4a2 2 0 012 2z" fill="#F2C811"/><path d="M13 16v12a2 2 0 01-2 2H7a2 2 0 01-2-2V18a2 2 0 012-2h6z" fill="#FAD837"/></svg>
+                Power BI
+              </span>
+              <span class="tag glass-pill">
+                <svg class="tech-logo sm" viewBox="0 0 32 32"><path fill="#0066FF" d="M16 2L2 10.5l6.8 4.2L16 10.4l7.2 4.3L30 10.5 16 2z"/><path fill="#0078D4" d="M2 10.5v11L8.8 26v-11.3L2 10.5z"/><path fill="#2899F5" d="M16 10.4v19.6l7.2-4.2V6.2L16 10.4z"/></svg>
+                Power Automate
+              </span>
+              <span class="tag glass-pill">DAX Modeling</span>
+              <span class="tag glass-pill">
+                <svg class="tech-logo sm" viewBox="0 0 32 32"><ellipse cx="16" cy="7" rx="11" ry="4" fill="#2899F5"/><path fill="#005A9E" d="M5 7v6c0 2.2 4.9 4 11 4s11-1.8 11-4V7c0 2.2-4.9 4-11 4S5 9.2 5 7z"/><path fill="#0078D4" d="M5 19v6c0 2.2 4.9 4 11 4s11-1.8 11-4v-6c0 2.2-4.9 4-11 4S5 21.2 5 19z"/></svg>
+                SQL
+              </span>
+              <span class="tag glass-pill">
+                <svg class="tech-logo sm" viewBox="0 0 32 32"><path fill="#107C41" d="M19 4h9a2 2 0 012 2v20a2 2 0 01-2 2h-9V4z"/><path fill="#21A366" d="M19 4H8a2 2 0 00-2 2v20a2 2 0 002 2h11V4z"/><path fill="#fff" d="M7.5 11l2.5 4.5-2.5 4.5h2l1.5-3 1.5 3h2l-2.5-4.5 2.5-4.5h-2l-1.5 3-1.5-3h-2z"/></svg>
+                VBA
+              </span>
+            </div>
           </div>
         </div>
+
         <div class="tl-item" data-animate="fade-up" data-delay="100">
           <div class="tl-marker"><div class="tl-dot"></div><div class="tl-line"></div></div>
           <div class="tl-card glass-card">
@@ -181,9 +361,14 @@
               <li>Analyzed debtor aging schedules to optimize corporate cash flows</li>
               <li>Supervised day-to-day office administration & policy compliance</li>
             </ul>
-            <div class="tl-tags"><span class="tag glass-pill">MIS Reporting</span><span class="tag glass-pill">Financial Modeling</span><span class="tag glass-pill">Advanced Excel</span></div>
+            <div class="tl-tags">
+              <span class="tag glass-pill">MIS Reporting</span>
+              <span class="tag glass-pill">Financial Modeling</span>
+              <span class="tag glass-pill">Advanced Excel</span>
+            </div>
           </div>
         </div>
+
         <div class="tl-item" data-animate="fade-up" data-delay="200">
           <div class="tl-marker"><div class="tl-dot"></div></div>
           <div class="tl-card glass-card">
@@ -195,14 +380,18 @@
               <li>Verified vendor bills against procurement records for audit accuracy</li>
               <li>Generated daily executive management reports & payment vouchers</li>
             </ul>
-            <div class="tl-tags"><span class="tag glass-pill">Financial Analysis</span><span class="tag glass-pill">Cash Flow</span><span class="tag glass-pill">Audit Controls</span></div>
+            <div class="tl-tags">
+              <span class="tag glass-pill">Financial Analysis</span>
+              <span class="tag glass-pill">Cash Flow</span>
+              <span class="tag glass-pill">Audit Controls</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ PROJECTS ═══ -->
+  <!-- ═══ KEY PROJECTS SECTION ═══ -->
   <section class="section section-alt" id="projects">
     <div class="container">
       <header class="sec-header" data-animate="fade-up">
@@ -211,81 +400,257 @@
         <p class="sec-sub">Enterprise-grade solutions engineered to eliminate manual bottlenecks.</p>
       </header>
       <div class="projects-grid">
+        <!-- Project 1 -->
         <div class="proj-card glass-card" data-animate="fade-up">
-          <div class="proj-icon-wrap"><i data-lucide="shield-check"></i></div>
+          <div class="proj-icon-wrap">
+            <svg class="tech-logo lg" viewBox="0 0 32 32">
+              <path fill="#742774" d="M19.7 3.5l8.8 5.1c.9.5 1.5 1.5 1.5 2.5v10.8c0 1.1-.6 2-1.5 2.5l-8.8 5.1c-1 .6-2.2.6-3.2 0l-8.8-5.1c-.9-.5-1.5-1.5-1.5-2.5V11.1c0-1.1.6-2 1.5-2.5l8.8-5.1c1-.6 2.2-.6 3.2 0z"/>
+              <path fill="#BA2870" d="M16 7.8l7.5 4.3v8.7L16 25.1l-7.5-4.3v-8.7L16 7.8z"/>
+              <path fill="#EA388A" d="M16 11.5l4.3 2.5v5L16 21.5l-4.3-2.5v-5L16 11.5z"/>
+            </svg>
+          </div>
           <span class="proj-cat">Power Apps — Enterprise Security</span>
           <h3 class="proj-title">Multi-Role Enterprise Canvas Application</h3>
           <p class="proj-desc">Architected a centralized Power App with dynamic 6-tier RBAC. Each role sees tailored screens, data scopes, and approval capabilities.</p>
-          <div class="proj-chips"><span class="chip glass-chip">Power Apps</span><span class="chip glass-chip">Canvas Apps</span><span class="chip glass-chip">RBAC</span><span class="chip glass-chip">SharePoint</span></div>
+          <div class="proj-chips">
+            <span class="chip glass-chip">Power Apps</span>
+            <span class="chip glass-chip">Canvas Apps</span>
+            <span class="chip glass-chip">RBAC Security</span>
+            <span class="chip glass-chip">
+              <svg class="tech-logo sm" viewBox="0 0 32 32"><circle cx="21" cy="11" r="7" fill="#036C70"/><circle cx="11" cy="15" r="8" fill="#008272"/><circle cx="19" cy="21" r="7" fill="#00A99D"/></svg>
+              SharePoint
+            </span>
+          </div>
         </div>
+
+        <!-- Project 2 -->
         <div class="proj-card glass-card" data-animate="fade-up" data-delay="100">
-          <div class="proj-icon-wrap"><i data-lucide="workflow"></i></div>
+          <div class="proj-icon-wrap">
+            <svg class="tech-logo lg" viewBox="0 0 32 32">
+              <path fill="#0066FF" d="M16 2L2 10.5l6.8 4.2L16 10.4l7.2 4.3L30 10.5 16 2z"/>
+              <path fill="#0078D4" d="M2 10.5v11L8.8 26v-11.3L2 10.5z"/>
+              <path fill="#2899F5" d="M16 10.4v19.6l7.2-4.2V6.2L16 10.4z"/>
+              <path fill="#00B294" d="M8.8 14.7v11.3l7.2 4V10.4L8.8 14.7z"/>
+            </svg>
+          </div>
           <span class="proj-cat">Power Automate — Operations</span>
           <h3 class="proj-title">End-to-End Workflow Automation Engine</h3>
           <p class="proj-desc">Automated transport dispatch, approval chains, and multi-stage validation. Reduced turnaround by 70% and eliminated 100% paper processes.</p>
-          <div class="proj-chips"><span class="chip glass-chip">Power Automate</span><span class="chip glass-chip">Approval Flows</span><span class="chip glass-chip">M365</span></div>
+          <div class="proj-chips">
+            <span class="chip glass-chip">Power Automate</span>
+            <span class="chip glass-chip">Approval Flows</span>
+            <span class="chip glass-chip">Cloud Workflows</span>
+            <span class="chip glass-chip">M365 Integration</span>
+          </div>
         </div>
+
+        <!-- Project 3 -->
         <div class="proj-card glass-card" data-animate="fade-up" data-delay="200">
-          <div class="proj-icon-wrap"><i data-lucide="bar-chart-3"></i></div>
+          <div class="proj-icon-wrap">
+            <svg class="tech-logo lg" viewBox="0 0 32 32">
+              <path d="M26 4v24a2 2 0 01-2 2h-4V2h4a2 2 0 012 2z" fill="#E8B000"/>
+              <path d="M19 10v18a2 2 0 01-2 2h-4V8h4a2 2 0 012 2z" fill="#F2C811"/>
+              <path d="M13 16v12a2 2 0 01-2 2H7a2 2 0 01-2-2V18a2 2 0 012-2h6z" fill="#FAD837"/>
+            </svg>
+          </div>
           <span class="proj-cat">Power BI — Analytics</span>
           <h3 class="proj-title">Production & Quality KPI Dashboard Suite</h3>
           <p class="proj-desc">Executive dashboards consolidating cutting, assembly, finishing & QA telemetry. Advanced DAX time-intelligence with automated ETL.</p>
-          <div class="proj-chips"><span class="chip glass-chip">Power BI</span><span class="chip glass-chip">DAX</span><span class="chip glass-chip">Power Query</span><span class="chip glass-chip">Star Schema</span></div>
+          <div class="proj-chips">
+            <span class="chip glass-chip">Power BI</span>
+            <span class="chip glass-chip">Advanced DAX</span>
+            <span class="chip glass-chip">Power Query</span>
+            <span class="chip glass-chip">Star Schema</span>
+          </div>
         </div>
+
+        <!-- Project 4 -->
         <div class="proj-card glass-card" data-animate="fade-up">
-          <div class="proj-icon-wrap"><i data-lucide="bell-ring"></i></div>
+          <div class="proj-icon-wrap">
+            <svg class="tech-logo lg" viewBox="0 0 32 32">
+              <path fill="#5059C9" d="M20 7a3 3 0 100-6 3 3 0 000 6zm4 2h-8a2 2 0 00-2 2v6h12v-6a2 2 0 00-2-2z"/>
+              <path fill="#7B83EB" d="M26 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5zm3 2h-4v5h4a1.5 1.5 0 001.5-1.5v-2A1.5 1.5 0 0029 10z"/>
+              <path fill="#4B53BC" d="M4 11h14a2 2 0 012 2v14a2 2 0 01-2 2H4a2 2 0 01-2-2V13a2 2 0 012-2z"/>
+              <path fill="#fff" d="M9.5 16h5v2.2h-1.8v6.8h-1.4v-6.8H9.5V16z"/>
+            </svg>
+          </div>
           <span class="proj-cat">Monitoring — Real-Time Alerts</span>
           <h3 class="proj-title">Overtime & SLA Breach Alert System</h3>
           <p class="proj-desc">Intelligent monitoring engine tracking overtime and pending approvals. Instant Teams/Outlook notifications with actionable cards.</p>
-          <div class="proj-chips"><span class="chip glass-chip">Power Automate</span><span class="chip glass-chip">Teams Webhooks</span><span class="chip glass-chip">Outlook API</span></div>
+          <div class="proj-chips">
+            <span class="chip glass-chip">Teams Webhooks</span>
+            <span class="chip glass-chip">Outlook API</span>
+            <span class="chip glass-chip">Adaptive Cards</span>
+          </div>
         </div>
+
+        <!-- Project 5 -->
         <div class="proj-card glass-card" data-animate="fade-up" data-delay="100">
-          <div class="proj-icon-wrap"><i data-lucide="database"></i></div>
+          <div class="proj-icon-wrap">
+            <svg class="tech-logo lg" viewBox="0 0 32 32">
+              <ellipse cx="16" cy="7" rx="11" ry="4" fill="#2899F5"/>
+              <path fill="#005A9E" d="M5 7v6c0 2.2 4.9 4 11 4s11-1.8 11-4V7c0 2.2-4.9 4-11 4S5 9.2 5 7z"/>
+              <path fill="#004578" d="M5 13v6c0 2.2 4.9 4 11 4s11-1.8 11-4v-6c0 2.2-4.9 4-11 4S5 15.2 5 13z"/>
+              <path fill="#0078D4" d="M5 19v6c0 2.2 4.9 4 11 4s11-1.8 11-4v-6c0 2.2-4.9 4-11 4S5 21.2 5 19z"/>
+            </svg>
+          </div>
           <span class="proj-cat">Data Engineering — ETL</span>
           <h3 class="proj-title">Single Source of Truth Data Pipeline</h3>
           <p class="proj-desc">Consolidated legacy spreadsheets, SharePoint lists & SQL tables into a normalized star-schema repository.</p>
-          <div class="proj-chips"><span class="chip glass-chip">SQL</span><span class="chip glass-chip">Python</span><span class="chip glass-chip">Office Script</span><span class="chip glass-chip">Data Modeling</span></div>
+          <div class="proj-chips">
+            <span class="chip glass-chip">SQL</span>
+            <span class="chip glass-chip">
+              <svg class="tech-logo sm" viewBox="0 0 32 32"><path fill="#3776AB" d="M15.9 3c-6.8 0-6.4 3-6.4 3l.01 3.1h6.5v.9H5.8S2 9.5 2 16.4c0 6.8 3.3 6.6 3.3 6.6h2v-2.8s-.1-3.3 3.3-3.3h5.7s3.2.1 3.2-3.1V6.2s.5-3.2-3.6-3.2zm-3.6 2c.7 0 1.2.5 1.2 1.2 0 .7-.5 1.2-1.2 1.2-.7 0-1.2-.5-1.2-1.2 0-.7.5-1.2 1.2-1.2z"/><path fill="#FFD43B" d="M16.1 29c6.8 0 6.4-3 6.4-3l-.01-3.1h-6.5v-.9h10.2s3.8.5 3.8-6.4c0-6.8-3.3-6.6-3.3-6.6h-2v2.8s.1 3.3-3.3 3.3h-5.7s-3.2-.1-3.2 3.1v7.6s-.5 3.2 3.6 3.2zm3.6-2c-.7 0-1.2-.5-1.2-1.2 0-.7.5-1.2 1.2-1.2.7 0 1.2.5 1.2 1.2 0 .7-.5 1.2-1.2 1.2z"/></svg>
+              Python
+            </span>
+            <span class="chip glass-chip">Office Scripts</span>
+            <span class="chip glass-chip">Data Modeling</span>
+          </div>
         </div>
+
+        <!-- Project 6 -->
         <div class="proj-card glass-card" data-animate="fade-up" data-delay="200">
-          <div class="proj-icon-wrap"><i data-lucide="trending-up"></i></div>
+          <div class="proj-icon-wrap">
+            <svg class="tech-logo lg" viewBox="0 0 32 32">
+              <path fill="#107C41" d="M19 4h9a2 2 0 012 2v20a2 2 0 01-2 2h-9V4z"/>
+              <path fill="#21A366" d="M19 4H8a2 2 0 00-2 2v20a2 2 0 002 2h11V4z"/>
+              <path fill="#107C41" d="M3 8a1 1 0 011-1h13a1 1 0 011 1v16a1 1 0 01-1 1H4a1 1 0 01-1-1V8z"/>
+              <path fill="#fff" d="M7.5 11l2.5 4.5-2.5 4.5h2l1.5-3 1.5 3h2l-2.5-4.5 2.5-4.5h-2l-1.5 3-1.5-3h-2z"/>
+            </svg>
+          </div>
           <span class="proj-cat">Excel Automation — Finance</span>
           <h3 class="proj-title">Commission & Financial Reporting Engine</h3>
           <p class="proj-desc">VBA-powered financial models: automated monthly sales commissions, incentive calculations, and dynamic debtor aging dashboards.</p>
-          <div class="proj-chips"><span class="chip glass-chip">Excel VBA</span><span class="chip glass-chip">Financial Modeling</span><span class="chip glass-chip">Pivot Tables</span></div>
+          <div class="proj-chips">
+            <span class="chip glass-chip">Excel VBA</span>
+            <span class="chip glass-chip">Financial Modeling</span>
+            <span class="chip glass-chip">Pivot Analytics</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ SKILLS ═══ -->
+  <!-- ═══ TECHNICAL SKILLS SECTION ═══ -->
   <section class="section" id="skills">
     <div class="container">
       <header class="sec-header" data-animate="fade-up">
         <span class="sec-badge glass-badge"><i data-lucide="cpu"></i>Toolbox</span>
-        <h2 class="sec-title">Technical Skills</h2>
+        <h2 class="sec-title">Technical Skills & Software Proficiency</h2>
         <p class="sec-sub">Technologies and methodologies I leverage daily to deliver results.</p>
       </header>
       <div class="skills-grid" data-animate="fade-up" data-delay="100">
+        <!-- Category 1 -->
         <div class="skill-cat glass-card">
-          <h3 class="sk-title"><i data-lucide="bar-chart-3"></i>Data Analytics & BI</h3>
+          <h3 class="sk-title">
+            <svg class="tech-logo" viewBox="0 0 32 32">
+              <path d="M26 4v24a2 2 0 01-2 2h-4V2h4a2 2 0 012 2z" fill="#E8B000"/>
+              <path d="M19 10v18a2 2 0 01-2 2h-4V8h4a2 2 0 012 2z" fill="#F2C811"/>
+              <path d="M13 16v12a2 2 0 01-2 2H7a2 2 0 01-2-2V18a2 2 0 012-2h6z" fill="#FAD837"/>
+            </svg>
+            <span>Data Analytics & BI</span>
+          </h3>
           <div class="sk-bars">
-            <div class="sk-bar"><div class="sk-info"><span>Power BI (DAX, Power Query, Modeling)</span><span class="sk-pct">95%</span></div><div class="bar-track"><div class="bar-fill" data-width="95"></div></div></div>
-            <div class="sk-bar"><div class="sk-info"><span>SQL (Queries, Joins, Views)</span><span class="sk-pct">90%</span></div><div class="bar-track"><div class="bar-fill" data-width="90"></div></div></div>
-            <div class="sk-bar"><div class="sk-info"><span>Advanced Excel (VBA, Macros, Pivots)</span><span class="sk-pct">98%</span></div><div class="bar-track"><div class="bar-fill" data-width="98"></div></div></div>
-            <div class="sk-bar"><div class="sk-info"><span>Google Sheets & Apps Script</span><span class="sk-pct">88%</span></div><div class="bar-track"><div class="bar-fill" data-width="88"></div></div></div>
+            <div class="sk-bar">
+              <div class="sk-info">
+                <span class="sk-label">
+                  <svg class="tech-logo sm" viewBox="0 0 32 32"><path d="M26 4v24a2 2 0 01-2 2h-4V2h4a2 2 0 012 2z" fill="#E8B000"/><path d="M19 10v18a2 2 0 01-2 2h-4V8h4a2 2 0 012 2z" fill="#F2C811"/><path d="M13 16v12a2 2 0 01-2 2H7a2 2 0 01-2-2V18a2 2 0 012-2h6z" fill="#FAD837"/></svg>
+                  Power BI (DAX, Power Query, Star Schema)
+                </span>
+                <span class="sk-pct">95%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill" data-width="95"></div></div>
+            </div>
+            <div class="sk-bar">
+              <div class="sk-info">
+                <span class="sk-label">
+                  <svg class="tech-logo sm" viewBox="0 0 32 32"><ellipse cx="16" cy="7" rx="11" ry="4" fill="#2899F5"/><path fill="#005A9E" d="M5 7v6c0 2.2 4.9 4 11 4s11-1.8 11-4V7c0 2.2-4.9 4-11 4S5 9.2 5 7z"/><path fill="#0078D4" d="M5 19v6c0 2.2 4.9 4 11 4s11-1.8 11-4v-6c0 2.2-4.9 4-11 4S5 21.2 5 19z"/></svg>
+                  SQL (Queries, Joins, Views, Aggregations)
+                </span>
+                <span class="sk-pct">90%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill" data-width="90"></div></div>
+            </div>
+            <div class="sk-bar">
+              <div class="sk-info">
+                <span class="sk-label">
+                  <svg class="tech-logo sm" viewBox="0 0 32 32"><path fill="#107C41" d="M19 4h9a2 2 0 012 2v20a2 2 0 01-2 2h-9V4z"/><path fill="#21A366" d="M19 4H8a2 2 0 00-2 2v20a2 2 0 002 2h11V4z"/><path fill="#fff" d="M7.5 11l2.5 4.5-2.5 4.5h2l1.5-3 1.5 3h2l-2.5-4.5 2.5-4.5h-2l-1.5 3-1.5-3h-2z"/></svg>
+                  Advanced Excel (VBA, Macros, Pivot Tables)
+                </span>
+                <span class="sk-pct">98%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill" data-width="98"></div></div>
+            </div>
+            <div class="sk-bar">
+              <div class="sk-info">
+                <span class="sk-label">
+                  <svg class="tech-logo sm" viewBox="0 0 32 32"><path fill="#0F9D58" d="M6 3a2 2 0 00-2 2v22a2 2 0 002 2h20a2 2 0 002-2V11l-8-8H6z"/><path fill="#87CEAC" d="M20 3v8h8L20 3z"/><path fill="#fff" d="M9 15h14v10H9V15zm2 2v2h4v-2h-4zm6 0v2h4v-2h-4zm-6 4v2h4v-2h-4zm6 0v2h4v-2h-4z"/></svg>
+                  Google Sheets & Apps Script
+                </span>
+                <span class="sk-pct">88%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill" data-width="88"></div></div>
+            </div>
           </div>
         </div>
+
+        <!-- Category 2 -->
         <div class="skill-cat glass-card">
-          <h3 class="sk-title"><i data-lucide="settings"></i>Low-Code & Automation</h3>
+          <h3 class="sk-title">
+            <svg class="tech-logo" viewBox="0 0 32 32">
+              <path fill="#742774" d="M19.7 3.5l8.8 5.1c.9.5 1.5 1.5 1.5 2.5v10.8c0 1.1-.6 2-1.5 2.5l-8.8 5.1c-1 .6-2.2.6-3.2 0l-8.8-5.1c-.9-.5-1.5-1.5-1.5-2.5V11.1c0-1.1.6-2 1.5-2.5l8.8-5.1c1-.6 2.2-.6 3.2 0z"/>
+              <path fill="#BA2870" d="M16 7.8l7.5 4.3v8.7L16 25.1l-7.5-4.3v-8.7L16 7.8z"/>
+              <path fill="#EA388A" d="M16 11.5l4.3 2.5v5L16 21.5l-4.3-2.5v-5L16 11.5z"/>
+            </svg>
+            <span>Low-Code & Automation</span>
+          </h3>
           <div class="sk-bars">
-            <div class="sk-bar"><div class="sk-info"><span>Power Apps (Canvas, RBAC)</span><span class="sk-pct">92%</span></div><div class="bar-track"><div class="bar-fill" data-width="92"></div></div></div>
-            <div class="sk-bar"><div class="sk-info"><span>Power Automate (Workflows & Alerts)</span><span class="sk-pct">94%</span></div><div class="bar-track"><div class="bar-fill" data-width="94"></div></div></div>
-            <div class="sk-bar"><div class="sk-info"><span>Office Script & Web Integration</span><span class="sk-pct">86%</span></div><div class="bar-track"><div class="bar-fill" data-width="86"></div></div></div>
-            <div class="sk-bar"><div class="sk-info"><span>Python & Data Science Basics</span><span class="sk-pct">80%</span></div><div class="bar-track"><div class="bar-fill" data-width="80"></div></div></div>
+            <div class="sk-bar">
+              <div class="sk-info">
+                <span class="sk-label">
+                  <svg class="tech-logo sm" viewBox="0 0 32 32"><path fill="#742774" d="M19.7 3.5l8.8 5.1c.9.5 1.5 1.5 1.5 2.5v10.8c0 1.1-.6 2-1.5 2.5l-8.8 5.1c-1 .6-2.2.6-3.2 0l-8.8-5.1c-.9-.5-1.5-1.5-1.5-2.5V11.1c0-1.1.6-2 1.5-2.5l8.8-5.1c1-.6 2.2-.6 3.2 0z"/><path fill="#BA2870" d="M16 7.8l7.5 4.3v8.7L16 25.1l-7.5-4.3v-8.7L16 7.8z"/></svg>
+                  Power Apps (Canvas, Dynamic RBAC)
+                </span>
+                <span class="sk-pct">92%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill" data-width="92"></div></div>
+            </div>
+            <div class="sk-bar">
+              <div class="sk-info">
+                <span class="sk-label">
+                  <svg class="tech-logo sm" viewBox="0 0 32 32"><path fill="#0066FF" d="M16 2L2 10.5l6.8 4.2L16 10.4l7.2 4.3L30 10.5 16 2z"/><path fill="#0078D4" d="M2 10.5v11L8.8 26v-11.3L2 10.5z"/></svg>
+                  Power Automate (Workflows, Webhooks)
+                </span>
+                <span class="sk-pct">94%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill" data-width="94"></div></div>
+            </div>
+            <div class="sk-bar">
+              <div class="sk-info">
+                <span class="sk-label">
+                  <svg class="tech-logo sm" viewBox="0 0 32 32"><circle cx="21" cy="11" r="7" fill="#036C70"/><circle cx="11" cy="15" r="8" fill="#008272"/><circle cx="19" cy="21" r="7" fill="#00A99D"/></svg>
+                  SharePoint & Office Scripts
+                </span>
+                <span class="sk-pct">86%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill" data-width="86"></div></div>
+            </div>
+            <div class="sk-bar">
+              <div class="sk-info">
+                <span class="sk-label">
+                  <svg class="tech-logo sm" viewBox="0 0 32 32"><path fill="#3776AB" d="M15.9 3c-6.8 0-6.4 3-6.4 3l.01 3.1h6.5v.9H5.8S2 9.5 2 16.4c0 6.8 3.3 6.6 3.3 6.6h2v-2.8s-.1-3.3 3.3-3.3h5.7s3.2.1 3.2-3.1V6.2s.5-3.2-3.6-3.2zm-3.6 2c.7 0 1.2.5 1.2 1.2 0 .7-.5 1.2-1.2 1.2-.7 0-1.2-.5-1.2-1.2 0-.7.5-1.2 1.2-1.2z"/><path fill="#FFD43B" d="M16.1 29c6.8 0 6.4-3 6.4-3l-.01-3.1h-6.5v-.9h10.2s3.8.5 3.8-6.4c0-6.8-3.3-6.6-3.3-6.6h-2v2.8s.1 3.3-3.3 3.3h-5.7s-3.2-.1-3.2 3.1v7.6s-.5 3.2 3.6 3.2zm3.6-2c-.7 0-1.2-.5-1.2-1.2 0-.7.5-1.2 1.2-1.2.7 0 1.2.5 1.2 1.2 0 .7-.5 1.2-1.2 1.2z"/></svg>
+                  Python & Data Wrangling (Pandas)
+                </span>
+                <span class="sk-pct">80%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill" data-width="80"></div></div>
+            </div>
           </div>
         </div>
+
+        <!-- Category 3: Core Competencies -->
         <div class="skill-cat full-w glass-card">
-          <h3 class="sk-title"><i data-lucide="target"></i>Core Competencies</h3>
+          <h3 class="sk-title"><i data-lucide="target"></i>Core Professional Competencies</h3>
           <div class="comp-tags">
             <span class="comp glass-pill"><i data-lucide="file-text"></i>MIS Executive Reporting</span>
             <span class="comp glass-pill"><i data-lucide="repeat"></i>Process Automation</span>
@@ -303,7 +668,7 @@
     </div>
   </section>
 
-  <!-- ═══ EDUCATION ═══ -->
+  <!-- ═══ EDUCATION & CERTIFICATIONS ═══ -->
   <section class="section section-alt" id="education">
     <div class="container">
       <header class="sec-header" data-animate="fade-up">
@@ -315,34 +680,96 @@
         <div class="edu-card glass-card">
           <h3 class="edu-title"><i data-lucide="graduation-cap"></i>Education</h3>
           <div class="edu-timeline">
-            <div class="edu-item"><div class="edu-dot cyan"></div><div class="edu-body"><span class="edu-year glass-badge">Batch-21</span><h4>PGD in Human Resource Management</h4><p>Academy of Business Professionals (ABP)</p></div></div>
-            <div class="edu-item"><div class="edu-dot blue"></div><div class="edu-body"><span class="edu-year glass-badge">Graduated 2020</span><h4>BBA — Major in Management</h4><p>National University, Bangladesh</p></div></div>
+            <div class="edu-item">
+              <div class="edu-dot cyan"></div>
+              <div class="edu-body">
+                <span class="edu-year glass-badge">Batch-21</span>
+                <h4>PGD in Human Resource Management</h4>
+                <p>Academy of Business Professionals (ABP)</p>
+              </div>
+            </div>
+            <div class="edu-item">
+              <div class="edu-dot blue"></div>
+              <div class="edu-body">
+                <span class="edu-year glass-badge">Graduated 2020</span>
+                <h4>BBA — Major in Management</h4>
+                <p>National University, Bangladesh</p>
+              </div>
+            </div>
           </div>
         </div>
+
         <div class="edu-card glass-card">
           <h3 class="edu-title"><i data-lucide="award"></i>Certifications & Training</h3>
           <div class="cert-list">
-            <div class="cert-item highlight glass-card"><i data-lucide="book-open" class="cert-ic"></i><div><h4>Trainer, Executive Skill Dept — Excel</h4><p>Brandix Bangladesh Region (2026–Present)</p></div></div>
-            <div class="cert-item glass-card"><i data-lucide="brain" class="cert-ic"></i><div><h4>Agentic AI for Organizations</h4><p>Brandix Digital Operation</p></div></div>
-            <div class="cert-item glass-card"><i data-lucide="bar-chart-3" class="cert-ic"></i><div><h4>Microsoft Power BI for Professionals</h4><p>Ostad</p></div></div>
-            <div class="cert-item glass-card"><i data-lucide="code-2" class="cert-ic"></i><div><h4>Data Science: Python & ML</h4><p>Ostad</p></div></div>
-            <div class="cert-item glass-card"><i data-lucide="palette" class="cert-ic"></i><div><h4>Adobe Creative Suite</h4><p>ICT Division — Learning & Earning</p></div></div>
+            <div class="cert-item highlight glass-card">
+              <svg class="tech-logo lg" viewBox="0 0 32 32"><path fill="#107C41" d="M19 4h9a2 2 0 012 2v20a2 2 0 01-2 2h-9V4z"/><path fill="#21A366" d="M19 4H8a2 2 0 00-2 2v20a2 2 0 002 2h11V4z"/><path fill="#fff" d="M7.5 11l2.5 4.5-2.5 4.5h2l1.5-3 1.5 3h2l-2.5-4.5 2.5-4.5h-2l-1.5 3-1.5-3h-2z"/></svg>
+              <div>
+                <h4>Trainer, Executive Skill Dept — Excel</h4>
+                <p>Brandix Bangladesh Region (2026–Present)</p>
+              </div>
+            </div>
+            <div class="cert-item glass-card">
+              <i data-lucide="brain" class="cert-ic"></i>
+              <div>
+                <h4>Agentic AI for Organizations</h4>
+                <p>Brandix Digital Operation</p>
+              </div>
+            </div>
+            <div class="cert-item glass-card">
+              <svg class="tech-logo lg" viewBox="0 0 32 32"><path d="M26 4v24a2 2 0 01-2 2h-4V2h4a2 2 0 012 2z" fill="#E8B000"/><path d="M19 10v18a2 2 0 01-2 2h-4V8h4a2 2 0 012 2z" fill="#F2C811"/><path d="M13 16v12a2 2 0 01-2 2H7a2 2 0 01-2-2V18a2 2 0 012-2h6z" fill="#FAD837"/></svg>
+              <div>
+                <h4>Microsoft Power BI for Professionals</h4>
+                <p>Ostad</p>
+              </div>
+            </div>
+            <div class="cert-item glass-card">
+              <svg class="tech-logo lg" viewBox="0 0 32 32"><path fill="#3776AB" d="M15.9 3c-6.8 0-6.4 3-6.4 3l.01 3.1h6.5v.9H5.8S2 9.5 2 16.4c0 6.8 3.3 6.6 3.3 6.6h2v-2.8s-.1-3.3 3.3-3.3h5.7s3.2.1 3.2-3.1V6.2s.5-3.2-3.6-3.2zm-3.6 2c.7 0 1.2.5 1.2 1.2 0 .7-.5 1.2-1.2 1.2-.7 0-1.2-.5-1.2-1.2 0-.7.5-1.2 1.2-1.2z"/><path fill="#FFD43B" d="M16.1 29c6.8 0 6.4-3 6.4-3l-.01-3.1h-6.5v-.9h10.2s3.8.5 3.8-6.4c0-6.8-3.3-6.6-3.3-6.6h-2v2.8s.1 3.3-3.3 3.3h-5.7s-3.2-.1-3.2 3.1v7.6s-.5 3.2 3.6 3.2zm3.6-2c-.7 0-1.2-.5-1.2-1.2 0-.7.5-1.2 1.2-1.2.7 0 1.2.5 1.2 1.2 0 .7-.5 1.2-1.2 1.2z"/></svg>
+              <div>
+                <h4>Data Science: Python & ML</h4>
+                <p>Ostad</p>
+              </div>
+            </div>
+            <div class="cert-item glass-card">
+              <svg class="tech-logo lg" viewBox="0 0 32 32"><path fill="#FF0000" d="M6 4a2 2 0 00-2 2v20a2 2 0 002 2h20a2 2 0 002-2V6a2 2 0 00-2-2H6z"/><path fill="#fff" d="M12.5 9h-4L5 23h3.5l1.6-4.5h4.8L12.5 9zm-.5 6.8h-2.5l1.3-4 1.2 4zm11.5-6.8h-3.2L15 23h3.6l1.3-4h4.1l1.3 4H29l-5.5-14zm-2.8 6.8l1.3-4.2 1.3 4.2h-2.6z"/></svg>
+              <div>
+                <h4>Adobe Creative Suite</h4>
+                <p>ICT Division — Learning & Earning</p>
+              </div>
+            </div>
           </div>
         </div>
+
         <div class="edu-card full-w glass-card">
-          <h3 class="edu-title"><i data-lucide="award"></i>Leadership & Volunteer</h3>
+          <h3 class="edu-title"><i data-lucide="award"></i>Leadership & Volunteer Engagement</h3>
           <div class="lead-grid">
-            <div class="lead-item glass-card"><h4>Deputy Office Secretary</h4><p>Bangladesh Youth Cadets Forum (National)</p><span class="lead-badge glass-badge">2022–2024</span></div>
-            <div class="lead-item glass-card"><h4>Finance Secretary</h4><p>Bangladesh Youth Cadets Forum (Comilla)</p><span class="lead-badge glass-badge">2019–2023</span></div>
-            <div class="lead-item glass-card"><h4>Ex-Cadet Sergeant</h4><p>Bangladesh National Cadet Corps (BNCC)</p><span class="lead-badge glass-badge">2013–2015</span></div>
-            <div class="lead-item glass-card"><h4>Certified Workshops</h4><p>Fire Safety (FSCD) & Illustration (ICT)</p><span class="lead-badge glass-badge">2019–2020</span></div>
+            <div class="lead-item glass-card">
+              <h4>Deputy Office Secretary</h4>
+              <p>Bangladesh Youth Cadets Forum (National Committee)</p>
+              <span class="lead-badge glass-badge">2022–2024</span>
+            </div>
+            <div class="lead-item glass-card">
+              <h4>Finance Secretary</h4>
+              <p>Bangladesh Youth Cadets Forum (Comilla District)</p>
+              <span class="lead-badge glass-badge">2019–2023</span>
+            </div>
+            <div class="lead-item glass-card">
+              <h4>Ex-Cadet Sergeant</h4>
+              <p>Bangladesh National Cadet Corps (BNCC — Mainamati Reg.)</p>
+              <span class="lead-badge glass-badge">2013–2015</span>
+            </div>
+            <div class="lead-item glass-card">
+              <h4>Certified Disaster & Illustration</h4>
+              <p>Fire Safety (FSCD) & Vector Illustration (ICT Div)</p>
+              <span class="lead-badge glass-badge">2019–2020</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ CONTACT ═══ -->
+  <!-- ═══ CONTACT SECTION ═══ -->
   <section class="section" id="contact">
     <div class="container">
       <header class="sec-header" data-animate="fade-up">
@@ -351,13 +778,31 @@
         <p class="sec-sub">Whether it's automated workflows, Power BI dashboards, or enterprise apps — I'm ready to help.</p>
       </header>
       <div class="contact-grid" data-animate="fade-up" data-delay="100">
-        <a href="mailto:kihpranto@yahoo.com" class="contact-card glass-card"><i data-lucide="mail" class="cc-icon"></i><h4>Email</h4><p>kihpranto@yahoo.com</p></a>
-        <a href="tel:+8801832961609" class="contact-card glass-card"><i data-lucide="phone" class="cc-icon"></i><h4>Phone</h4><p>+880 1832 961 609</p></a>
-        <div class="contact-card glass-card"><i data-lucide="map-pin" class="cc-icon"></i><h4>Location</h4><p>Cumilla, Bangladesh</p></div>
-        <a href="tel:+8801711160763" class="contact-card glass-card"><i data-lucide="smartphone" class="cc-icon"></i><h4>Alt Phone</h4><p>+880 1711 160 763</p></a>
+        <a href="mailto:kihpranto@yahoo.com" class="contact-card glass-card">
+          <i data-lucide="mail" class="cc-icon"></i>
+          <h4>Email Directly</h4>
+          <p>kihpranto@yahoo.com</p>
+        </a>
+        <a href="tel:+8801832961609" class="contact-card glass-card">
+          <i data-lucide="phone" class="cc-icon"></i>
+          <h4>Call Me</h4>
+          <p>+880 1832 961 609</p>
+        </a>
+        <div class="contact-card glass-card">
+          <i data-lucide="map-pin" class="cc-icon"></i>
+          <h4>Location</h4>
+          <p>Cumilla, Bangladesh</p>
+        </div>
+        <a href="tel:+8801711160763" class="contact-card glass-card">
+          <i data-lucide="smartphone" class="cc-icon"></i>
+          <h4>Alternative Phone</h4>
+          <p>+880 1711 160 763</p>
+        </a>
       </div>
       <div class="contact-cta" data-animate="fade-up" data-delay="200">
-        <a href="mailto:kihpranto@yahoo.com" class="btn btn-primary btn-lg glass-btn-glow"><i data-lucide="send"></i> Send Me an Email</a>
+        <a href="mailto:kihpranto@yahoo.com" class="btn btn-primary btn-lg glass-btn-glow">
+          <i data-lucide="send"></i> Send Me an Email
+        </a>
       </div>
     </div>
   </section>
@@ -367,15 +812,29 @@
     <div class="container">
       <div class="footer-inner">
         <div class="footer-logo"><span class="footer-mono">KIH</span></div>
-        <p class="footer-copy">© 2026 Kazi Md Ikramul (Pranto) Hassan — Built with <i data-lucide="heart" style="width:14px;height:14px;color:var(--accent-cyan);vertical-align:middle"></i></p>
-        <div class="footer-links"><a href="#home">Home</a><a href="#about">About</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#contact">Contact</a></div>
+        <p class="footer-copy">© 2026 Kazi Md Ikramul (Pranto) Hassan — Built with Passion & Precision</p>
+        <div class="footer-links">
+          <a href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#experience">Experience</a>
+          <a href="#projects">Projects</a>
+          <a href="#skills">Skills</a>
+          <a href="#contact">Contact</a>
+        </div>
       </div>
     </div>
   </footer>
 
-  <button class="back-top glass-btn-glow" id="backToTop" aria-label="Back to top"><i data-lucide="arrow-up"></i></button>
+  <!-- Floating Back to Top Button -->
+  <button class="back-top glass-btn-glow" id="backToTop" aria-label="Back to top">
+    <i data-lucide="arrow-up"></i>
+  </button>
 
   <script src="script.js"></script>
-  <script>lucide.createIcons();</script>
+  <script>
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  </script>
 </body>
 </html>
