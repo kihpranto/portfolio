@@ -156,24 +156,30 @@ img, svg {
 }
 
 /* ─── Real Official Software Logos ─── */
-.tech-logo {
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  vertical-align: middle;
-  object-fit: contain;
-  flex-shrink: 0;
+.tech-logo, img.tech-logo, svg.tech-logo {
+  width: 20px !important;
+  height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  object-fit: contain !important;
+  flex-shrink: 0 !important;
   transition: transform var(--fast);
 }
 
-.tech-logo.sm {
-  width: 16px;
-  height: 16px;
+.tech-logo.sm, img.tech-logo.sm, svg.tech-logo.sm {
+  width: 16px !important;
+  height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
 }
 
-.tech-logo.lg {
-  width: 30px;
-  height: 30px;
+.tech-logo.lg, img.tech-logo.lg, svg.tech-logo.lg {
+  width: 28px !important;
+  height: 28px !important;
+  max-width: 28px !important;
+  max-height: 28px !important;
 }
 
 /* ─── Lucide Icons ─── */
