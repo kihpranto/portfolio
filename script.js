@@ -96,6 +96,18 @@
   const desktopLinks = document.querySelectorAll('.desktop-nav .nav-link');
 
   function updateActiveNav() {
+    const atBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60);
+
+    if (atBottom) {
+      desktopLinks.forEach((link) => {
+        link.classList.toggle('active', link.getAttribute('href') === '#contact');
+      });
+      mobileNavLinks.forEach((link) => {
+        link.classList.toggle('active', link.getAttribute('href') === '#contact');
+      });
+      return;
+    }
+
     const scrollPos = window.scrollY + 160;
     sections.forEach((section) => {
       const top = section.offsetTop;
