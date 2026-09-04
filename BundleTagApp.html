@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StitchSync Tag - Garment Bundle Tag & Cut Identification Engine</title>
+  <!-- Brand Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/stitchsync-tag-logo.jpg">
+  <!-- Tailwind CSS Engine (Local Offline + Configuration) -->
+  <script src="tailwind.js"></script>
+  <script>
+    if (typeof tailwind !== 'undefined') {
+      tailwind.config = { darkMode: 'class' };
+    }
+  </script>
+
+  <!-- SheetJS Excel Engine (Local Offline + Excel .xlsx/.xls Parser) -->
+  <script src="xlsx.full.min.js"></script>
+
+  <!-- QR Code Generator Engine (Local Offline) -->
+  <script src="js/qrcode.min.js"></script>
+
+  <!-- Google Fonts (Plus Jakarta Sans & JetBrains Mono) with non-blocking fallback -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body
+  class="h-screen w-screen overflow-hidden bg-[#F8FAFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200 antialiased selection:bg-blue-500 selection:text-white flex flex-col">
+
+  <!-- Top Portfolio Return Bar -->
+  <header class="no-print w-full bg-slate-900/95 text-slate-200 border-b border-slate-800 px-4 py-2 flex items-center justify-between text-xs z-50 shrink-0 select-none backdrop-blur-md shadow-md">
+    <div class="flex items-center gap-3">
+      <a href="projects.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 hover:text-blue-300 font-bold border border-blue-500/40 transition">
+        <span>←</span>
+        <span>Back to Projects</span>
+      </a>
+      <span class="text-slate-600">|</span>
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-medium text-slate-300">Live Application Demo:</span>
+        <span class="font-bold text-white">StitchSync Tag Generator v3.2</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="index.html" class="text-slate-400 hover:text-white transition font-medium">Portfolio Home</a>
+      <span class="text-slate-700">•</span>
+      <a href="mailto:kihpranto@yahoo.com" class="text-blue-400 hover:text-blue-300 transition font-semibold">Contact Kazi Md Ikramul Hassan</a>
+    </div>
+  </header>
+
+  <!-- Main Flex Layout Container -->
+  <div id="app-root-container" class="flex-1 w-full flex flex-row overflow-hidden bg-[#F8FAFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100">
+
+    <!-- Left Side Panel Navigation (Sidebar) -->
+    <aside id="app-sidebar" class="no-print w-64 shrink-0 bg-white/95 dark:bg-slate-900/95 border-r border-slate-200/90 dark:border-slate-800/90 flex flex-col justify-between h-screen z-40 transition-all duration-300 shadow-sm backdrop-blur-md overflow-hidden">
+      
+      <!-- Sidebar Header: Brand & Collapse Toggle -->
+      <div class="sidebar-header p-3.5 border-b border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between gap-2.5">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-8 h-8 rounded-xl overflow-hidden shadow-sm shadow-blue-500/20 ring-1 ring-blue-500/30 shrink-0 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 flex items-center justify-center" title="StitchSync Tag">
+            <img src="assets/stitchsync-tag-logo.jpg" alt="StitchSync Tag Logo" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='🏷️'">
+          </div>
+          <div class="sidebar-brand-text truncate">
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-black text-slate-900 dark:text-slate-100 tracking-tight">STITCH<span class="text-blue-600 dark:text-blue-400">SYNC</span> <span class="text-[9px] font-extrabold px-1 py-0.2 rounded bg-blue-100/90 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">TAG</span></span>
+              <span class="px-1 py-0.2 rounded text-[8px] font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">v3.2</span>
+            </div>
+            <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">Garment Bundle Tag Engine</p>
+          </div>
+        </div>
+        <button type="button" onclick="toggleSidebar()" id="btn-sidebar-collapse" title="Collapse / Expand Sidebar"
+          class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer shrink-0">
+          <svg class="w-4 h-4 sidebar-collapse-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Navigation Groups with Custom Scrollbar -->
+      <div class="flex-1 overflow-y-auto p-3 space-y-4 custom-scrollbar">
+        
+        <!-- CATEGORY 1: PRODUCTION & TAGGING -->
+        <div class="nav-category-group">
+          <div class="px-2 py-1 flex items-center justify-between text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 sidebar-category-title cursor-pointer select-none" onclick="toggleCategoryAccordion('cat-production')" title="Production & Tagging">
+            <span class="flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              <span>Production & Tagging</span>
+            </span>
+            <svg id="cat-production-arrow" class="w-3 h-3 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+          <div id="cat-production" class="space-y-1 mt-1.5 transition-all duration-200">
+            <!-- Page 1: Tag Generator -->
+            <button type="button" onclick="switchTab('generator')" data-tab-target="generator" id="tab-generator" title="Tag Generator (Auto Mode)"
+              class="nav-item-active sidebar-nav-item w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-xl transition cursor-pointer">
+              <div class="flex items-center gap-2.5">
+                <svg class="w-4 h-4 sidebar-item-icon shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M7 7h.01M7 3h5a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A1 1 0 013 12V7a4 4 0 014-4z">
+                  </path>
+                </svg>
+                <span class="sidebar-item-label">Tag Generator</span>
+              </div>
+              <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-blue-100/80 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300 sidebar-badge">Auto</span>
+            </button>
+
+            <!-- Page 2: Print Preview -->
+            <button type="button" onclick="switchTab('print')" data-tab-target="print" id="tab-print" title="Print Preview & Tag Sheets"
+              class="nav-item-inactive sidebar-nav-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
+              <div class="flex items-center gap-2.5">
+                <svg class="w-4 h-4 sidebar-item-icon shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                  </path>
+                </svg>
+                <span class="sidebar-item-label">Print Preview</span>
+              </div>
+              <span id="sidebar-print-count" class="text-[10px] font-bold font-mono px-1.5 py-0.2 rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400 sidebar-badge">0</span>
+            </button>
+
+            <!-- Page 3: Numbering Chart -->
+            <button type="button" onclick="switchTab('chart')" data-tab-target="chart" id="tab-chart" title="Bundle Numbering Chart"
+              class="nav-item-inactive sidebar-nav-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
+              <div class="flex items-center gap-2.5">
+                <svg class="w-4 h-4 sidebar-item-icon shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                  </path>
+                </svg>
+                <span class="sidebar-item-label">Numbering Chart</span>
+              </div>
+              <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.2 rounded border border-emerald-200/60 dark:border-emerald-800/60 sidebar-badge">QC</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CATEGORY 2: INVENTORY & HISTORY -->
+        <div class="nav-category-group">
+          <div class="px-2 py-1 flex items-center justify-between text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 sidebar-category-title cursor-pointer select-none" onclick="toggleCategoryAccordion('cat-inventory')" title="Inventory & History">
+            <span class="flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              <span>Inventory & History</span>
+            </span>
+            <svg id="cat-inventory-arrow" class="w-3 h-3 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+          <div id="cat-inventory" class="space-y-1 mt-1.5 transition-all duration-200">
+            <!-- Page 4: Bundle Batch Logs -->
+            <button type="button" onclick="switchTab('logs')" data-tab-target="logs" id="tab-logs" title="Bundle Batch Logs & History"
+              class="nav-item-inactive sidebar-nav-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
+              <div class="flex items-center gap-2.5">
+                <svg class="w-4 h-4 sidebar-item-icon shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                  </path>
+                </svg>
+                <span class="sidebar-item-label">Bundle Batch Logs</span>
+              </div>
+              <span id="sidebar-logs-count" class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.2 rounded border border-emerald-200/60 dark:border-emerald-800/60 sidebar-badge">0 Logs</span>
+            </button>
+
+            <!-- Page 5: Production Output Reports -->
+            <button type="button" onclick="switchTab('reports')" data-tab-target="reports" id="tab-reports" title="Production Output & Generation Reports"
+              class="nav-item-inactive sidebar-nav-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
+              <div class="flex items-center gap-2.5">
+                <svg class="w-4 h-4 sidebar-item-icon shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                  </path>
+                </svg>
+                <span class="sidebar-item-label">Production Reports</span>
+              </div>
+              <span class="text-[9px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-1.5 py-0.2 rounded border border-indigo-200/60 dark:border-indigo-800/60 sidebar-badge">Analytics</span>
+            </button>
+
+            <!-- Page: Archived Batches -->
+            <button type="button" onclick="switchTab('archive')" data-tab-target="archive" id="tab-archive" title="Archived Batch Logs"
+              class="nav-item-inactive sidebar-nav-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
+              <div class="flex items-center gap-2.5">
+                <svg class="w-4 h-4 sidebar-item-icon shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4">
+                  </path>
+                </svg>
+                <span class="sidebar-item-label">Archived Batches</span>
+              </div>
+              <span id="sidebar-archive-count" class="text-[9px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-1.5 py-0.2 rounded border border-amber-200/60 dark:border-amber-800/60 sidebar-badge">0</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CATEGORY 3: MASTER DATA & SYSTEM -->
+        <div class="nav-category-group">
+          <div class="px-2 py-1 flex items-center justify-between text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 sidebar-category-title cursor-pointer select-none" onclick="toggleCategoryAccordion('cat-system')" title="Master Data & System">
+            <span class="flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-indigo-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+              <span>Master Data & System</span>
+            </span>
+            <svg id="cat-system-arrow" class="w-3 h-3 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+          <div id="cat-system" class="space-y-1 mt-1.5 transition-all duration-200">
+            <!-- Page 7: Master Data Source -->
+            <button type="button" onclick="switchTab('master')" data-tab-target="master" id="tab-master" title="Master Cutting Specifications"
+              class="nav-item-inactive sidebar-nav-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
+              <div class="flex items-center gap-2.5">
+                <svg class="w-4 h-4 sidebar-item-icon shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4">
+                  </path>
+                </svg>
+                <span class="sidebar-item-label">Master Data Source</span>
+              </div>
+              <span id="sidebar-master-count" class="text-[10px] font-bold font-mono px-1.5 py-0.2 rounded-full bg-blue-100 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 sidebar-badge">27.3k</span>
+            </button>
+
+            <!-- Page 8: Sizes & Cut Parts Specs -->
+            <button type="button" onclick="switchTab('specs')" data-tab-target="specs" id="tab-specs" title="Sizes & Cut Parts Master Configuration"
+              class="nav-item-inactive sidebar-nav-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
+              <div class="flex items-center gap-2.5">
+                <svg class="w-4 h-4 sidebar-item-icon shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4">
+                  </path>
+                </svg>
+                <span class="sidebar-item-label">Sizes & Cut Parts</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar Footer: System Status & User Info -->
+      <div class="p-3 border-t border-slate-200/80 dark:border-slate-800/80 bg-slate-50/70 dark:bg-slate-900/60 space-y-2.5 sidebar-footer">
+        <div class="sidebar-footer-row flex items-center justify-between gap-2 px-1">
+          <div class="flex items-center gap-2 min-w-0">
+            <span id="sidebar-db-dot" class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+            <span id="sidebar-db-label" class="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 truncate">Live DB Connected</span>
+          </div>
+          <span class="text-[10px] text-slate-400 font-mono sidebar-credit shrink-0">v3.1</span>
+        </div>
+        <div class="text-[10px] text-slate-400 dark:text-slate-500 text-center font-medium sidebar-credit">
+          Brandix Bangladesh • PI Team
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Wrapper (Frozen Header, Scrollable Middle, Frozen Footer) -->
+    <div id="app-main-column" class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+      
+      <!-- Top Minimal App Bar (Frozen at Top) -->
+      <header id="app-top-header"
+        class="glass-nav border-b border-slate-200/80 dark:border-slate-800/80 shadow-[0_1px_3px_rgba(0,0,0,0.02)] no-print shrink-0 z-30 transition-colors duration-200 px-3 py-1.5 sm:px-4">
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3 min-w-0">
+            <!-- Sidebar Toggle Button -->
+            <button type="button" onclick="toggleSidebar()" title="Toggle Sidebar Navigation"
+              class="p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer shadow-2xs shrink-0">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            </button>
+
+            <!-- Dynamic Breadcrumb Path Indicator -->
+            <div id="nav-breadcrumb" class="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300 font-medium truncate">
+              <span class="text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-blue-500 shrink-0 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <span>Production & Tagging</span>
+              </span>
+              <span class="text-slate-300 dark:text-slate-600">/</span>
+              <span class="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A1 1 0 013 12V7a4 4 0 014-4z"/></svg>
+                <span>Tag Generator</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Right Quick Actions & Theme Toggle -->
+          <div class="flex items-center gap-2 shrink-0">
+            <!-- Suite Cross-Link: Switch to StitchSync Rack -->
+            <a href="LocationManager.html" target="_blank" title="Open StitchSync Rack (Warehouse Floor Manager)"
+              class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition cursor-pointer flex items-center gap-1.5 shadow-2xs">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+              <span class="hidden sm:inline">StitchSync</span> <strong>Rack</strong>
+              <svg class="w-3 h-3 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </a>
+            <button type="button" onclick="reloadMasterDataFromCSV()" title="Reload MasterData.csv"
+              class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 transition cursor-pointer flex items-center gap-1.5 shadow-2xs">
+              <svg id="header-reload-icon" class="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              <span class="hidden sm:inline">Reload Master Data</span>
+            </button>
+            <!-- Top Bar Theme Toggle -->
+            <button type="button" onclick="toggleDarkMode()" id="btn-theme-toggle" title="Toggle Dark / Light Mode"
+              class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition cursor-pointer flex items-center justify-center shadow-2xs">
+              <svg id="icon-sun" class="w-3.5 h-3.5 text-amber-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                </path>
+              </svg>
+              <svg id="icon-moon" class="w-3.5 h-3.5 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Toast Notification Container -->
+      <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 no-print"></div>
+
+      <!-- Loading Overlay -->
+      <div id="loading-overlay"
+        class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center hidden no-print" onclick="if(event.target===this)hideLoading()">
+        <div
+          class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-2xl flex items-center justify-between gap-4 max-w-sm mx-4">
+          <div class="flex items-center gap-3.5">
+            <div class="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin shrink-0"></div>
+            <div>
+              <p id="loading-spinner-text" class="text-xs font-bold text-slate-800 dark:text-slate-200">Processing request...</p>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400">GarmentTag Live Database Engine</p>
+            </div>
+          </div>
+          <button type="button" onclick="hideLoading()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-sm font-bold p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" title="Dismiss">✕</button>
+        </div>
+      </div>
+
+      <!-- Middle Scrollable Viewport (Only content scrolls) -->
+      <div id="main-scroll-viewport" class="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
+        <!-- Main Content Container -->
+        <main class="w-full max-w-[1720px] mx-auto px-2.5 sm:px-4 py-2 space-y-2.5">
+
+          <!-- System Telemetry & Live Connection Status Dashboard (Frozen / Sticky on scroll) -->
+          <div id="system-status-bar"
+            class="sticky top-0 z-25 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 px-3 py-1.5 sm:px-4 flex flex-wrap items-center justify-between gap-2.5 transition-all no-print">
+            
+            <div class="flex items-center gap-3 sm:gap-4 flex-wrap">
+              <!-- Master Data Source Indicator -->
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                  Master Data:
+                </span>
+                <span id="gen-status-master" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                  <span id="gen-status-master-dot" class="w-2 h-2 rounded-full bg-slate-400"></span>
+                  <span id="gen-status-master-text">Disconnected</span>
+                </span>
+              </div>
+
+              <!-- Bundle Database Indicator (garment_batches_data.jsonl & garment_tags_data.jsonl) -->
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                  Bundle DB:
+                </span>
+                <span id="gen-status-bundle" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                  <span id="gen-status-bundle-dot" class="w-2 h-2 rounded-full bg-rose-500"></span>
+                  <span id="gen-status-bundle-text">Disconnected</span>
+                </span>
+              </div>
+
+              <!-- Universal Specs Indicator -->
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                  Specs:
+                </span>
+                <span id="gen-status-specs" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                  <span id="gen-status-specs-dot" class="w-2 h-2 rounded-full bg-slate-400"></span>
+                  <span id="gen-status-specs-text">Disconnected</span>
+                </span>
+              </div>
+
+              <!-- Archive Database Indicator -->
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                  Archive DB:
+                </span>
+                <span id="gen-status-archive" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                  <span id="gen-status-archive-dot" class="w-2 h-2 rounded-full bg-slate-400"></span>
+                  <span id="gen-status-archive-text">Disconnected</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 flex-wrap">
+              <button onclick="browseCSVFolder()" class="px-2.5 py-1 text-[11px] font-bold rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition cursor-pointer flex items-center gap-1 shadow-2xs" title="Select / Change Master Data Excel Folder">
+                📊 Connect Excel
+              </button>
+              <button onclick="browseDatabaseFolder()" class="px-2.5 py-1 text-[11px] font-bold rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition cursor-pointer flex items-center gap-1 shadow-2xs" title="Select / Change .jsonl Database Folder">
+                📁 Connect DB
+              </button>
+              <span id="json-sync-indicator" class="inline-flex items-center gap-1.5 text-xs font-bold text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 px-3 py-1 rounded-full border border-rose-200 dark:border-rose-800 shadow-2xs">
+                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                Database Disconnected
+              </span>
+            </div>
+          </div>
+
+    <!-- Connection Warning Banner (Shown only when Database Folder is not connected) -->
+    <div id="db-disconnected-alert" class="hidden bg-amber-50/90 dark:bg-amber-950/70 border border-amber-300 dark:border-amber-700 rounded-2xl p-3.5 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs no-print">
+      <div class="flex items-center gap-3 text-amber-800 dark:text-amber-200 text-xs font-semibold">
+        <div id="db-alert-icon" class="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-900/60 flex items-center justify-center text-amber-700 dark:text-amber-300 font-bold shrink-0 text-base">
+          ⚡
+        </div>
+        <div>
+          <strong id="db-alert-title" class="font-bold text-slate-900 dark:text-slate-100 text-sm block">Folders Disconnected (Zero Node.js Mode)</strong>
+          <span id="db-alert-desc" class="text-[11px] text-amber-900/80 dark:text-amber-200/80">Connect your Database (.jsonl) and Master Data (Excel) folders below:</span>
+        </div>
+      </div>
+      <div class="flex items-center flex-wrap gap-2 shrink-0">
+        <button id="btn-connect-db-banner" onclick="browseDatabaseFolder()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer flex items-center gap-1.5 active:scale-95">
+          📁 Connect Database Folder (.jsonl)
+        </button>
+        <button id="btn-connect-csv-banner" onclick="browseCSVFolder()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer flex items-center gap-1.5 active:scale-95">
+          📊 Connect Master Data Folder (Excel)
+        </button>
+        <button onclick="checkAndInitJSONConnection()" class="px-3.5 py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl shadow-2xs transition cursor-pointer flex items-center gap-1.5">
+          🔄 Retry Server
+        </button>
+      </div>
+    </div>
+
+    <!-- Tag Generator Component -->
+    <section id="sec-generator" class="space-y-2.5">
+
+      <!-- Step 1 Card: Production Specifications -->
+      <div id="card-gen-specs"
+        class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-3 sm:p-3.5 space-y-2 transition-all duration-300">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+          <div class="flex items-center gap-2">
+            <span
+              class="w-5 h-5 rounded-lg bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 text-[11px] font-extrabold flex items-center justify-center border border-blue-200/80 dark:border-blue-800 shadow-2xs">01</span>
+            <div>
+              <h2 class="text-xs font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                Production & Cutting Specifications
+              </h2>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400">Select order identifiers from MasterData.csv to auto-link specs</p>
+            </div>
+          </div>
+          <div id="ply-sequence-badge" class="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400">
+            Select Style, Color & Schedule to calculate sequential Ply start
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
+          <div>
+            <label for="gen-style" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+              <span>Style Name *</span>
+            </label>
+            <select id="gen-style" onchange="onStyleChange()" title="Select Style Name" aria-label="Style Name"
+              class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl px-2 py-1 text-xs font-medium text-slate-800 dark:text-slate-200 outline-none transition shadow-2xs">
+              <option value="">-- Select Style --</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="gen-color" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+              <span>Color Name *</span>
+            </label>
+            <select id="gen-color" onchange="onColorChange()" disabled title="Select Color Name" aria-label="Color Name"
+              class="w-full h-8 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-medium text-slate-800 dark:text-slate-200 disabled:opacity-50 outline-none transition shadow-2xs">
+              <option value="">-- Select Color --</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="gen-po" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+              <span>Schedule Number *</span>
+            </label>
+            <select id="gen-po" onchange="onScheduleChange()" disabled title="Select Schedule Number" aria-label="Schedule Number"
+              class="w-full h-8 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-medium text-slate-800 dark:text-slate-200 disabled:opacity-50 outline-none transition shadow-2xs">
+              <option value="">-- Select Schedule --</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="gen-pattern" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+              <span>Lay Job No *</span>
+            </label>
+            <select id="gen-pattern" onchange="onJobNoChange()" disabled title="Select Lay Job No" aria-label="Lay Job No"
+              class="w-full h-8 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-medium text-slate-800 dark:text-slate-200 disabled:opacity-50 outline-none transition shadow-2xs">
+              <option value="">-- Select Lay Job No --</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="gen-docket" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+              <span>Docket No</span>
+            </label>
+            <select id="gen-docket" onchange="onDocketChange()" disabled title="Select Docket No" aria-label="Docket No"
+              class="w-full h-8 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-medium text-slate-800 dark:text-slate-200 disabled:opacity-50 outline-none transition shadow-2xs">
+              <option value="">-- Select Docket No --</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+              <span>Total Lay Plies *</span>
+            </label>
+            <input type="number" id="gen-ply" oninput="updatePlySequenceBadge()" min="1" value=""
+              placeholder="e.g. 30"
+              class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl px-2 py-1 text-xs font-mono font-bold text-slate-800 dark:text-slate-200 outline-none transition shadow-2xs">
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+              <span>Pattern</span>
+            </label>
+            <input type="text" id="gen-pattern-text" value=""
+              placeholder="e.g. P-001"
+              class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl px-2 py-1 text-xs font-medium text-slate-800 dark:text-slate-200 outline-none transition shadow-2xs">
+          </div>
+
+          <div>
+            <label for="gen-embellishment" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1">
+              <span>Embellishment Style</span>
+            </label>
+            <select id="gen-embellishment" title="Select Embellishment Style" aria-label="Embellishment Style"
+              class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl px-2 py-1 text-xs font-medium text-slate-800 dark:text-slate-200 outline-none transition shadow-2xs">
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Cut Parts Selection Tile & Size Ratio Mapping -->
+      <div id="card-gen-mapping"
+        class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-2.5 sm:p-3 space-y-2 transition-all duration-300">
+
+        <!-- TOP TILE: Multi-Select Cut Parts (2A) -->
+        <div
+          class="bg-slate-50/80 dark:bg-slate-800/40 rounded-xl p-2 sm:p-2.5 border border-slate-200/80 dark:border-slate-700/80">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+            <div>
+              <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                <span
+                  class="w-4 h-4 rounded-md bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-[9px] font-extrabold flex items-center justify-center border border-indigo-200 dark:border-indigo-800 shadow-2xs">
+                  2A
+                </span>
+                Cut Parts Selection Matrix
+                <span id="selected-parts-count"
+                  class="text-[9px] bg-indigo-600 text-white font-mono px-1.5 py-0.2 rounded-full font-bold shadow-2xs">
+                  0 Selected
+                </span>
+              </h3>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400">Toggle parts that should be bundled for each garment unit</p>
+            </div>
+
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" onclick="selectAllParts()"
+                class="px-2 py-0.5 bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 border border-slate-200 dark:border-slate-700 text-indigo-600 dark:text-indigo-400 text-[11px] font-semibold rounded-lg transition-all cursor-pointer shadow-2xs">
+                Select All
+              </button>
+              <button type="button" onclick="deselectAllParts()"
+                class="px-2 py-0.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-[11px] font-semibold rounded-lg transition-all cursor-pointer shadow-2xs">
+                Clear All
+              </button>
+            </div>
+          </div>
+
+          <div id="parts-tile-container" class="flex flex-wrap gap-1.5">
+            <!-- Dynamic part pills -->
+          </div>
+        </div>
+
+        <!-- BOTTOM TABLE: Size & Cut Ratio Copies Mapping (2B) -->
+        <div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+            <div>
+              <h2 class="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                <span
+                  class="w-4 h-4 rounded-md bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 text-[9px] font-extrabold flex items-center justify-center border border-blue-200/80 dark:border-blue-800 shadow-2xs">
+                  2B
+                </span>
+                Size & Cut Ratio Copies Mapping
+              </h2>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400">Configure size markers and optional shade breakdowns with individual ply allocations</p>
+            </div>
+
+            <button id="btn-add-mapping-row" onclick="addMappingRow()"
+              class="inline-flex items-center gap-1 px-2.5 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-[11px] rounded-lg shadow-xs transition-all cursor-pointer">
+              <span class="text-xs leading-none">+</span> Add Size Row
+            </button>
+          </div>
+
+          <div
+            class="overflow-x-auto border border-slate-200/90 dark:border-slate-800/90 rounded-xl bg-white dark:bg-slate-900 shadow-2xs">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr
+                  class="bg-[#F8FAFC] dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+                  <th class="py-1 px-2 w-10 text-center">#</th>
+                  <th class="py-1 px-2 w-36">Garment Size</th>
+                  <th class="py-1 px-2 w-36">Cut Ratio (Copies)</th>
+                  <th class="py-1 px-2">Shade Breakdown & Ply Allocation</th>
+                  <th class="py-1 px-2 w-20 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody id="mapping-rows" class="divide-y divide-slate-100 dark:divide-slate-800/80">
+                <!-- Mapping rows injected here -->
+              </tbody>
+            </table>
+          </div>
+
+          <div
+            class="mt-2 p-2 sm:p-2.5 bg-gradient-to-r from-slate-100 via-blue-50/50 to-indigo-50/40 dark:from-slate-800/90 dark:via-slate-800/60 dark:to-indigo-950/40 rounded-xl border border-slate-200 dark:border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-2xs">
+            <div id="mapping-summary-text" class="text-xs text-slate-700 dark:text-slate-300 font-medium">
+              <!-- Summary string -->
+            </div>
+
+            <button id="btn-generate" onclick="generateTags()"
+              class="px-4 py-2 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 active:scale-98 text-white font-extrabold text-xs rounded-xl shadow-md shadow-blue-500/25 transition-all whitespace-nowrap shrink-0 cursor-pointer flex items-center justify-center gap-1.5">
+              <span class="text-sm leading-none">⚡</span>
+              <span>Generate Garment Tags</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Print Preview Component -->
+    <section id="sec-print" class="hidden space-y-2.5">
+      <div id="card-print-controls"
+        class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800/90 p-3 sm:p-3.5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2 shadow-xs no-print transition-all duration-300">
+        <div>
+          <h2 id="print-header-title" class="font-bold text-slate-900 dark:text-slate-100 text-xs tracking-tight">Bundle Tag Print
+            Preview (2 Columns)</h2>
+          <p id="print-header-subtitle" class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Formatted for A4 portrait
+            paper cutter / laser tag sheets.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          <!-- Printer Selector -->
+          <div
+            class="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/80 p-0.5 rounded-lg border border-slate-200/80 dark:border-slate-700/80">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 px-1 hidden sm:inline">Printer:</span>
+            <select id="print-printer-select" title="Select Target Printer" aria-label="Select Printer"
+              class="h-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-semibold text-slate-800 dark:text-slate-200 px-2 outline-none cursor-pointer max-w-[160px] shadow-2xs">
+              <option value="">Default Printer</option>
+            </select>
+          </div>
+
+          <!-- Copies Input -->
+          <div
+            class="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/80 p-0.5 rounded-lg border border-slate-200/80 dark:border-slate-700/80">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 px-1 hidden sm:inline">Copies:</span>
+            <input type="number" id="print-copies-input" min="1" max="99" value="1" title="Number of copies"
+              class="w-10 h-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-bold text-center text-slate-800 dark:text-slate-200 outline-none shadow-2xs">
+          </div>
+
+          <!-- Paper Size Selector -->
+          <div
+            class="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/80 p-0.5 rounded-lg border border-slate-200/80 dark:border-slate-700/80">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 px-1 hidden sm:inline">Size:</span>
+            <select id="print-paper-size" onchange="setPrintPaperSize(this.value)" title="Select Print Paper Size" aria-label="Paper Size"
+              class="h-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-bold text-slate-800 dark:text-slate-200 px-2 outline-none cursor-pointer shadow-2xs">
+              <option value="A4" selected>📄 A4 (210 × 297 mm)</option>
+              <option value="A3">📄 A3 (297 × 420 mm)</option>
+              <option value="Letter">📄 Letter (8.5" × 11")</option>
+              <option value="4x6">🏷️ 4" × 6" (Thermal Tag)</option>
+              <option value="4x8">🏷️ 4" × 8" (Continuous Roll)</option>
+              <option value="3x5">🏷️ 3" × 5" (Compact Tag)</option>
+            </select>
+          </div>
+
+          <!-- Tag Density / Height Selector -->
+          <div
+            class="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/80 p-0.5 rounded-lg border border-slate-200/80 dark:border-slate-700/80">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 px-1 hidden sm:inline">Preset:</span>
+            <select id="print-tag-density" onchange="setPrintTagDensity(this.value)" title="Select Tag Density Preset" aria-label="Tag Density"
+              class="h-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-bold text-slate-800 dark:text-slate-200 px-2 outline-none cursor-pointer shadow-2xs">
+              <option value="6" selected>6 Tags / Sheet (Ultra Compact)</option>
+              <option value="5">5 Tags / Sheet (Compact)</option>
+              <option value="4">4 Tags / Sheet (Optimal)</option>
+              <option value="3">3 Tags / Sheet (Medium)</option>
+              <option value="2">2 Tags / Sheet (Large)</option>
+              <option value="1">1 Tag / Sheet (Full Label)</option>
+            </select>
+          </div>
+
+          <!-- Tag Height Adjuster (mm) -->
+          <div
+            class="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/80 p-0.5 rounded-lg border border-slate-200/80 dark:border-slate-700/80">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 px-1 hidden sm:inline">Height:</span>
+            <button type="button" onclick="stepTagHeight(-1)" class="w-5 h-6 flex items-center justify-center font-bold text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer shadow-2xs">-</button>
+            <input type="number" id="print-tag-height" min="15" max="150" step="0.5" value="23" onchange="setPrintTagHeight(this.value)" title="Custom Tag Height in mm"
+              class="w-12 h-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-xs font-mono font-bold text-center text-slate-800 dark:text-slate-200 outline-none shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-400 font-mono pr-0.5">mm</span>
+            <button type="button" onclick="stepTagHeight(1)" class="w-5 h-6 flex items-center justify-center font-bold text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer shadow-2xs">+</button>
+          </div>
+
+          <!-- Tag Gap Selector -->
+          <div
+            class="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/80 p-0.5 rounded-lg border border-slate-200/80 dark:border-slate-700/80">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 px-1 hidden sm:inline">Gap:</span>
+            <select id="print-tag-gap" onchange="setPrintTagGap(this.value)" title="Select Tag Row Gap" aria-label="Tag Gap"
+              class="h-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-bold text-slate-800 dark:text-slate-200 px-2 outline-none cursor-pointer shadow-2xs">
+              <option value="0">0 mm (No Gap)</option>
+              <option value="1" selected>1 mm (Tight)</option>
+              <option value="2">2 mm (Standard)</option>
+              <option value="3">3 mm (Relaxed)</option>
+              <option value="4">4 mm (Wide)</option>
+            </select>
+          </div>
+
+          <!-- Column Layout Switcher -->
+          <div
+            class="flex items-center gap-0.5 bg-slate-100/90 dark:bg-slate-800/80 p-0.5 rounded-lg border border-slate-200/80 dark:border-slate-700/80">
+            <span
+              class="text-[10px] font-bold text-slate-500 dark:text-slate-400 px-1 hidden sm:inline">Cols:</span>
+            <button type="button" onclick="setPrintColumns(1)" id="btn-print-col-1"
+              class="px-2 py-0.5 text-xs font-semibold rounded text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700/60 transition-all cursor-pointer">
+              1
+            </button>
+            <button type="button" onclick="setPrintColumns(2)" id="btn-print-col-2"
+              class="px-2 py-0.5 text-xs font-bold rounded transition-all cursor-pointer bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-2xs border border-slate-200/60 dark:border-slate-700/60">
+              2
+            </button>
+            <button type="button" onclick="setPrintColumns(3)" id="btn-print-col-3"
+              class="px-2 py-0.5 text-xs font-semibold rounded text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700/60 transition-all cursor-pointer">
+              3
+            </button>
+          </div>
+
+          <button onclick="clearPrintPreview()"
+            class="px-2.5 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors cursor-pointer shadow-2xs">
+            Clear
+          </button>
+          <button onclick="exportTagsAsPDF()"
+            class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-lg transition-all flex items-center gap-1 shadow-2xs cursor-pointer">
+            <span>📥 PDF</span>
+          </button>
+          <button onclick="printDirectTags()" id="btn-direct-print" title="Direct print without system dialog"
+            class="px-3.5 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs rounded-lg transition-all flex items-center gap-1 shadow-xs shadow-blue-500/20 cursor-pointer">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+              </path>
+            </svg>
+            🖨️ Direct Print
+          </button>
+          <button onclick="triggerPrintTags()" title="Open Windows System Print Dialog"
+            class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs rounded-lg transition-all flex items-center gap-1 cursor-pointer shadow-2xs">
+            ⚙️ System...
+          </button>
+        </div>
+      </div>
+
+      <div id="card-print-sheets" class="print-container transition-all duration-300">
+        <div id="print-tags-grid"
+          class="tag-grid cols-2 bg-white dark:bg-slate-900 p-0 border border-slate-300 dark:border-slate-800 min-h-[400px] rounded-none">
+          <!-- Tag cards injected here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Numbering Chart Component -->
+    <section id="sec-chart" class="space-y-2.5 hidden">
+      <!-- Controls -->
+      <div id="card-chart-controls"
+        class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-3 sm:p-3.5 no-print transition-all duration-300">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 flex-wrap">
+            <div class="flex-1 min-w-[180px] max-w-sm">
+              <label for="chart-source-select" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Load Data
+                Source</label>
+              <select id="chart-source-select" onchange="onChartSourceSelectChange(this.value)" title="Select Data Source" aria-label="Data Source"
+                class="w-full h-8 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs">
+                <option value="current" selected>⚡ Current Print Queue (All Queued Tags)</option>
+              </select>
+            </div>
+
+            <div class="w-full sm:w-44">
+              <label for="chart-printer-select" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Target Printer</label>
+              <select id="chart-printer-select" title="Select Target Printer" aria-label="Target Printer"
+                class="w-full h-8 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs">
+                <option value="">Default Printer</option>
+              </select>
+            </div>
+
+            <div class="w-full sm:w-32">
+              <label for="chart-paper-size" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Paper Size</label>
+              <select id="chart-paper-size" onchange="setChartPaperSize(this.value)" title="Select Chart Paper Size" aria-label="Paper Size"
+                class="w-full h-8 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs">
+                <option value="A4" selected>📄 A4</option>
+                <option value="A3">📄 A3</option>
+                <option value="Letter">📄 Letter</option>
+              </select>
+            </div>
+
+            <div class="w-full sm:w-32">
+              <label for="chart-columns-select" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Defect Columns</label>
+              <select id="chart-columns-select" onchange="onChartColumnsChange(this.value)" title="Select Defect Columns" aria-label="Defect Columns"
+                class="w-full h-8 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs">
+                <option value="1">1 Column</option>
+                <option value="2">2 Columns</option>
+                <option value="3">3 Columns</option>
+                <option value="4" selected>4 Columns</option>
+                <option value="5">5 Columns</option>
+                <option value="6">6 Columns</option>
+              </select>
+            </div>
+
+            <div class="w-full sm:w-36">
+              <label for="chart-sheet-mode" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Sheet View</label>
+              <select id="chart-sheet-mode" onchange="onChartSheetModeChange(this.value)" title="Select Sheet View Mode" aria-label="Sheet View Mode"
+                class="w-full h-8 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs">
+                <option value="both" selected>📑 All Sheets (Auto + EMB)</option>
+                <option value="chart">📋 Numbering Chart Only</option>
+                <option value="emb">✨ Embellishment Sheet Only</option>
+              </select>
+            </div>
+
+            <div class="w-full sm:w-32">
+              <label for="chart-emb-override" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Embellishment</label>
+              <select id="chart-emb-override" onchange="onChartEmbOverrideChange(this.value)" title="Override Embellishment Setting" aria-label="Embellishment Override"
+                class="w-full h-8 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs">
+                <option value="auto" selected>Auto (From Batch)</option>
+                <option value="yes">Force Yes (Show EMB)</option>
+                <option value="no">Force No (Hide EMB)</option>
+              </select>
+            </div>
+
+            <div class="w-full sm:w-40">
+              <label for="chart-row-height" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Row Height: <span id="chart-row-height-label" class="text-blue-600 dark:text-blue-400">27px</span></label>
+              <div class="flex items-center gap-1.5">
+                <input type="range" id="chart-row-height" min="14" max="50" value="27" step="1"
+                  oninput="onChartRowHeightChange(this.value)" title="Adjust Chart Row Height in Pixels" aria-label="Chart Row Height"
+                  class="flex-1 h-2 accent-blue-600 cursor-pointer" />
+                <button type="button" onclick="onChartRowHeightChange(27); document.getElementById('chart-row-height').value=27;"
+                  class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 text-[9px] font-bold rounded transition cursor-pointer border border-slate-200 dark:border-slate-700"
+                  title="Reset to default 27px">↺</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 self-end sm:self-center flex-wrap pt-1 sm:pt-0">
+            <button onclick="exportChartAsPDF()"
+              class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow-2xs transition-all flex items-center gap-1 cursor-pointer">
+              📥 Save PDF
+            </button>
+            <button onclick="printDirectChart()"
+              class="px-3.5 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs rounded-lg shadow-xs shadow-blue-500/20 transition-all flex items-center gap-1 cursor-pointer">
+              🖨️ Direct Print
+            </button>
+            <button onclick="triggerPrintChart()"
+              class="px-2.5 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs rounded-lg transition-all flex items-center gap-1 cursor-pointer shadow-2xs">
+              ⚙️ System...
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Printable Sheet Display -->
+      <div id="card-chart-sheet" class="transition-all duration-300">
+        <div id="numbering-sheet-container"
+          class="printable-chart-container bg-white dark:bg-slate-900 rounded-none shadow-none border-0 p-2 sm:p-3 max-w-[210mm] mx-auto text-slate-900 dark:text-slate-100 font-sans">
+        </div>
+      </div>
+    </section>
+
+    <!-- Bundle Logs Component -->
+    <section id="sec-logs" class="hidden space-y-2.5">
+      <!-- Frozen / Sticky Batch Logs Control Card -->
+      <div id="card-logs-header"
+        class="sticky top-[42px] z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-md border border-slate-200/90 dark:border-slate-800/90 p-3 sm:p-3.5 space-y-2.5 transition-all duration-300">
+        <div
+          class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 mb-2.5 pb-2 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <div class="flex flex-wrap items-center gap-2 mb-0.5">
+              <h2 class="text-xs font-bold text-slate-900 dark:text-slate-100 tracking-tight">Bundle Logs Dashboard</h2>
+              <span
+                class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
+                title="Directly connected to garment_batches_data.jsonl">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                JSONL Database
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">Displaying sequential bundle logs stored directly in <code class="font-mono text-slate-700 dark:text-slate-300">garment_batches_data.jsonl</code>.</p>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="exportDatabaseAsJSON()"
+              class="px-3 py-1.5 text-xs font-semibold rounded-xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900 transition cursor-pointer flex items-center gap-1.5 shadow-2xs">
+              📥 Download JSON DB
+            </button>
+            <button onclick="exportLogsAsCSV()"
+              class="px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer flex items-center gap-1.5 shadow-2xs">
+              📊 Export Logs (.csv)
+            </button>
+          </div>
+        </div>
+
+        <div id="card-logs-search"
+          class="bg-slate-50/90 dark:bg-slate-800/50 p-2.5 sm:p-3 rounded-xl border border-slate-200/80 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Search Logs</label>
+            <input type="text" id="log-search" oninput="onLogSearchInput()"
+              placeholder="Search Style, Color, Schedule, Job No..."
+              class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 rounded-xl px-2.5 py-1 outline-none focus:border-blue-500 font-medium shadow-2xs">
+          </div>
+          <div>
+            <label for="log-filter-style" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Filter Style</label>
+            <select id="log-filter-style" onchange="onLogStyleFilterChange()" title="Filter logs by style" aria-label="Filter Style"
+              class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 rounded-xl px-2.5 py-1 outline-none font-medium shadow-2xs">
+              <option value="">-- All Styles --</option>
+            </select>
+          </div>
+          <div>
+            <label for="log-filter-color" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Filter Color</label>
+            <select id="log-filter-color" onchange="onLogColorFilterChange()" title="Filter logs by color" aria-label="Filter Color"
+              class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 rounded-xl px-2.5 py-1 outline-none font-medium shadow-2xs">
+              <option value="">-- All Colors --</option>
+            </select>
+          </div>
+          <div>
+            <label for="log-filter-po" class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Filter Schedule Number</label>
+            <select id="log-filter-po" onchange="onLogScheduleFilterChange()" title="Filter logs by schedule number" aria-label="Filter Schedule Number"
+              class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 rounded-xl px-2.5 py-1 outline-none font-medium shadow-2xs">
+              <option value="">-- All Schedule Numbers --</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Multi-Log Batch Print & Selection Bar -->
+        <div id="logs-multi-select-bar" class="bg-blue-50/90 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800/80 p-2 sm:p-2.5 rounded-xl flex flex-wrap items-center justify-between gap-2 transition-all">
+          <div class="flex items-center gap-3 flex-wrap">
+            <label class="flex items-center gap-2 cursor-pointer select-none text-xs font-bold text-slate-700 dark:text-slate-200">
+              <input type="checkbox" id="logs-select-all-checkbox" onchange="toggleSelectAllLogs(this.checked)" class="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500 cursor-pointer">
+              <span>Select All Visible</span>
+            </label>
+            <span class="text-slate-300 dark:text-slate-700">|</span>
+            <span id="logs-selected-count-badge" class="text-xs font-semibold text-blue-700 dark:text-blue-300">
+              0 batches selected
+            </span>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button id="btn-print-selected-logs" onclick="printSelectedLogBatches(false)" disabled class="px-3 py-1 bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700 text-white font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer">
+              🖨️ Print Selected Batches (<span id="btn-print-selected-count">0</span>)
+            </button>
+            <button id="btn-chart-selected-logs" onclick="printSelectedCharts()" disabled class="px-3 py-1 bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-emerald-700 text-white font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer">
+              📊 Print Selected Charts (<span id="btn-chart-selected-count">0</span>)
+            </button>
+            <button id="btn-archive-selected-logs" onclick="archiveSelectedBatches()" disabled class="px-3 py-1 bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-amber-700 text-white font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer">
+              📦 Move to Archive (<span id="btn-archive-selected-count">0</span>)
+            </button>
+            <button id="btn-append-selected-logs" onclick="printSelectedLogBatches(true)" disabled class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs rounded-lg transition-all flex items-center gap-1.5 cursor-pointer">
+              ➕ Add to Queue
+            </button>
+            <button onclick="clearSelectedLogs()" class="px-2 py-1 text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
+              Clear Selection
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Batch Cards List Container (Scrolls underneath the frozen header) -->
+      <div id="card-logs-batches" class="space-y-4 pt-1">
+        <div id="logs-batch-container" class="space-y-4"></div>
+      </div>
+      <div id="logs-pagination-container"
+        class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400">
+      </div>
+    </section>
+
+    <!-- Archived Batches Component -->
+    <section id="sec-archive" class="hidden space-y-2.5">
+      <!-- Frozen / Sticky Archived Batches Control Card -->
+      <div id="card-archive-header"
+        class="sticky top-[42px] z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-md border border-slate-200/90 dark:border-slate-800/90 p-3 sm:p-3.5 transition-all duration-300">
+        <div
+          class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 mb-2.5 pb-2 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <div class="flex flex-wrap items-center gap-2 mb-0.5">
+              <h2 class="text-xs font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-center gap-2">
+                <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                Archived Batches Dashboard
+              </h2>
+              <span id="archive-live-status-badge"
+                class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800"
+                title="Directly connected to garment_archive_data.jsonl">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                JSONL Archive Database
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">Displaying historical batches stored directly in <code class="font-mono text-slate-700 dark:text-slate-300">garment_archive_data.jsonl</code>.</p>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="exportArchiveAsJSON()"
+              class="px-3 py-1.5 text-xs font-semibold rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900 transition cursor-pointer flex items-center gap-1.5 shadow-2xs">
+              📥 Download Archive JSON
+            </button>
+            <button onclick="exportArchiveAsCSV()"
+              class="px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer flex items-center gap-1.5 shadow-2xs">
+              📊 Export Archive (.csv)
+            </button>
+            <button onclick="clearAllArchive()"
+              class="px-3 py-1.5 text-xs font-semibold rounded-xl border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900 transition cursor-pointer flex items-center gap-1.5 shadow-2xs">
+              🗑️ Clear All Archive
+            </button>
+          </div>
+        </div>
+
+        <div id="card-archive-search"
+          class="bg-slate-50/90 dark:bg-slate-800/50 p-2.5 sm:p-3 rounded-xl border border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-3">
+          <div class="flex-1 max-w-md">
+            <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Search Archive</label>
+            <input type="text" id="archive-search" placeholder="🔍 Search by Batch ID, Style, Color, Schedule, Lay Job, Docket..."
+              oninput="renderArchiveTable()"
+              class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 rounded-xl px-2.5 py-1 outline-none font-medium shadow-2xs focus:border-blue-500">
+          </div>
+        </div>
+      </div>
+
+      <!-- Archived Cards List Container (Scrolls underneath the frozen header) -->
+      <div id="card-archive-batches" class="space-y-4 pt-1">
+        <div id="archive-batch-container" class="space-y-4"></div>
+      </div>
+      <div id="archive-pagination-container"
+        class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400">
+      </div>
+    </section>
+
+    <!-- Unified Production Reports & Analytics Component Page -->
+    <section id="sec-reports" class="hidden space-y-2.5">
+      <!-- Main Dashboard Card -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-3 sm:p-3.5 space-y-2.5 transition-all duration-300">
+        
+        <!-- Top Title & Action Toolbar -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 pb-2 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <div class="flex flex-wrap items-center gap-2 mb-0.5">
+              <span class="p-1 bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 rounded-lg text-xs font-bold">📈 Analytics</span>
+              <h2 class="text-xs font-bold text-slate-900 dark:text-slate-100 tracking-tight">Production Output & Generation Reports</h2>
+              <span class="inline-flex items-center gap-1 px-2 py-0.2 rounded-full text-[9px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                Live DB Stream
+              </span>
+            </div>
+            <p class="text-[10px] text-slate-500 dark:text-slate-400">
+              Multi-dimensional analytics, hourly generation trends, and cross-cutting breakdowns by style, color, schedule, lay job, and docket.
+            </p>
+          </div>
+
+          <!-- Actions: Export CSV, Print, Refresh -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button type="button" onclick="renderReportsDashboard()" title="Refresh & re-calculate report metrics"
+              class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition cursor-pointer flex items-center gap-1 shadow-2xs">
+              🔄 Refresh
+            </button>
+            <button type="button" onclick="exportReportAsCSV()" title="Download current report view as CSV spreadsheet"
+              class="px-3 py-1 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs transition cursor-pointer flex items-center gap-1">
+              📊 Export CSV
+            </button>
+            <button type="button" onclick="printProductionReport()" title="Print report summary or save as PDF"
+              class="px-3 py-1 text-xs font-bold rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xs shadow-blue-500/20 transition cursor-pointer flex items-center gap-1">
+              🖨️ Print / PDF Report
+            </button>
+          </div>
+        </div>
+
+        <!-- Dimension Switcher Pills (Hourly, Style, Style+Color, Style+Color+Schedule, Job, Docket) -->
+        <div class="space-y-1.5">
+          <label class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">Report Dimension</label>
+          <div class="flex flex-wrap gap-1.5 p-1 bg-slate-100/90 dark:bg-slate-800/80 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
+            <button type="button" onclick="setReportDimension('hourly')" id="report-dim-hourly"
+              class="px-3 py-1.5 text-xs font-bold rounded-xl transition cursor-pointer bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-2xs border border-slate-200/80 dark:border-slate-700">
+              ⏱️ Hourly Data
+            </button>
+            <button type="button" onclick="setReportDimension('style')" id="report-dim-style"
+              class="px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700/60 transition cursor-pointer">
+              📌 Style Wise
+            </button>
+            <button type="button" onclick="setReportDimension('style_color')" id="report-dim-style_color"
+              class="px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700/60 transition cursor-pointer">
+              🎨 Style + Color Wise
+            </button>
+            <button type="button" onclick="setReportDimension('style_color_schedule')" id="report-dim-style_color_schedule"
+              class="px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700/60 transition cursor-pointer">
+              📅 Style + Color + Schedule Wise
+            </button>
+            <button type="button" onclick="setReportDimension('job')" id="report-dim-job"
+              class="px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700/60 transition cursor-pointer">
+              🧵 Lay Job Wise
+            </button>
+            <button type="button" onclick="setReportDimension('docket')" id="report-dim-docket"
+              class="px-3 py-1.5 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700/60 transition cursor-pointer">
+              📑 Docket Wise
+            </button>
+          </div>
+        </div>
+
+        <!-- Date Range & Secondary Filters Toolbar -->
+        <div class="p-3.5 bg-slate-50/90 dark:bg-slate-800/50 rounded-2xl border border-slate-200/90 dark:border-slate-700/80 space-y-3">
+          <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+            
+            <!-- Date Presets -->
+            <div class="flex items-center gap-1 flex-wrap">
+              <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mr-1">Period:</span>
+              <button type="button" onclick="setReportDatePreset('today')" id="report-preset-today"
+                class="px-2.5 py-1 text-xs font-bold rounded-lg bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 shadow-2xs cursor-pointer transition">
+                Today
+              </button>
+              <button type="button" onclick="setReportDatePreset('yesterday')" id="report-preset-yesterday"
+                class="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-400 hover:bg-white/70 dark:hover:bg-slate-700/70 cursor-pointer transition">
+                Yesterday
+              </button>
+              <button type="button" onclick="setReportDatePreset('7days')" id="report-preset-7days"
+                class="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-400 hover:bg-white/70 dark:hover:bg-slate-700/70 cursor-pointer transition">
+                Last 7 Days
+              </button>
+              <button type="button" onclick="setReportDatePreset('month')" id="report-preset-month"
+                class="px-2.5 py-1 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-400 hover:bg-white/70 dark:hover:bg-slate-700/70 cursor-pointer transition">
+                This Month
+              </button>
+            </div>
+
+            <!-- Custom Date Pickers -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <div class="flex items-center gap-1.5">
+                <label for="report-start-date" class="text-[11px] font-bold text-slate-500 dark:text-slate-400">From:</label>
+                <input type="date" id="report-start-date" onchange="onReportDateCustomChange()" title="Report Start Date" aria-label="From Date"
+                  class="h-8 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-medium rounded-xl px-2 outline-none focus:border-blue-500 shadow-2xs">
+              </div>
+              <div class="flex items-center gap-1.5">
+                <label for="report-end-date" class="text-[11px] font-bold text-slate-500 dark:text-slate-400">To:</label>
+                <input type="date" id="report-end-date" onchange="onReportDateCustomChange()" title="Report End Date" aria-label="To Date"
+                  class="h-8 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-medium rounded-xl px-2 outline-none focus:border-blue-500 shadow-2xs">
+              </div>
+            </div>
+          </div>
+
+          <!-- Filters Bar: Search query, Style, Color, Schedule -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-2 border-t border-slate-200/70 dark:border-slate-700/70">
+            <div>
+              <input type="text" id="report-search-input" oninput="onReportFilterChange()"
+                placeholder="Search style, color, job, docket, schedule..." title="Search report records" aria-label="Search Report"
+                class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 rounded-xl px-2.5 outline-none focus:border-blue-500 font-medium shadow-2xs">
+            </div>
+            <div>
+              <select id="report-filter-style" onchange="onReportFilterChange()" title="Filter report by style" aria-label="Filter Style"
+                class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 rounded-xl px-2 outline-none font-medium shadow-2xs">
+                <option value="">-- All Styles --</option>
+              </select>
+            </div>
+            <div>
+              <select id="report-filter-color" onchange="onReportFilterChange()" title="Filter report by color" aria-label="Filter Color"
+                class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 rounded-xl px-2 outline-none font-medium shadow-2xs">
+                <option value="">-- All Colors --</option>
+              </select>
+            </div>
+            <div>
+              <select id="report-filter-schedule" onchange="onReportFilterChange()" title="Filter report by schedule number" aria-label="Filter Schedule"
+                class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 rounded-xl px-2 outline-none font-medium shadow-2xs">
+                <option value="">-- All Schedules --</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Executive KPI Metrics Summary Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div class="p-3.5 bg-slate-50/90 dark:bg-slate-800/60 rounded-2xl border border-slate-200/90 dark:border-slate-700/80 shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Total Bundles</span>
+            <div class="text-lg font-black text-blue-600 dark:text-blue-400 font-mono mt-0.5" id="report-kpi-bundles">0</div>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400">Bundle units created</span>
+          </div>
+          <div class="p-3.5 bg-slate-50/90 dark:bg-slate-800/60 rounded-2xl border border-slate-200/90 dark:border-slate-700/80 shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Total Tags</span>
+            <div class="text-lg font-black text-indigo-600 dark:text-indigo-400 font-mono mt-0.5" id="report-kpi-tags">0</div>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400">Printed tag labels</span>
+          </div>
+          <div class="p-3.5 bg-slate-50/90 dark:bg-slate-800/60 rounded-2xl border border-slate-200/90 dark:border-slate-700/80 shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Total Garment Pcs</span>
+            <div class="text-lg font-black text-emerald-600 dark:text-emerald-400 font-mono mt-0.5" id="report-kpi-pieces">0</div>
+            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">Sum of cut plies</span>
+          </div>
+          <div class="p-3.5 bg-slate-50/90 dark:bg-slate-800/60 rounded-2xl border border-slate-200/90 dark:border-slate-700/80 shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Total Batches</span>
+            <div class="text-lg font-black text-slate-900 dark:text-slate-100 font-mono mt-0.5" id="report-kpi-batches">0</div>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400">Generation runs</span>
+          </div>
+          <div class="p-3.5 bg-slate-50/90 dark:bg-slate-800/60 rounded-2xl border border-slate-200/90 dark:border-slate-700/80 shadow-2xs col-span-2 sm:col-span-1">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Peak Output Period</span>
+            <div class="text-xs font-black text-amber-600 dark:text-amber-400 font-mono truncate mt-1" id="report-kpi-peak">N/A</div>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400">Highest volume window</span>
+          </div>
+        </div>
+
+        <!-- Visual Analytics Chart Section (Hourly Velocity / Output Timeline) -->
+        <div id="report-chart-card" class="bg-slate-50/70 dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-200/90 dark:border-slate-700/80 space-y-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5" id="report-chart-title">
+              <span>📊 Hourly Generation Volume & Velocity</span>
+            </h3>
+            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500" id="report-chart-subtitle">Hourly distribution of bundle output</span>
+          </div>
+          <div id="report-chart-container" class="w-full overflow-x-auto min-h-[140px] flex items-center justify-center">
+            <!-- Dynamic SVG Bar Chart rendered here -->
+          </div>
+        </div>
+
+        <!-- Report Data Table & Drill-down Container -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between px-1">
+            <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5" id="report-table-title">
+              <span>📋 Detailed Dimension Table</span>
+            </h3>
+            <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400" id="report-records-count">0 Rows</span>
+          </div>
+
+          <div id="report-table-container"
+            class="overflow-x-auto border border-slate-200/90 dark:border-slate-800/90 rounded-2xl bg-white dark:bg-slate-900 shadow-2xs">
+            <!-- Aggregated Dynamic Table Injected Here -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Master Data Source Component Page -->
+    <section id="sec-master" class="hidden space-y-2.5">
+      <div id="card-master-source"
+        class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-3 sm:p-3.5 transition-all duration-300">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-2.5 pb-2 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="p-1 bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 rounded-lg text-xs font-bold">📄 Master CSV</span>
+              <h2 class="text-xs font-bold text-slate-900 dark:text-slate-100 tracking-tight">Master Data Source (MasterData.csv)</h2>
+            </div>
+            <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+              Master cutting specifications are streamed directly from your local <code class="font-mono font-bold text-slate-700 dark:text-slate-300">MasterData.csv</code> file.
+            </p>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button onclick="reloadMasterDataFromCSV()" title="Reload latest data from MasterData.csv"
+              class="px-3 py-1 text-xs font-bold rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xs transition flex items-center gap-1 cursor-pointer">
+              🔄 Reload CSV
+            </button>
+            <button onclick="downloadMasterDataTemplate()" title="Download current MasterData.csv"
+              class="px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition cursor-pointer flex items-center gap-1 shadow-2xs">
+              📥 Download CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Master Data Metric Summary Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2.5">
+          <div class="p-2.5 bg-slate-50/90 dark:bg-slate-800/60 rounded-xl border border-slate-200/90 dark:border-slate-700/80 shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Total Records</span>
+            <div class="text-base font-black text-slate-900 dark:text-slate-100 font-mono mt-0.5" id="csv-records-count">0</div>
+            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">⚡ In-Memory Stream</span>
+          </div>
+          <div class="p-2.5 bg-slate-50/90 dark:bg-slate-800/60 rounded-xl border border-slate-200/90 dark:border-slate-700/80 shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Unique Styles</span>
+            <div class="text-base font-black text-blue-600 dark:text-blue-400 font-mono mt-0.5" id="csv-styles-count">0</div>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Ascending A-Z</span>
+          </div>
+          <div class="p-2.5 bg-slate-50/90 dark:bg-slate-800/60 rounded-xl border border-slate-200/90 dark:border-slate-700/80 shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Unique Colors</span>
+            <div class="text-base font-black text-indigo-600 dark:text-indigo-400 font-mono mt-0.5" id="csv-colors-count">0</div>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Auto Cascading</span>
+          </div>
+          <div class="p-2.5 bg-slate-50/90 dark:bg-slate-800/60 rounded-xl border border-slate-200/90 dark:border-slate-700/80 shadow-2xs">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Connected File</span>
+            <div class="text-xs font-bold text-slate-800 dark:text-slate-200 font-mono truncate mt-0.5" id="csv-file-name-badge">MasterData.csv</div>
+            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">Live Linked</span>
+          </div>
+        </div>
+
+        <!-- On-Demand Search & Instant Query Table -->
+        <div id="card-master-search"
+          class="bg-slate-50/80 dark:bg-slate-800/40 p-2.5 sm:p-3 rounded-xl border border-slate-200/90 dark:border-slate-700/90 space-y-2">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 class="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                <span>🔍 Fast On-Demand Master Search & Lookup</span>
+              </h3>
+              <p class="text-[10px] text-slate-500 dark:text-slate-400">
+                Type any Style, Color, Schedule, Lay Job, or Docket to instantly query in-memory.
+              </p>
+            </div>
+            <div class="w-full sm:w-72">
+              <input type="text" id="master-search-input" oninput="onMasterSearchInput()"
+                placeholder="Search style, color, schedule, docket..."
+                class="w-full h-8 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-1 text-xs text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 font-medium shadow-2xs">
+            </div>
+          </div>
+
+          <div id="master-table-container"
+            class="overflow-x-auto border border-slate-200/90 dark:border-slate-800/90 rounded-xl bg-white dark:bg-slate-900 max-h-72 overflow-y-auto shadow-2xs">
+            <table class="w-full text-left text-xs">
+              <thead
+                class="bg-[#F8FAFC] dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 text-[11px] sticky top-0">
+                <tr>
+                  <th class="py-2.5 px-3 w-10 text-center">#</th>
+                  <th onclick="sortMasterDataTable('style')" class="py-2.5 px-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition select-none">
+                    <span class="inline-flex items-center gap-1"><span>Style Name</span><span id="sort-icon-master-style" class="text-slate-400 font-mono text-[9px]">↕</span></span>
+                  </th>
+                  <th onclick="sortMasterDataTable('color')" class="py-2.5 px-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition select-none">
+                    <span class="inline-flex items-center gap-1"><span>Color Name</span><span id="sort-icon-master-color" class="text-slate-400 font-mono text-[9px]">↕</span></span>
+                  </th>
+                  <th onclick="sortMasterDataTable('schedule')" class="py-2.5 px-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition select-none">
+                    <span class="inline-flex items-center gap-1"><span>Schedule Number</span><span id="sort-icon-master-schedule" class="text-slate-400 font-mono text-[9px]">↕</span></span>
+                  </th>
+                  <th onclick="sortMasterDataTable('layJobNo')" class="py-2.5 px-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition select-none">
+                    <span class="inline-flex items-center gap-1"><span>Lay Job No</span><span id="sort-icon-master-layJobNo" class="text-slate-400 font-mono text-[9px]">↕</span></span>
+                  </th>
+                  <th onclick="sortMasterDataTable('docketNo')" class="py-2.5 px-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition select-none">
+                    <span class="inline-flex items-center gap-1"><span>Docket No</span><span id="sort-icon-master-docketNo" class="text-slate-400 font-mono text-[9px]">↕</span></span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="master-table-rows" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Universal Sizes & Universal Parts Component Page -->
+    <section id="sec-specs" class="hidden space-y-4">
+      <div id="card-master-specs" class="grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300">
+        <div
+          class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-4 sm:p-5">
+          <div class="flex items-center justify-between mb-1">
+            <h3 class="font-bold text-slate-900 dark:text-slate-100 text-xs">Universal Sizes</h3>
+            <span class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700 font-mono">garment_specs_data.jsonl</span>
+          </div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Managed sizes saved directly in <code class="font-mono text-slate-700 dark:text-slate-300">garment_specs_data.jsonl</code>.</p>
+          <div class="flex gap-2 mb-3.5">
+            <input type="text" id="m-new-size" placeholder="Add Size (e.g. 4XL)"
+              class="flex-1 h-9 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-xl px-3 py-1 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-2xs">
+            <button onclick="addUniversalSize()" id="btn-add-size"
+              class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-1.5 rounded-xl transition-all cursor-pointer shadow-xs">Add
+              Size</button>
+          </div>
+          <div id="sizes-pill-list" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-4 sm:p-5">
+          <div class="flex items-center justify-between mb-1">
+            <h3 class="font-bold text-slate-900 dark:text-slate-100 text-xs">Universal Cut Parts</h3>
+            <span class="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700 font-mono">garment_specs_data.jsonl</span>
+          </div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Managed cut parts saved directly in <code class="font-mono text-slate-700 dark:text-slate-300">garment_specs_data.jsonl</code>.</p>
+          <div class="flex gap-2 mb-3.5">
+            <input type="text" id="m-new-part" placeholder="Add Part (e.g. Waistband)"
+              class="flex-1 h-9 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-xl px-3 py-1 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-2xs">
+            <button onclick="addUniversalPart()" id="btn-add-part"
+              class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-1.5 rounded-xl transition-all cursor-pointer shadow-xs">Add
+              Part</button>
+          </div>
+          <div id="parts-pill-list" class="flex flex-wrap gap-2"></div>
+        </div>
+      </div>
+    </section>
+
+        </main>
+      </div>
+
+      <!-- Pinned / Frozen Footer Component -->
+      <footer id="app-bottom-footer"
+        class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-500 dark:text-slate-400 text-[11px] py-1.5 px-3 sm:px-4 border-t border-slate-200/90 dark:border-slate-800/90 no-print shrink-0 z-30 transition-colors duration-200">
+        <div class="w-full max-w-[1720px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-slate-800 dark:text-slate-200">Garment Tag Bundle Generator</span>
+            <span class="text-slate-300 dark:text-slate-700">•</span>
+            <span class="text-slate-500 dark:text-slate-400 font-mono text-[10px]">Enterprise Edition v3.1</span>
+          </div>
+          <div>
+            <span class="font-medium text-slate-500 dark:text-slate-400">Brandix Bangladesh Process Improvement Team</span>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- Application Modular Scripts -->
+  <script src="app.config.js"></script>
+  <script src="js/qrcode.min.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/api-sync.js"></script>
+  <script src="js/specs-manager.js"></script>
+  <script src="js/tag-generator.js"></script>
+  <script src="js/print-preview.js"></script>
+  <script src="js/numbering-chart.js"></script>
+  <script src="js/production-reports.js"></script>
+  <script src="js/batch-logs.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>

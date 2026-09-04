@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Key Projects & Implementations — Kazi Md Ikramul Hassan</title>
+  <meta name="description" content="Explore key projects, enterprise applications, Power Platform solutions, and automated data pipelines engineered by Kazi Md Ikramul (Pranto) Hassan.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Premium Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="style.css?v=2.5">
+  <style>
+    /* Critical Anti-FOUC & Drawer Fixed Geometry */
+    .mobile-nav-backdrop { position: fixed; inset: 0; z-index: 10000; opacity: 0; visibility: hidden; pointer-events: none; }
+    .mobile-nav-drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 10001; transform: translateX(100%); pointer-events: none; }
+    .mobile-nav-backdrop.active { opacity: 1; visibility: visible; pointer-events: auto; }
+    .mobile-nav-drawer.active { transform: translateX(0); pointer-events: auto; }
+    
+    /* Tech Logo Sizing */
+    .tech-logo, img.tech-logo, svg.tech-logo { width: 20px !important; height: 20px !important; max-width: 20px !important; max-height: 20px !important; object-fit: contain !important; vertical-align: middle !important; display: inline-block !important; flex-shrink: 0 !important; }
+    .tech-logo.sm, img.tech-logo.sm, svg.tech-logo.sm { width: 16px !important; height: 16px !important; max-width: 16px !important; max-height: 16px !important; }
+    .tech-logo.lg, img.tech-logo.lg, svg.tech-logo.lg { width: 28px !important; height: 28px !important; max-width: 28px !important; max-height: 28px !important; }
+
+    /* Catalog Page Custom Styles */
+    .catalog-hero {
+      padding-top: 140px;
+      padding-bottom: 50px;
+      text-align: center;
+      position: relative;
+    }
+    .catalog-title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      color: #ffffff;
+      margin-top: 12px;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .catalog-title-accent {
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .catalog-sub {
+      font-size: 1.1rem;
+      color: #94a3b8;
+      max-width: 760px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+    
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 48px;
+    }
+    .filter-btn {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .filter-btn:hover {
+      border-color: rgba(6, 182, 212, 0.5);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+    .filter-btn.active {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.25));
+      border-color: #06b6d4;
+      color: #06b6d4;
+      box-shadow: 0 0 16px rgba(6, 182, 212, 0.25);
+    }
+
+    /* Catalog Grid Extended */
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 28px;
+      margin-bottom: 60px;
+    }
+    @media (max-width: 768px) {
+      .catalog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Featured Project Badge & Header */
+    .card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .status-live {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .status-enterprise {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    .status-analytics {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .project-actions {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .btn-launch {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #06b6d4, #2563eb);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(6, 182, 212, 0.35);
+      transition: all 0.25s ease;
+    }
+    .btn-launch:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5);
+      color: #ffffff;
+    }
+    .btn-details {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .btn-details:hover {
+      color: #38bdf8;
+    }
+
+    /* Key Impact List */
+    .metric-list {
+      margin: 16px 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .metric-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+    .metric-item i {
+      color: #06b6d4;
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Glowing Mesh Background Orbs -->
+  <div class="ambient-glows" aria-hidden="true">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+  </div>
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <!-- ═══ DESKTOP & TOP NAVIGATION BAR ═══ -->
+  <header class="header-wrapper">
+    <nav class="navbar glass-nav" id="navbar">
+      <div class="nav-inner">
+        <!-- Upgraded KIH Monogram Logo -->
+        <a href="index.html" class="nav-logo" aria-label="KIH Home">
+          <div class="logo-circle">
+            <span class="logo-text">KIH</span>
+            <span class="logo-ring"></span>
+            <span class="logo-pulse"></span>
+          </div>
+          <div class="logo-info">
+            <span class="logo-name">Ikramul Hassan</span>
+            <span class="logo-role">Business Analyst</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <ul class="nav-links desktop-nav" id="desktopNav">
+          <li><a href="index.html#home" class="nav-link"><i data-lucide="home" class="nav-icon"></i><span>Home</span></a></li>
+          <li><a href="index.html#about" class="nav-link"><i data-lucide="user" class="nav-icon"></i><span>About</span></a></li>
+          <li><a href="index.html#experience" class="nav-link"><i data-lucide="briefcase" class="nav-icon"></i><span>Experience</span></a></li>
+          <li><a href="projects.html" class="nav-link active"><i data-lucide="folder-kanban" class="nav-icon"></i><span>Projects</span></a></li>
+          <li><a href="index.html#skills" class="nav-link"><i data-lucide="cpu" class="nav-icon"></i><span>Skills</span></a></li>
+          <li><a href="index.html#education" class="nav-link"><i data-lucide="graduation-cap" class="nav-icon"></i><span>Education</span></a></li>
+          <li><a href="index.html#contact" class="nav-link"><i data-lucide="mail" class="nav-icon"></i><span>Contact</span></a></li>
+        </ul>
+
+        <!-- Top Right Action Area -->
+        <div class="nav-actions">
+          <a href="mailto:kihpranto@yahoo.com" class="nav-cta glass-btn-glow">
+            <i data-lucide="send" class="cta-icon"></i>
+            <span>Hire Me</span>
+          </a>
+          <!-- Mobile Hamburger Toggle -->
+          <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+            <span class="bar bar-1"></span>
+            <span class="bar bar-2"></span>
+            <span class="bar bar-3"></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ═══ MOBILE GLASS SIDEBAR DRAWER & BACKDROP ═══ -->
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop" aria-hidden="true"></div>
+  <aside class="mobile-nav-drawer glass-sidebar" id="mobileNavDrawer" aria-label="Mobile Navigation Sidebar">
+    <div class="mobile-nav-header">
+      <div class="mobile-logo">
+        <div class="logo-circle small">
+          <span class="logo-text">KIH</span>
+        </div>
+        <div class="logo-info">
+          <span class="logo-name">Ikramul Hassan</span>
+          <span class="logo-role">Business Analyst</span>
+        </div>
+      </div>
+      <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close navigation menu">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation List -->
+    <ul class="mobile-nav-links" id="mobileNavLinks">
+      <li>
+        <a href="index.html#home" class="mobile-nav-link">
+          <span class="link-icon-wrap"><i data-lucide="home"></i></span>
+          <span class="tab-name">Home</span>
+        </a>
+      </li>
+      <li>
+        <a href="index.html#about" class="mobile-nav-link">
+          <span class="link-icon-wrap"><i data-lucide="user"></i></span>
+          <span class="tab-name">About</span>
+        </a>
+      </li>
+      <li>
+        <a href="index.html#experience" class="mobile-nav-link">
+          <span class="link-icon-wrap"><i data-lucide="briefcase"></i></span>
+          <span class="tab-name">Experience</span>
+        </a>
+      </li>
+      <li>
+        <a href="projects.html" class="mobile-nav-link active">
+          <span class="link-icon-wrap"><i data-lucide="folder-kanban"></i></span>
+          <span class="tab-name">Projects</span>
+          <span class="active-glow"></span>
+        </a>
+      </li>
+      <li>
+        <a href="index.html#skills" class="mobile-nav-link">
+          <span class="link-icon-wrap"><i data-lucide="cpu"></i></span>
+          <span class="tab-name">Skills</span>
+        </a>
+      </li>
+      <li>
+        <a href="index.html#education" class="mobile-nav-link">
+          <span class="link-icon-wrap"><i data-lucide="graduation-cap"></i></span>
+          <span class="tab-name">Education</span>
+        </a>
+      </li>
+      <li>
+        <a href="index.html#contact" class="mobile-nav-link">
+          <span class="link-icon-wrap"><i data-lucide="mail"></i></span>
+          <span class="tab-name">Contact</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="mobile-nav-footer">
+      <a href="mailto:kihpranto@yahoo.com" class="mobile-cta-btn glass-btn-glow">
+        <i data-lucide="send"></i>
+        <span>Get In Touch</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ═══ CATALOG HERO SECTION ═══ -->
+  <main class="container">
+    <section class="catalog-hero" data-animate="fade-up">
+      <span class="sec-badge glass-badge"><i data-lucide="layers"></i>Key Projects & Implementations</span>
+      <h1 class="catalog-title">Enterprise Solutions & <span class="catalog-title-accent">Digital Implementations</span></h1>
+      <p class="catalog-sub">Explore full-stack desktop & web engines, role-based Power Apps, automated cloud workflows, and interactive Power BI KPI ecosystems delivered in production environments.</p>
+
+      <!-- Category Filter Pills -->
+      <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-filter="all"><i data-lucide="grid"></i> All Solutions (6)</button>
+        <button class="filter-btn" data-filter="app"><i data-lucide="monitor"></i> Desktop & Web Apps</button>
+        <button class="filter-btn" data-filter="powerplatform"><i data-lucide="zap"></i> Power Platform</button>
+        <button class="filter-btn" data-filter="bi"><i data-lucide="bar-chart-2"></i> Power BI & Analytics</button>
+        <button class="filter-btn" data-filter="etl"><i data-lucide="database"></i> Data Engineering & ETL</button>
+      </div>
+    </section>
+
+    <!-- ═══ PROJECTS CATALOG GRID ═══ -->
+    <section class="catalog-grid" id="projectsCatalog">
+      
+      <!-- PROJECT 1: StitchSync Tag Generator (BundleTagApp) [FLAGSHIP] -->
+      <article class="proj-card glass-card" data-category="app" data-animate="fade-up">
+        <div class="card-top-row">
+          <div class="proj-icon-wrap" style="background: rgba(6, 182, 212, 0.15); border-color: rgba(6, 182, 212, 0.4);">
+            <img src="assets/stitchsync-tag-logo.jpg" class="tech-logo lg" width="28" height="28" alt="StitchSync Tag Logo" style="border-radius: 6px;" onerror="this.src='assets/logos/powerapps.svg'">
+          </div>
+          <span class="status-badge status-live">🟢 Live Demo</span>
+        </div>
+        <span class="proj-cat">Full-Stack App — Apparel Manufacturing</span>
+        <h2 class="proj-title">StitchSync Tag — Garment Bundle Tag Generator</h2>
+        <p class="proj-desc">High-speed production bundle generator for apparel cutting floors. Parses multi-sheet Excel docket summaries, computes bundle numbering sequences, and auto-generates QR-code-encoded tracking tags with zero server dependency.</p>
+        
+        <ul class="metric-list">
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>70% Faster Turnaround:</strong> Replaced manual voucher creation with automated batch parsing</li>
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>100% Traceability:</strong> Individual QR codes track part, size, and line routing</li>
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>Offline Ready:</strong> Client-side SheetJS & QR rendering runs anywhere</li>
+        </ul>
+
+        <div class="proj-chips">
+          <span class="chip glass-chip"><img src="assets/logos/python.svg" class="tech-logo sm" width="16" height="16" alt="JS"> JavaScript ES6</span>
+          <span class="chip glass-chip">Tailwind CSS</span>
+          <span class="chip glass-chip"><img src="assets/logos/excel.svg" class="tech-logo sm" width="16" height="16" alt="Excel"> SheetJS Excel</span>
+          <span class="chip glass-chip">QR Generator</span>
+          <span class="chip glass-chip">Electron / Node</span>
+        </div>
+
+        <div class="project-actions">
+          <a href="BundleTagApp.html" class="btn-launch">
+            <i data-lucide="play"></i>
+            <span>Launch Live App</span>
+          </a>
+          <a href="BundleTagApp.html" class="btn-details">
+            <span>Explore App</span>
+            <i data-lucide="arrow-right"></i>
+          </a>
+        </div>
+      </article>
+
+      <!-- PROJECT 2: Multi-Role Canvas App -->
+      <article class="proj-card glass-card" data-category="powerplatform" data-animate="fade-up" data-delay="100">
+        <div class="card-top-row">
+          <div class="proj-icon-wrap">
+            <img src="assets/logos/powerapps.svg" class="tech-logo lg" width="28" height="28" alt="Power Apps">
+          </div>
+          <span class="status-badge status-enterprise">Enterprise</span>
+        </div>
+        <span class="proj-cat">Power Apps — Enterprise Security</span>
+        <h2 class="proj-title">Multi-Role Enterprise Canvas Application</h2>
+        <p class="proj-desc">Centralized operational low-code portal supporting 6 distinct user tiers (Requester, HOD, Approver, Planner, Accounts, Super User). Enforces role-based dynamic forms, security delegation, and complete audit logging.</p>
+        
+        <ul class="metric-list">
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>6 Role Personas:</strong> Tailored forms and restricted action delegation per role</li>
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>Zero Data Leaks:</strong> Enforced SharePoint item-level permission rules</li>
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>Mobile & Desktop:</strong> Responsive layout supporting tablet shop-floor usage</li>
+        </ul>
+
+        <div class="proj-chips">
+          <span class="chip glass-chip"><img src="assets/logos/powerapps.svg" class="tech-logo sm" width="16" height="16" alt="Power Apps"> Power Apps</span>
+          <span class="chip glass-chip">Canvas Architecture</span>
+          <span class="chip glass-chip">RBAC Security</span>
+          <span class="chip glass-chip"><img src="assets/logos/sharepoint.svg" class="tech-logo sm" width="16" height="16" alt="SharePoint"> SharePoint</span>
+        </div>
+
+        <div class="project-actions">
+          <span class="chip glass-chip" style="color: #94a3b8; font-size: 11px;">Internal Production App</span>
+          <a href="index.html#contact" class="btn-details">
+            <span>Request Demo</span>
+            <i data-lucide="mail"></i>
+          </a>
+        </div>
+      </article>
+
+      <!-- PROJECT 3: Power Automate Flow Engine -->
+      <article class="proj-card glass-card" data-category="powerplatform" data-animate="fade-up" data-delay="200">
+        <div class="card-top-row">
+          <div class="proj-icon-wrap">
+            <img src="assets/logos/powerautomate.svg" class="tech-logo lg" width="28" height="28" alt="Power Automate">
+          </div>
+          <span class="status-badge status-enterprise">Automated</span>
+        </div>
+        <span class="proj-cat">Power Automate — Workflow Automation</span>
+        <h2 class="proj-title">End-to-End Workflow Automation Engine</h2>
+        <p class="proj-desc">Automated transport vehicle dispatch, operational requisition approval chains, and multi-stage verification. Eliminated manual paper slips and accelerated multi-tier approvals by over 70%.</p>
+        
+        <ul class="metric-list">
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>1,200+ Hours Saved:</strong> Automated repetitive manual data routing tasks</li>
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>100% Paperless:</strong> Transitioned physical vouchers to digital audit logs</li>
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>Multi-Channel Alerts:</strong> Outlook & Teams actionable notification cards</li>
+        </ul>
+
+        <div class="proj-chips">
+          <span class="chip glass-chip"><img src="assets/logos/powerautomate.svg" class="tech-logo sm" width="16" height="16" alt="Power Automate"> Power Automate</span>
+          <span class="chip glass-chip">Approval Chains</span>
+          <span class="chip glass-chip"><img src="assets/logos/teams.svg" class="tech-logo sm" width="16" height="16" alt="Teams"> Teams Webhooks</span>
+          <span class="chip glass-chip">M365 Cloud</span>
+        </div>
+
+        <div class="project-actions">
+          <span class="chip glass-chip" style="color: #94a3b8; font-size: 11px;">M365 Enterprise Flow</span>
+          <a href="index.html#contact" class="btn-details">
+            <span>Discuss Architecture</span>
+            <i data-lucide="mail"></i>
+          </a>
+        </div>
+      </article>
+
+      <!-- PROJECT 4: Power BI Analytics Ecosystem -->
+      <article class="proj-card glass-card" data-category="bi" data-animate="fade-up">
+        <div class="card-top-row">
+          <div class="proj-icon-wrap">
+            <img src="assets/logos/powerbi.svg" class="tech-logo lg" width="28" height="28" alt="Power BI">
+          </div>
+          <span class="status-badge status-analytics">KPI Suite</span>
+        </div>
+        <span class="proj-cat">Power BI — Executive Analytics</span>
+        <h2 class="proj-title">Production & Quality KPI Dashboard Suite</h2>
+        <p class="proj-desc">Cross-departmental executive analytics suite unifying operational metrics across cutting, sewing assembly lines, finishing units, and final QA inspections with time-intelligence comparisons.</p>
+        
+        <ul class="metric-list">
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>Line-Wise OEE:</strong> Real-time variance tracking against hourly targets</li>
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>Advanced DAX:</strong> Complex dynamic ranking, MoM/YoY time intelligence</li>
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>Automated Refresh:</strong> Power BI Gateway scheduled daily ETL pipelines</li>
+        </ul>
+
+        <div class="proj-chips">
+          <span class="chip glass-chip"><img src="assets/logos/powerbi.svg" class="tech-logo sm" width="16" height="16" alt="Power BI"> Power BI</span>
+          <span class="chip glass-chip">Advanced DAX</span>
+          <span class="chip glass-chip">Power Query M</span>
+          <span class="chip glass-chip">Star Schema</span>
+        </div>
+
+        <div class="project-actions">
+          <span class="chip glass-chip" style="color: #94a3b8; font-size: 11px;">Executive Telemetry</span>
+          <a href="index.html#contact" class="btn-details">
+            <span>Case Study Details</span>
+            <i data-lucide="mail"></i>
+          </a>
+        </div>
+      </article>
+
+      <!-- PROJECT 5: Single Source of Truth ETL Pipeline -->
+      <article class="proj-card glass-card" data-category="etl" data-animate="fade-up" data-delay="100">
+        <div class="card-top-row">
+          <div class="proj-icon-wrap">
+            <img src="assets/logos/sqlserver.svg" class="tech-logo lg" width="28" height="28" alt="SQL Server">
+          </div>
+          <span class="status-badge status-enterprise">Data Pipeline</span>
+        </div>
+        <span class="proj-cat">Data Engineering — Ingestion & Modeling</span>
+        <h2 class="proj-title">Single Source of Truth Data Pipeline</h2>
+        <p class="proj-desc">Engineered an automated data consolidation pipeline reconciling scattered Excel spreadsheets, SharePoint lists, and SQL relational databases into a normalized schema for BI analytics.</p>
+        
+        <ul class="metric-list">
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>100% Data Integrity:</strong> Reconciled discrepancy between operations and accounts</li>
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>Python & SQL:</strong> Automated validation checks preventing faulty data entry</li>
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>Sub-Second Queries:</strong> Optimized indexing and dimensional views</li>
+        </ul>
+
+        <div class="proj-chips">
+          <span class="chip glass-chip"><img src="assets/logos/sqlserver.svg" class="tech-logo sm" width="16" height="16" alt="SQL"> SQL Server</span>
+          <span class="chip glass-chip"><img src="assets/logos/python.svg" class="tech-logo sm" width="16" height="16" alt="Python"> Python ETL</span>
+          <span class="chip glass-chip"><img src="assets/logos/excel.svg" class="tech-logo sm" width="16" height="16" alt="Excel"> Office Scripts</span>
+          <span class="chip glass-chip">Data Modeling</span>
+        </div>
+
+        <div class="project-actions">
+          <span class="chip glass-chip" style="color: #94a3b8; font-size: 11px;">Automated ETL</span>
+          <a href="index.html#contact" class="btn-details">
+            <span>Inquire About Pipeline</span>
+            <i data-lucide="mail"></i>
+          </a>
+        </div>
+      </article>
+
+      <!-- PROJECT 6: Executive MIS & Financial Modeling -->
+      <article class="proj-card glass-card" data-category="etl" data-animate="fade-up" data-delay="200">
+        <div class="card-top-row">
+          <div class="proj-icon-wrap">
+            <img src="assets/logos/excel.svg" class="tech-logo lg" width="28" height="28" alt="Excel">
+          </div>
+          <span class="status-badge status-analytics">Financial Model</span>
+        </div>
+        <span class="proj-cat">Financial MIS — Modeling & Optimization</span>
+        <h2 class="proj-title">Regional Sales & Debtor Aging Analytics Platform</h2>
+        <p class="proj-desc">High-precision financial model tracking DSO (Days Sales Outstanding), debtor payment behaviors, incentive structures, and regional sales velocity to improve cash conversion cycles.</p>
+        
+        <ul class="metric-list">
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>22% Faster Collections:</strong> Identified overdue debtor buckets for proactive follow-up</li>
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>Automated Commissions:</strong> Multi-tiered monthly incentive computation engine</li>
+          <li class="metric-item"><i data-lucide="check-circle-2"></i> <strong>VBA Macros:</strong> One-click workbook generation and report delivery</li>
+        </ul>
+
+        <div class="proj-chips">
+          <span class="chip glass-chip"><img src="assets/logos/excel.svg" class="tech-logo sm" width="16" height="16" alt="Excel"> Excel VBA</span>
+          <span class="chip glass-chip">Financial Modeling</span>
+          <span class="chip glass-chip">Power Query</span>
+          <span class="chip glass-chip">Aging Analytics</span>
+        </div>
+
+        <div class="project-actions">
+          <span class="chip glass-chip" style="color: #94a3b8; font-size: 11px;">Financial Telemetry</span>
+          <a href="index.html#contact" class="btn-details">
+            <span>Inquire About Model</span>
+            <i data-lucide="mail"></i>
+          </a>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- ═══ BOTTOM CTA BANNER ═══ -->
+    <section class="glass-card" style="padding: 40px 30px; text-align: center; margin-bottom: 80px; background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(30, 41, 59, 0.7)); border: 1px solid rgba(6, 182, 212, 0.3);">
+      <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin-bottom: 12px;">Need a Tailored Low-Code App or BI Ecosystem?</h2>
+      <p style="color: #94a3b8; max-width: 600px; margin: 0 auto 24px; font-size: 14px;">Let's discuss your organization's operational bottlenecks and architect an automated solution.</p>
+      <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+        <a href="mailto:kihpranto@yahoo.com" class="btn-launch" style="padding: 12px 28px; font-size: 14px;">
+          <i data-lucide="mail"></i>
+          <span>Contact Kazi Md Ikramul Hassan</span>
+        </a>
+        <a href="index.html" class="filter-btn" style="padding: 12px 24px; font-size: 14px; border-radius: 10px;">
+          <i data-lucide="home"></i>
+          <span>Return to Homepage</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer glass-footer">
+    <div class="container footer-inner">
+      <div class="footer-info">
+        <div class="logo-circle small">
+          <span class="logo-text">KIH</span>
+        </div>
+        <span class="footer-name">Kazi Md Ikramul (Pranto) Hassan</span>
+        <span class="footer-title">Executive Business Analyst & Power Platform Specialist</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#home">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#experience">Experience</a>
+        <a href="projects.html" class="active">Projects</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+      <p class="footer-copy">© 2026 Kazi Md Ikramul Hassan. Designed with Glassmorphism 2.0 & Built for High Performance.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js?v=2.5"></script>
+  <script>
+    // Category Filtering Script
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const projectCards = document.querySelectorAll('#projectsCatalog .proj-card');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const filter = btn.getAttribute('data-filter');
+
+          projectCards.forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+              card.style.display = 'flex';
+              setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 50);
+            } else {
+              card.style.opacity = '0';
+              card.style.transform = 'translateY(15px)';
+              setTimeout(() => { card.style.display = 'none'; }, 250);
+            }
+          });
+        });
+      });
+
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+    });
+  </script>
+</body>
+</html>

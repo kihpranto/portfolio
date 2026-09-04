@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StitchSync Rack - Warehouse Floor, Pallet & Location Manager</title>
+  <!-- Brand Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/stitchsync-rack-logo.jpg">
+  <!-- Tailwind CSS Engine Configuration -->
+  <script>
+    tailwind = {
+      config: {
+        darkMode: 'class'
+      }
+    };
+  </script>
+  <script src="tailwind.js"></script>
+  <script>
+    if (typeof tailwind !== 'undefined') {
+      tailwind.config = { darkMode: 'class' };
+    }
+    // Apply saved theme immediately to prevent flashing
+    (function() {
+      try {
+        const saved = localStorage.getItem('theme');
+        const isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <!-- SheetJS for Excel / CSV Export -->
+  <script src="xlsx.full.min.js"></script>
+  <!-- Custom Core Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; color: black !important; }
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 h-screen w-screen flex flex-col overflow-hidden font-sans transition-colors duration-200 antialiased selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- TOP GLOBAL HEADER BAR (FROZEN TOP) -->
+  <header class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800/90 shrink-0 z-40 px-4 py-2.5 shadow-2xs transition-colors">
+    <div class="max-w-[1720px] mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <!-- Left: App Branding & Breadcrumb -->
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl overflow-hidden shadow-sm shadow-amber-500/20 ring-1 ring-amber-500/30 shrink-0 bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-slate-950 font-black" title="StitchSync Rack">
+          <img src="assets/stitchsync-rack-logo.jpg" alt="StitchSync Rack Logo" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='📍'">
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-sm font-black text-slate-900 dark:text-slate-100 tracking-tight">STITCH<span class="text-amber-500">SYNC</span> <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">RACK</span></h1>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono border border-slate-200 dark:border-slate-700">3 Pallets / Rack</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+            <span>StitchSync Suite</span>
+            <span class="text-slate-300 dark:text-slate-700">/</span>
+            <span id="loc-breadcrumb-title" class="font-bold text-amber-600 dark:text-amber-400">Floor & Pallets</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Status, Auto-Sync Pulse, Suite Switch, Theme Toggle & Folder Picker -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <!-- Suite Cross-Link: Switch to StitchSync Tag -->
+        <a href="BundleTagApp.html" target="_blank" title="Open StitchSync Tag (Garment Bundle Tag Generator)"
+          class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition cursor-pointer flex items-center gap-1.5 shadow-2xs">
+          <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+          <span class="hidden sm:inline">StitchSync</span> <strong>Tag</strong>
+          <svg class="w-3 h-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        </a>
+
+        <!-- Live Auto-Sync Status -->
+        <span id="loc-sync-indicator" class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live Auto-Sync Active
+        </span>
+
+        <!-- Database Connection Badge -->
+        <div id="loc-status-db-badge" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+          <span id="loc-status-db-dot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span id="loc-status-db-text">Live Connected</span>
+        </div>
+
+        <!-- Folder Connection Button -->
+        <button onclick="browseLocationDatabaseFolder()" title="Select Database Storage Folder"
+          class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition cursor-pointer border border-slate-200 dark:border-slate-700 shadow-2xs">
+          📁
+        </button>
+
+        <!-- Dark / Light Theme Toggle -->
+        <button onclick="toggleLocDarkMode()" title="Toggle Dark / Light Theme" id="loc-theme-toggle-btn"
+          class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition cursor-pointer border border-slate-200 dark:border-slate-700 shadow-2xs">
+          <span id="loc-theme-toggle-icon">🌓</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVIGATION TABS SUB-HEADER (FROZEN TOP) -->
+  <nav class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800/90 px-4 py-1.5 shrink-0 z-30 shadow-2xs">
+    <div class="max-w-[1720px] mx-auto flex items-center gap-1.5 overflow-x-auto custom-scrollbar no-print">
+      <button type="button" onclick="switchLocationTab('explorer')" id="loc-nav-explorer"
+        class="loc-nav-item px-3.5 py-2 text-xs font-extrabold rounded-xl bg-amber-500 text-slate-950 shadow-xs transition flex items-center gap-2 cursor-pointer whitespace-nowrap">
+        <span>🏢</span>
+        <span>Floor & Pallet Explorer</span>
+      </button>
+      <button type="button" onclick="switchLocationTab('scan')" id="loc-nav-scan"
+        class="loc-nav-item px-3.5 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2 cursor-pointer whitespace-nowrap">
+        <span>⚡</span>
+        <span>Quick Scan & Assign</span>
+        <span class="text-[9px] px-1 bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 font-bold rounded">1-Click</span>
+      </button>
+      <button type="button" onclick="switchLocationTab('assign')" id="loc-nav-assign"
+        class="loc-nav-item px-3.5 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2 cursor-pointer whitespace-nowrap">
+        <span>📦</span>
+        <span>Batch Assign</span>
+      </button>
+      <button type="button" onclick="switchLocationTab('dispatch')" id="loc-nav-dispatch"
+        class="loc-nav-item px-3.5 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2 cursor-pointer whitespace-nowrap">
+        <span>🚀</span>
+        <span>Dispatch from Storage</span>
+      </button>
+      <button type="button" onclick="switchLocationTab('setup')" id="loc-nav-setup"
+        class="loc-nav-item px-3.5 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2 cursor-pointer whitespace-nowrap">
+        <span>⚙️</span>
+        <span>Master Rack Setup (3 Pallets)</span>
+      </button>
+      <button type="button" onclick="switchLocationTab('audit')" id="loc-nav-audit"
+        class="loc-nav-item px-3.5 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2 cursor-pointer whitespace-nowrap">
+        <span>🔍</span>
+        <span>Search & Audit Inventory</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- TOP KPI METRIC SUMMARY CARDS (FROZEN TOP) -->
+  <section id="loc-kpi-bar" class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800/90 px-4 py-2 shrink-0 z-25 shadow-2xs no-print">
+    <div class="max-w-[1720px] mx-auto grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+      <div class="p-2 sm:p-2.5 bg-slate-50 dark:bg-slate-950/70 rounded-xl border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">🏢 Storage Racks</span>
+          <div class="text-base sm:text-lg font-black text-slate-900 dark:text-slate-100 font-mono" id="metric-racks">0</div>
+        </div>
+        <span class="text-[10px] text-blue-600 dark:text-blue-400 font-bold bg-blue-50 dark:bg-blue-950/80 px-2 py-0.5 rounded-md" id="metric-zones">0 Zones</span>
+      </div>
+      <div class="p-2 sm:p-2.5 bg-slate-50 dark:bg-slate-950/70 rounded-xl border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">📦 Total Pallets (3 / Rack)</span>
+          <div class="text-base sm:text-lg font-black text-indigo-600 dark:text-indigo-400 font-mono" id="metric-pallets">0</div>
+        </div>
+        <span class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold bg-slate-200/70 dark:bg-slate-800 px-2 py-0.5 rounded-md" id="metric-capacity">Max 0 Bundles</span>
+      </div>
+      <div class="p-2 sm:p-2.5 bg-slate-50 dark:bg-slate-950/70 rounded-xl border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">🏷️ Stored Bundles</span>
+          <div class="text-base sm:text-lg font-black text-amber-600 dark:text-amber-400 font-mono" id="metric-stored">0</div>
+        </div>
+        <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/80 px-2 py-0.5 rounded-md" id="metric-dispatched">0 Dispatched</span>
+      </div>
+      <div class="p-2 sm:p-2.5 bg-slate-50 dark:bg-slate-950/70 rounded-xl border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between">
+        <div class="min-w-0 flex-1 mr-2">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">📊 Storage Utilization</span>
+          <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 font-mono" id="metric-utilization">0%</div>
+        </div>
+        <div class="w-16 sm:w-20 bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden shrink-0">
+          <div id="metric-progress" class="bg-emerald-500 h-full w-0 transition-all duration-300"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN SCROLLABLE CONTENT CONTAINER (SMOOTH MIDDLE SCROLLING) -->
+  <main id="loc-main-scroll-container" class="flex-1 overflow-y-auto min-h-0 custom-scrollbar p-4 sm:p-5">
+    <div class="max-w-[1720px] mx-auto space-y-4">
+
+    <!-- VIEW 1: FLOOR & PALLET EXPLORER (Default) -->
+    <section id="loc-view-explorer" class="space-y-3">
+      <!-- STICKY FROZEN EXPLORER TOOLBAR & TOP PAGINATION (FROZEN ON SCROLL) -->
+      <div class="sticky top-0 z-20 bg-slate-50/95 dark:bg-slate-950/95 backdrop-blur-md pt-0.5 pb-2">
+        <div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-3.5 space-y-2.5">
+          
+          <!-- Zone Filter Pills Bar -->
+          <div class="flex items-center justify-between gap-2 overflow-x-auto pb-1 custom-scrollbar">
+            <div class="flex items-center gap-1.5 shrink-0">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 mr-1">Floor Zones:</span>
+              <button type="button" onclick="filterByZone('ALL')" data-zone="ALL" class="loc-zone-pill px-3 py-1 text-xs font-black rounded-lg bg-amber-500 text-slate-950 shadow-2xs cursor-pointer transition">
+                🏢 All Zones (60 Racks)
+              </button>
+              <button type="button" onclick="filterByZone('Zone 1')" data-zone="Zone 1" class="loc-zone-pill px-3 py-1 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer transition">
+                Zone 1 (Racks 1–15)
+              </button>
+              <button type="button" onclick="filterByZone('Zone 2')" data-zone="Zone 2" class="loc-zone-pill px-3 py-1 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer transition">
+                Zone 2 (Racks 16–30)
+              </button>
+              <button type="button" onclick="filterByZone('Zone 3')" data-zone="Zone 3" class="loc-zone-pill px-3 py-1 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer transition">
+                Zone 3 (Racks 31–45)
+              </button>
+              <button type="button" onclick="filterByZone('Zone 4')" data-zone="Zone 4" class="loc-zone-pill px-3 py-1 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer transition">
+                Zone 4 (Racks 46–60)
+              </button>
+            </div>
+            <div class="text-[11px] text-slate-400 shrink-0 font-medium hidden sm:block">
+              Shortcuts: <kbd class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-mono border border-slate-200 dark:border-slate-700">/</kbd> Search • <kbd class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-mono border border-slate-200 dark:border-slate-700">1-6</kbd> Tabs
+            </div>
+          </div>
+
+          <!-- Main Filter Controls Row -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-1 border-t border-slate-100 dark:border-slate-800/80">
+            <div class="flex items-center gap-2 flex-wrap">
+              <div class="w-52">
+                <select id="loc-explorer-rack-filter" onchange="renderFloorExplorer()" title="Filter by storage rack" aria-label="Storage Rack Filter" class="w-full h-9 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs">
+                  <option value="ALL">🏢 All Storage Racks</option>
+                </select>
+              </div>
+              <div class="w-64 relative">
+                <input type="text" id="loc-explorer-search" oninput="renderFloorExplorer()" placeholder="Filter style, color, tag ID (Press /)..."
+                  class="w-full h-9 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl pl-3 pr-8 text-xs text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 shadow-2xs" />
+                <button type="button" onclick="clearExplorerSearch()" title="Clear Search" class="absolute right-2 top-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs font-bold cursor-pointer">
+                  ✕
+                </button>
+              </div>
+              <!-- Racks Per Page Dropdown -->
+              <div class="flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 pl-1">
+                <span>View:</span>
+                <select id="loc-explorer-page-size" onchange="changeExplorerPageSize(this.value)" title="Select number of racks per page" aria-label="Racks Per Page" class="h-9 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs">
+                  <option value="10">10 Racks</option>
+                  <option value="20" selected>20 Racks</option>
+                  <option value="30">30 Racks</option>
+                  <option value="50">50 Racks</option>
+                  <option value="ALL">All Racks (60)</option>
+                </select>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <button onclick="expandAllRacks()" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition cursor-pointer flex items-center gap-1">
+                <span>▲</span> Expand All
+              </button>
+              <button onclick="collapseAllRacks()" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition cursor-pointer flex items-center gap-1">
+                <span>▼</span> Collapse All
+              </button>
+              <button onclick="openPrintLabelsModal()" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-slate-900 hover:bg-black text-white dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                <span>🏷️ Print Barcodes</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Top Pagination Bar -->
+          <div id="loc-explorer-pagination-top" class="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800/80"></div>
+        </div>
+      </div>
+
+      <!-- Dynamic Rack & 3-Pallet Grid -->
+      <div id="loc-explorer-grid" class="space-y-4"></div>
+
+      <!-- Bottom Pagination Bar -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-3.5">
+        <div id="loc-explorer-pagination-bottom" class="flex flex-col sm:flex-row items-center justify-between gap-2"></div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: QUICK SCAN & ASSIGN STATION -->
+    <section id="loc-view-scan" class="hidden space-y-3">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-5 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <span>⚡ Fast QR & Barcode Tag Scanning Station</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">Scan a garment bundle tag to instantly assign it to a pallet tier. Use keyboard shortcuts (Ctrl+1, Ctrl+2, Ctrl+3) for instant tier selection.</p>
+          </div>
+          <span class="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950 px-3 py-1 rounded-full border border-amber-200 dark:border-amber-800">
+            Audio Beeps Enabled 🔊
+          </span>
+        </div>
+
+        <!-- Scanner Input & Target Pallet Controls -->
+        <div class="p-4 bg-slate-50 dark:bg-slate-950/60 rounded-2xl border border-slate-200/90 dark:border-slate-800/90 space-y-3.5">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-end">
+            <div class="lg:col-span-6 space-y-1">
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">1. Scan Barcode / QR Tag (or Enter Tag ID)</label>
+              <div class="relative">
+                <input type="text" id="loc-scan-input" onkeydown="handleScanInputKey(event)"
+                  placeholder="Scan QR or Enter Tag ID (e.g. BABL-001-B1-FNT)..."
+                  class="w-full h-11 bg-white dark:bg-slate-900 border-2 border-amber-500 rounded-xl px-4 text-xs font-mono font-bold text-slate-900 dark:text-slate-100 outline-none focus:ring-4 focus:ring-amber-500/20 shadow-xs" autofocus />
+                <button type="button" onclick="processScannedTagInput()" class="absolute right-1.5 top-1.5 bottom-1.5 px-4 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-lg transition cursor-pointer">
+                  Lookup
+                </button>
+              </div>
+            </div>
+            <div class="lg:col-span-3 space-y-1">
+              <label for="loc-scan-target-rack" class="block text-xs font-bold text-slate-700 dark:text-slate-300">2. Target Rack</label>
+              <select id="loc-scan-target-rack" onchange="onScanRackChanged(this.value)" title="Select target rack" aria-label="Target Rack" class="w-full h-11 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"></select>
+            </div>
+            <div class="lg:col-span-3 space-y-1">
+              <label for="loc-scan-target-pallet" class="block text-xs font-bold text-slate-700 dark:text-slate-300">3. Target Pallet</label>
+              <select id="loc-scan-target-pallet" onchange="selectQuickScanPallet(this.value)" title="Select target pallet" aria-label="Target Pallet" class="w-full h-11 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"></select>
+            </div>
+          </div>
+
+          <!-- 3 PALLETS QUICK SELECTION BUTTONS BAR -->
+          <div class="pt-2 border-t border-slate-200/80 dark:border-slate-800/80">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5">⚡ 1-Click Quick Pallet Tier Selection:</span>
+            <div id="loc-scan-quick-pallets-bar" class="flex items-center gap-2 flex-wrap"></div>
+          </div>
+        </div>
+
+        <!-- Tag Preview Card -->
+        <div id="loc-scan-preview-card" class="p-4 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 min-h-[90px] flex items-center justify-center">
+          <span class="text-xs text-slate-400 font-medium">Scan or enter a tag above to preview bundle details and assign location.</span>
+        </div>
+
+        <!-- Current Session History Table -->
+        <div class="space-y-2 pt-2">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200">Current Scanning Session Activity Log</h4>
+            <button onclick="clearScanSessionTable()" class="text-xs text-slate-400 hover:text-rose-600 font-bold cursor-pointer">Clear Session</button>
+          </div>
+          <div class="overflow-x-auto border border-slate-200/90 dark:border-slate-800/90 rounded-xl bg-white dark:bg-slate-900 custom-scrollbar max-h-64">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px] border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10">
+                <tr>
+                  <th class="p-2.5">Time</th>
+                  <th class="p-2.5">Tag ID</th>
+                  <th class="p-2.5">Bundle # / Shade</th>
+                  <th class="p-2.5">Style / Color</th>
+                  <th class="p-2.5">Size / Part</th>
+                  <th class="p-2.5">PO & Job No</th>
+                  <th class="p-2.5">Assigned Location</th>
+                  <th class="p-2.5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="loc-scan-session-rows" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+                <tr>
+                  <td colspan="8" class="p-4 text-center text-slate-400 italic">No tags scanned in this session yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: BATCH ASSIGN TO LOCATION -->
+    <section id="loc-view-assign" class="hidden space-y-3">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-5 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <span>📦 Bulk Assign Batches to Storage Location</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">Select an entire batch or specific tags, select target rack and pallet, and assign in bulk.</p>
+          </div>
+          <span id="loc-batch-selected-count-badge" class="px-3 py-1 bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded-lg text-xs font-bold border border-blue-200 dark:border-blue-800">
+            0 Selected
+          </span>
+        </div>
+
+        <!-- Batch Source & Target Location Bar -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end p-4 bg-slate-50 dark:bg-slate-950/60 rounded-2xl border border-slate-200/90 dark:border-slate-800/90">
+          <div class="md:col-span-5 space-y-1">
+            <label for="loc-batch-source-select" class="block text-xs font-bold text-slate-700 dark:text-slate-300">1. Source Generated Batch</label>
+            <select id="loc-batch-source-select" onchange="onLocationBatchSourceChange()" title="Select source generated batch" aria-label="Source Batch" class="w-full h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"></select>
+          </div>
+          <div class="md:col-span-4 space-y-1">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">2. Target Destination (Rack & Pallet)</label>
+            <div class="grid grid-cols-2 gap-2">
+              <select id="loc-batch-target-rack" onchange="onBatchRackChanged(this.value)" title="Select target rack" aria-label="Target Rack" class="h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"></select>
+              <select id="loc-batch-target-pallet" title="Select target pallet" aria-label="Target Pallet" class="h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"></select>
+            </div>
+          </div>
+          <div class="md:col-span-3">
+            <button type="button" onclick="submitBatchAssignSelected()" class="w-full h-10 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <span>⚡ Assign Selected</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Multi-Select Controls & Search -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <button onclick="toggleSelectAllBatchBundles(true)" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-200 transition cursor-pointer">Select All</button>
+            <button onclick="toggleSelectAllBatchBundles(false)" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-400 transition cursor-pointer">Deselect All</button>
+            <span id="loc-batch-table-info" class="text-xs text-slate-400 ml-2 font-medium">Showing 0 candidate bundles</span>
+          </div>
+          <div class="w-72">
+            <input type="text" id="loc-batch-table-search" oninput="renderBatchAssignTable()" placeholder="Search tag ID, style, color..."
+              class="w-full h-8.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 shadow-2xs" />
+          </div>
+        </div>
+
+        <!-- Batch Bundles Table -->
+        <div class="overflow-x-auto border border-slate-200/90 dark:border-slate-800/90 rounded-xl bg-white dark:bg-slate-900 max-h-96 custom-scrollbar">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px] border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10">
+              <tr>
+                <th class="p-2.5 w-10 text-center"><input type="checkbox" id="loc-batch-th-cb" onchange="toggleSelectAllBatchBundles(this.checked)" title="Select all batch bundles" aria-label="Select all batch bundles" class="rounded text-blue-600 cursor-pointer" /></th>
+                <th class="p-2.5">Tag ID</th>
+                <th class="p-2.5">Bundle # / Shade</th>
+                <th class="p-2.5">Style / Color</th>
+                <th class="p-2.5">Size (Part)</th>
+                <th class="p-2.5">PO / Job / Docket</th>
+                <th class="p-2.5">Ply Range</th>
+                <th class="p-2.5">EMB</th>
+                <th class="p-2.5">Storage Status</th>
+                <th class="p-2.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="loc-batch-table-rows" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: DISPATCH FROM STORAGE -->
+    <section id="loc-view-dispatch" class="hidden space-y-3">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-5 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <span>🚀 Dispatch Stored Bundles to Production Lines</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">Select bundles stored in warehouse pallets and release them to Sewing Lines or Finishing.</p>
+          </div>
+          <span id="loc-dispatch-selected-count-badge" class="px-3 py-1 bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 rounded-lg text-xs font-bold border border-amber-200 dark:border-amber-800">
+            0 Selected
+          </span>
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end p-4 bg-slate-50 dark:bg-slate-950/60 rounded-2xl border border-slate-200/90 dark:border-slate-800/90">
+          <div class="md:col-span-5 space-y-1">
+            <label for="loc-dispatch-source-select" class="block text-xs font-bold text-slate-700 dark:text-slate-300">1. Filter Stored Bundles by Batch</label>
+            <select id="loc-dispatch-source-select" onchange="onLocationDispatchSourceChange()" title="Filter stored bundles by batch" aria-label="Batch Filter" class="w-full h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none focus:border-amber-500 cursor-pointer shadow-2xs"></select>
+          </div>
+          <div class="md:col-span-4 space-y-1">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">2. Destination Line / Section</label>
+            <input type="text" id="loc-dispatch-destination" value="Sewing Line 1" placeholder="e.g. Sewing Line 1, Finishing..."
+              class="w-full h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-amber-500 shadow-2xs" />
+          </div>
+          <div class="md:col-span-3">
+            <button type="button" onclick="submitDispatchSelectedBundles()" class="w-full h-10 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <span>🚀 Dispatch Selected</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Destination Presets -->
+        <div class="flex items-center gap-1.5 flex-wrap text-xs">
+          <span class="text-slate-400 font-medium mr-1">Quick Presets:</span>
+          <button type="button" onclick="setQuickDispatchDest('Sewing Line 1')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold cursor-pointer">Line 1</button>
+          <button type="button" onclick="setQuickDispatchDest('Sewing Line 2')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold cursor-pointer">Line 2</button>
+          <button type="button" onclick="setQuickDispatchDest('Sewing Line 3')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold cursor-pointer">Line 3</button>
+          <button type="button" onclick="setQuickDispatchDest('Finishing Section')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold cursor-pointer">Finishing</button>
+          <button type="button" onclick="setQuickDispatchDest('Quality QC')" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold cursor-pointer">Quality QC</button>
+        </div>
+
+        <!-- Stored Bundles Table -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+          <div class="flex items-center gap-2">
+            <button onclick="toggleSelectAllDispatchBundles(true)" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-200 transition cursor-pointer">Select All</button>
+            <button onclick="toggleSelectAllDispatchBundles(false)" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-400 transition cursor-pointer">Deselect All</button>
+            <span id="loc-dispatch-table-info" class="text-xs text-slate-400 ml-2 font-medium">Showing 0 stored bundles</span>
+          </div>
+          <div class="w-72">
+            <input type="text" id="loc-dispatch-table-search" oninput="renderDispatchTable()" placeholder="Search stored bundles..."
+              class="w-full h-8.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs text-slate-800 dark:text-slate-200 outline-none focus:border-amber-500 shadow-2xs" />
+          </div>
+        </div>
+
+        <div class="overflow-x-auto border border-slate-200/90 dark:border-slate-800/90 rounded-xl bg-white dark:bg-slate-900 max-h-96 custom-scrollbar">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px] border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10">
+              <tr>
+                <th class="p-2.5 w-10 text-center"><input type="checkbox" id="loc-dispatch-th-cb" onchange="toggleSelectAllDispatchBundles(this.checked)" title="Select all stored bundles" aria-label="Select all stored bundles" class="rounded text-amber-600 cursor-pointer" /></th>
+                <th class="p-2.5">Tag ID</th>
+                <th class="p-2.5">Bundle # / Shade</th>
+                <th class="p-2.5">Style / Color</th>
+                <th class="p-2.5">Size (Part)</th>
+                <th class="p-2.5">PO / Docket</th>
+                <th class="p-2.5">Ply Range</th>
+                <th class="p-2.5">EMB</th>
+                <th class="p-2.5">Current Storage</th>
+                <th class="p-2.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="loc-dispatch-table-rows" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 5: MASTER RACK & PALLET SETUP (3 Pallets Per Rack Auto-Generated) -->
+    <section id="loc-view-setup" class="hidden space-y-3">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Add Rack Card (Creates 3 Pallets Automatically) -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-5 space-y-3.5">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+            <div>
+              <h3 class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <span>🏢 Add Storage Rack (Auto-creates 3 Pallets)</span>
+              </h3>
+              <p class="text-[11px] text-slate-400 mt-0.5">Creating a rack automatically provisions 3 pallets (Pallet 1, Pallet 2, Pallet 3) with 50 capacity each.</p>
+            </div>
+            <span class="text-[10px] font-bold px-2 py-0.5 bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded">3 Pallets / Rack</span>
+          </div>
+
+          <form onsubmit="handleCreateRackSubmit(event)" class="space-y-3">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Rack Number * (e.g. 1, 2, 3...)</label>
+                <input type="text" id="setup-new-rack-name" placeholder="e.g. 1 (or Rack 1, Rack 2...)" required
+                  class="w-full h-9 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 text-xs text-slate-900 dark:text-slate-100 outline-none focus:border-blue-500 font-bold shadow-2xs" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Floor Zone</label>
+                <input type="text" id="setup-new-rack-zone" placeholder="e.g. Zone 1, North Wall..."
+                  class="w-full h-9 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 text-xs text-slate-900 dark:text-slate-100 outline-none focus:border-blue-500 shadow-2xs" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Description / Storage Notes</label>
+              <input type="text" id="setup-new-rack-desc" placeholder="e.g. 3-tier warehouse pallet storage..."
+                class="w-full h-9 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 text-xs text-slate-900 dark:text-slate-100 outline-none focus:border-blue-500 shadow-2xs" />
+            </div>
+            <button type="submit" class="w-full h-9 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs flex items-center justify-center gap-1.5">
+              <span>➕ Add Storage Rack (with 3 Pallets)</span>
+            </button>
+          </form>
+
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-800">
+            <span class="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-2">Existing Warehouse Racks:</span>
+            <div id="setup-racks-pill-list" class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto custom-scrollbar"></div>
+          </div>
+        </div>
+
+        <!-- Add Custom Pallet Card -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-5 space-y-3.5">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+            <div>
+              <h3 class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <span>📦 Add Additional Pallet to Rack</span>
+              </h3>
+              <p class="text-[11px] text-slate-400 mt-0.5">Attach custom extra pallet tiers to any existing storage rack.</p>
+            </div>
+          </div>
+
+          <form onsubmit="handleCreatePalletSubmit(event)" class="space-y-3">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label for="pallet-form-rack" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Parent Rack *</label>
+                <select id="pallet-form-rack" title="Select parent rack" aria-label="Parent Rack" class="w-full h-9 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-2 text-xs font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-blue-500 cursor-pointer shadow-2xs"></select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Pallet Name *</label>
+                <input type="text" id="pallet-form-name" placeholder="e.g. Pallet 4, Top Tier..." required
+                  class="w-full h-9 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 text-xs text-slate-900 dark:text-slate-100 outline-none focus:border-blue-500 font-bold shadow-2xs" />
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label for="pallet-form-cap" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Capacity (Bundles)</label>
+                <input type="number" id="pallet-form-cap" value="50" min="1" max="1000" placeholder="50" title="Pallet Capacity in Bundles" aria-label="Pallet Capacity"
+                  class="w-full h-9 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 text-xs text-slate-900 dark:text-slate-100 outline-none focus:border-blue-500 font-mono shadow-2xs" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Description / Location</label>
+                <input type="text" id="pallet-form-desc" placeholder="e.g. Top tier shelf..."
+                  class="w-full h-9 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 text-xs text-slate-900 dark:text-slate-100 outline-none focus:border-blue-500 shadow-2xs" />
+              </div>
+            </div>
+            <button type="submit" class="w-full h-9 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs flex items-center justify-center gap-1.5">
+              <span>➕ Add Pallet Tier</span>
+            </button>
+          </form>
+
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-800">
+            <span class="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-2">Existing Pallets:</span>
+            <div id="setup-pallets-pill-list" class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto custom-scrollbar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Master Registry Detailed Table -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-5 space-y-3">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <span>📋 Master Warehouse Racks & Pallets Registry</span>
+          </h3>
+          <button onclick="openPrintLabelsModal()" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-slate-900 hover:bg-black text-white dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 shadow-xs flex items-center gap-1.5 cursor-pointer">
+            <span>🖨️ Print Label Sheets</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto border border-slate-200/90 dark:border-slate-800/90 rounded-xl bg-white dark:bg-slate-900 max-h-96 custom-scrollbar">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px] border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10">
+              <tr>
+                <th class="p-2.5">Type</th>
+                <th class="p-2.5">Name / Identifier</th>
+                <th class="p-2.5">Parent / Zone</th>
+                <th class="p-2.5">Capacity</th>
+                <th class="p-2.5">Stored</th>
+                <th class="p-2.5">Description</th>
+                <th class="p-2.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="loc-setup-table-rows" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 6: INVENTORY SEARCH & AUDIT -->
+    <section id="loc-view-audit" class="hidden space-y-3">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200/90 dark:border-slate-800/90 p-5 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <span>🔍 Real-Time Warehouse Inventory Search & Audit</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">Search across all stored and dispatched garment bundles by Style, Color, Docket, Tag ID, or Rack.</p>
+          </div>
+          <button onclick="exportLocationInventoryCSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+            <span>📊 Export to CSV</span>
+          </button>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800/80">
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">Keywords</label>
+            <input type="text" id="loc-audit-search" oninput="renderAuditTable(true)" placeholder="Style, color, tag ID..."
+              class="w-full h-8.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs text-slate-900 dark:text-slate-100 outline-none focus:border-blue-500 shadow-2xs" />
+          </div>
+          <div>
+            <label for="loc-audit-status-filter" class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">Status</label>
+            <select id="loc-audit-status-filter" onchange="renderAuditTable(true)" title="Filter audit results by status" aria-label="Status Filter" class="w-full h-8.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs">
+              <option value="ALL">All Statuses</option>
+              <option value="STORED" selected>📦 STORED in Warehouse</option>
+              <option value="DISPATCHED">🚀 DISPATCHED to Line</option>
+            </select>
+          </div>
+          <div>
+            <label for="loc-audit-rack-filter" class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-1">Filter by Rack</label>
+            <select id="loc-audit-rack-filter" onchange="renderAuditTable(true)" title="Filter audit results by rack" aria-label="Rack Filter" class="w-full h-8.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none focus:border-blue-500 cursor-pointer shadow-2xs">
+              <option value="ALL">All Racks</option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button onclick="renderAuditTable(true)" class="w-full h-8.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1 cursor-pointer">
+              <span>Filter Results</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Audit Table -->
+        <div class="flex items-center justify-between pt-1">
+          <span id="loc-audit-page-info" class="text-xs text-slate-400 font-semibold">Showing 0 bundles</span>
+        </div>
+
+        <div class="overflow-x-auto border border-slate-200/90 dark:border-slate-800/90 rounded-xl bg-white dark:bg-slate-900 max-h-96 custom-scrollbar">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px] border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10">
+              <tr>
+                <th class="p-2.5">Tag ID</th>
+                <th class="p-2.5">Bundle # / Shade</th>
+                <th class="p-2.5">Style / Color</th>
+                <th class="p-2.5">Size (Part)</th>
+                <th class="p-2.5">PO / Job / Docket</th>
+                <th class="p-2.5">Ply Range</th>
+                <th class="p-2.5">EMB</th>
+                <th class="p-2.5">Status</th>
+                <th class="p-2.5">Storage Location</th>
+                <th class="p-2.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="loc-audit-table-rows" class="divide-y divide-slate-100 dark:divide-slate-800 font-medium"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    </div>
+  </main>
+
+  <!-- FROZEN FOOTER (FROZEN BOTTOM) -->
+  <footer class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-500 dark:text-slate-400 text-xs py-2 px-4 border-t border-slate-200/90 dark:border-slate-800/90 no-print shrink-0 z-40">
+    <div class="max-w-[1720px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="font-extrabold text-slate-800 dark:text-slate-200">Warehouse Location Manager</span>
+        <span class="text-slate-300 dark:text-slate-700">•</span>
+        <span class="font-mono text-[10px]">Connected to GarmentTag Suite Database</span>
+      </div>
+      <div>
+        <span class="font-medium text-slate-500">Active Storage: <code id="loc-storage-path-display" class="font-mono text-slate-700 dark:text-slate-300">...</code></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL: EDIT RACK -->
+  <div id="modal-edit-rack" class="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4 hidden no-print">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800 max-w-md w-full p-5 space-y-3.5">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+        <h3 class="text-sm font-extrabold text-slate-900 dark:text-slate-100">🏢 Edit Storage Rack</h3>
+        <button onclick="closeModal('modal-edit-rack')" class="text-slate-400 hover:text-slate-200">✕</button>
+      </div>
+      <input type="hidden" id="edit-rack-id" />
+      <div class="space-y-2.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Rack Number * (e.g. 1, 2, 3...)</label>
+          <input type="text" id="edit-rack-name" placeholder="e.g. 1 or Rack 1" class="w-full h-8.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs font-bold text-slate-900 dark:text-slate-100 outline-none" />
+        </div>
+        <div>
+          <label for="edit-rack-zone" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Floor Zone</label>
+          <input type="text" id="edit-rack-zone" placeholder="e.g. Zone 1" title="Floor Zone" aria-label="Floor Zone" class="w-full h-8.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs text-slate-900 dark:text-slate-100 outline-none" />
+        </div>
+        <div>
+          <label for="edit-rack-desc" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Description</label>
+          <input type="text" id="edit-rack-desc" placeholder="e.g. Storage rack description" title="Rack Description" aria-label="Rack Description" class="w-full h-8.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs text-slate-900 dark:text-slate-100 outline-none" />
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('modal-edit-rack')" class="px-3 py-1.5 text-xs text-slate-400 font-bold">Cancel</button>
+        <button onclick="submitEditRackModal()" class="px-4 py-1.5 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-xl">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: EDIT PALLET -->
+  <div id="modal-edit-pallet" class="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4 hidden no-print">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800 max-w-md w-full p-5 space-y-3.5">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+        <h3 class="text-sm font-extrabold text-slate-900 dark:text-slate-100">📦 Edit Pallet Tier</h3>
+        <button onclick="closeModal('modal-edit-pallet')" class="text-slate-400 hover:text-slate-200">✕</button>
+      </div>
+      <input type="hidden" id="edit-pallet-id" />
+      <div class="space-y-2.5">
+        <div>
+          <label for="edit-pallet-rack" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Parent Rack</label>
+          <select id="edit-pallet-rack" title="Parent Rack" aria-label="Parent Rack" class="w-full h-8.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 text-xs font-bold text-slate-900 dark:text-slate-100 outline-none"></select>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label for="edit-pallet-name" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Pallet Name</label>
+            <input type="text" id="edit-pallet-name" placeholder="e.g. Pallet 1" title="Pallet Name" aria-label="Pallet Name" class="w-full h-8.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs font-bold text-slate-900 dark:text-slate-100 outline-none" />
+          </div>
+          <div>
+            <label for="edit-pallet-cap" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Capacity</label>
+            <input type="number" id="edit-pallet-cap" placeholder="50" title="Pallet Capacity in Bundles" aria-label="Pallet Capacity" class="w-full h-8.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs text-slate-900 dark:text-slate-100 outline-none" />
+          </div>
+        </div>
+        <div>
+          <label for="edit-pallet-desc" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Description</label>
+          <input type="text" id="edit-pallet-desc" placeholder="e.g. Pallet tier description" title="Pallet Description" aria-label="Pallet Description" class="w-full h-8.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs text-slate-900 dark:text-slate-100 outline-none" />
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('modal-edit-pallet')" class="px-3 py-1.5 text-xs text-slate-400 font-bold">Cancel</button>
+        <button onclick="submitEditPalletModal()" class="px-4 py-1.5 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: MOVE BUNDLE -->
+  <div id="modal-move-bundle" class="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4 hidden no-print">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800 max-w-md w-full p-5 space-y-3.5">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+        <h3 class="text-sm font-extrabold text-slate-900 dark:text-slate-100">🔄 Transfer / Move Bundle Location</h3>
+        <button onclick="closeModal('modal-move-bundle')" class="text-slate-400 hover:text-slate-200">✕</button>
+      </div>
+      <div id="modal-move-tag-info" class="p-3 bg-slate-50 dark:bg-slate-950 rounded-xl font-mono text-xs text-blue-600 font-bold"></div>
+      <div class="grid grid-cols-2 gap-2.5">
+        <div>
+          <label for="modal-move-rack" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Target Rack</label>
+          <select id="modal-move-rack" title="Target Rack" aria-label="Target Rack" class="w-full h-8.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 text-xs font-bold outline-none"></select>
+        </div>
+        <div>
+          <label for="modal-move-pallet" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Target Pallet</label>
+          <select id="modal-move-pallet" title="Target Pallet" aria-label="Target Pallet" class="w-full h-8.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 text-xs font-bold outline-none"></select>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('modal-move-bundle')" class="px-3 py-1.5 text-xs text-slate-400 font-bold">Cancel</button>
+        <button onclick="submitModalMove()" class="px-4 py-1.5 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-xl">Save Transfer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DISPATCH BUNDLES -->
+  <div id="modal-dispatch" class="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4 hidden no-print">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800 max-w-md w-full p-5 space-y-3.5">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+        <h3 class="text-sm font-extrabold text-slate-900 dark:text-slate-100">🚀 Dispatch to Production Line</h3>
+        <button onclick="closeModal('modal-dispatch')" class="text-slate-400 hover:text-slate-200">✕</button>
+      </div>
+      <div class="text-xs text-slate-600 dark:text-slate-400 font-bold">Dispatching <span id="modal-dispatch-count" class="text-amber-600">0 Bundles</span></div>
+      <div>
+        <label for="modal-dispatch-destination" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Destination Line / Section</label>
+        <input type="text" id="modal-dispatch-destination" value="Sewing Line 1" placeholder="e.g. Sewing Line 1" title="Destination Line or Section" aria-label="Destination Line" class="w-full h-8.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs font-bold outline-none" />
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Notes / Dispatched By</label>
+        <input type="text" id="modal-dispatch-notes" placeholder="Optional notes..." class="w-full h-8.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs outline-none" />
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('modal-dispatch')" class="px-3 py-1.5 text-xs text-slate-400 font-bold">Cancel</button>
+        <button onclick="submitModalDispatch()" class="px-4 py-1.5 text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white rounded-xl">Confirm Dispatch</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PRINT LOCATION LABELS -->
+  <div id="modal-print-labels" class="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4 hidden no-print">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800 max-w-2xl w-full p-5 space-y-4 max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+        <h3 class="text-sm font-extrabold text-slate-900 dark:text-slate-100">🏷️ Print Physical Rack & Pallet Location Barcodes</h3>
+        <button onclick="closeModal('modal-print-labels')" class="text-slate-400 hover:text-slate-200">✕</button>
+      </div>
+      <div class="flex items-center justify-between gap-3">
+        <select id="loc-print-filter-rack" onchange="renderPrintableLabelsPreview()" title="Filter printable labels by rack" aria-label="Filter Rack" class="h-8 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 text-xs font-bold outline-none"></select>
+        <button onclick="window.print()" class="px-4 py-1.5 text-xs font-bold bg-slate-900 hover:bg-black text-white dark:bg-white dark:text-slate-900 rounded-xl shadow-xs cursor-pointer">
+          🖨️ Print Labels
+        </button>
+      </div>
+      <div id="print-labels-preview-container" class="flex-1 overflow-y-auto p-4 border border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950/60 custom-scrollbar grid grid-cols-2 gap-3"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: FULL BUNDLE TAG DETAILS SPEC -->
+  <div id="modal-tag-details" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4 hidden no-print" onclick="if(event.target===this)closeModal('modal-tag-details')">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200/90 dark:border-slate-800 max-w-xl w-full overflow-hidden space-y-0 animate-in zoom-in-95 duration-150">
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white p-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-xl font-black border border-white/20">
+            🏷️
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="tag-modal-id" class="font-mono font-black text-base tracking-wider text-white">TAG-000000</span>
+              <span id="tag-modal-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400 text-slate-950 uppercase">STORED</span>
+            </div>
+            <p class="text-[11px] text-blue-100 font-medium">Garment Cut Bundle Production Tag Details</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeModal('modal-tag-details')" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center font-bold text-sm transition cursor-pointer" title="Close Modal">✕</button>
+      </div>
+
+      <!-- Tag Details Content -->
+      <div id="tag-modal-body" class="p-5 space-y-4 max-h-[75vh] overflow-y-auto custom-scrollbar">
+        <!-- Dynamically rendered by openTagDetailsModal(tagId) -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-3.5 bg-slate-50 dark:bg-slate-950/80 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2 flex-wrap">
+        <div class="flex items-center gap-2">
+          <button type="button" id="tag-modal-btn-move" class="px-3.5 py-1.5 text-xs font-bold rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 text-slate-800 dark:text-slate-200 transition cursor-pointer">
+            🔄 Move Location
+          </button>
+          <button type="button" id="tag-modal-btn-dispatch" class="px-3.5 py-1.5 text-xs font-bold rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 transition cursor-pointer">
+            🚀 Dispatch to Line
+          </button>
+        </div>
+        <button type="button" onclick="closeModal('modal-tag-details')" class="px-4 py-1.5 text-xs font-bold rounded-xl bg-slate-900 hover:bg-black text-white dark:bg-white dark:text-slate-900 transition cursor-pointer">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HIDDEN HTML FOLDER PICKER -->
+  <input type="file" id="loc-html-folder-picker" webkitdirectory directory multiple title="Select database folder" aria-label="Select database folder" class="hidden" />
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="loc-toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
+
+  <!-- APPLICATION SCRIPTS -->
+  <script src="app.config.js"></script>
+  <script src="js/qrcode.min.js"></script>
+  <script src="js/location-sync.js"></script>
+  <script src="js/location-app.js"></script>
+</body>
+
+</html>

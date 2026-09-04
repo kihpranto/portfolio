@@ -387,12 +387,55 @@
   <section class="section section-alt" id="projects">
     <div class="container">
       <header class="sec-header" data-animate="fade-up">
-        <span class="sec-badge glass-badge"><i data-lucide="folder-kanban"></i>Portfolio</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 8px;">
+          <span class="sec-badge glass-badge"><i data-lucide="folder-kanban"></i>Portfolio</span>
+          <a href="projects.html" class="glass-btn-glow" style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 18px; border-radius: 9999px; font-size: 13px; font-weight: 700; color: #06b6d4; text-decoration: none; border: 1px solid rgba(6, 182, 212, 0.4); background: rgba(6, 182, 212, 0.1); transition: all 0.25s ease;">
+            <span>Explore All Projects</span>
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </a>
+        </div>
         <h2 class="sec-title">Key Projects & Implementations</h2>
         <p class="sec-sub">Enterprise-grade solutions engineered to eliminate manual bottlenecks.</p>
       </header>
       <div class="projects-grid">
-        <!-- Project 1 -->
+        <!-- Project 1: StitchSync Tag Generator (BundleTagApp) -->
+        <div class="proj-card glass-card" data-animate="fade-up" style="border-color: rgba(6, 182, 212, 0.35); background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(15, 23, 42, 0.8));">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <div class="proj-icon-wrap" style="background: rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.5);">
+              <img src="assets/stitchsync-tag-logo.jpg" class="tech-logo lg" width="28" height="28" alt="StitchSync Tag Logo" style="border-radius: 6px;" onerror="this.src='assets/logos/powerapps.svg'">
+            </div>
+            <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 9999px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); text-transform: uppercase;">
+              🟢 Live Demo
+            </span>
+          </div>
+          <span class="proj-cat">Full-Stack App — Apparel Manufacturing</span>
+          <h3 class="proj-title">StitchSync Tag — Garment Bundle Tag Generator</h3>
+          <p class="proj-desc">Industrial bundle cut tracking & numbering engine with automated Excel parsing, client-side QR generation, and thermal tag printing.</p>
+          <div class="proj-chips">
+            <span class="chip glass-chip">
+              <img src="assets/logos/python.svg" class="tech-logo sm" width="16" height="16" alt="JS">
+              JavaScript
+            </span>
+            <span class="chip glass-chip">Tailwind CSS</span>
+            <span class="chip glass-chip">
+              <img src="assets/logos/excel.svg" class="tech-logo sm" width="16" height="16" alt="Excel">
+              SheetJS
+            </span>
+            <span class="chip glass-chip">QR Generator</span>
+          </div>
+          <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: space-between;">
+            <a href="BundleTagApp.html" class="glass-btn-glow" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; color: #ffffff; background: linear-gradient(135deg, #06b6d4, #2563eb); text-decoration: none;">
+              <i data-lucide="play" style="width: 14px; height: 14px;"></i>
+              <span>Launch App</span>
+            </a>
+            <a href="projects.html" style="font-size: 12px; font-weight: 600; color: #94a3b8; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+              <span>Full Details</span>
+              <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
         <div class="proj-card glass-card" data-animate="fade-up">
           <div class="proj-icon-wrap">
             <img src="assets/logos/powerapps.svg" class="tech-logo lg" width="28" height="28" alt="Power Apps">
@@ -509,6 +552,15 @@
             <span class="chip glass-chip">Pivot Analytics</span>
           </div>
         </div>
+      </div>
+
+      <!-- Explore All Projects Bottom CTA Bar -->
+      <div class="projects-cta-wrap" data-animate="fade-up" style="text-align: center; margin-top: 48px;">
+        <a href="projects.html" class="glass-btn-glow" style="display: inline-flex; align-items: center; gap: 10px; padding: 14px 34px; font-size: 15px; font-weight: 700; text-decoration: none; border-radius: 12px; background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.25)); border: 1px solid rgba(6, 182, 212, 0.5); color: #ffffff; box-shadow: 0 0 25px rgba(6, 182, 212, 0.25); transition: all 0.3s ease;">
+          <i data-lucide="layers"></i>
+          <span>Explore All Key Projects & Implementations</span>
+          <i data-lucide="arrow-right"></i>
+        </a>
       </div>
     </div>
   </section>
