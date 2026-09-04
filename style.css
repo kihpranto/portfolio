@@ -1328,6 +1328,8 @@ img, svg {
 }
 
 .proj-card {
+  display: flex;
+  flex-direction: column;
   border-radius: var(--rad);
   padding: 22px 24px;
 }
