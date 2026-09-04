@@ -5,6 +5,7 @@
 function renderStyleDropdown() {
   const select = document.getElementById('gen-style');
   if (!select) return;
+  const currentVal = select.value || (window.isDemoMode ? 'BWD011B6' : '');
   select.innerHTML = '<option value="">-- Select Style --</option>';
   const uniqueStyles = Array.from(new Set((appState.styleMaster || []).map(s => s.style).filter(Boolean)))
     .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
@@ -12,8 +13,12 @@ function renderStyleDropdown() {
     const opt = document.createElement('option');
     opt.value = st;
     opt.textContent = st;
+    if (st === currentVal) opt.selected = true;
     select.appendChild(opt);
   });
+  if (currentVal && uniqueStyles.includes(currentVal)) {
+    select.value = currentVal;
+  }
   if (typeof refreshSearchableSelect === 'function') refreshSearchableSelect('gen-style');
 }
 
