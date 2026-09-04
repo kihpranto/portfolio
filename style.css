@@ -193,8 +193,8 @@ img, svg {
 /* ═══ GLASS PRIMITIVES (Narrow & Compact) ═══ */
 .glass-card {
   background: var(--glass-bg);
-  backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--rad);
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.38), var(--glass-highlight);
@@ -212,8 +212,8 @@ img, svg {
 
 .glass-card-sm {
   background: rgba(13, 22, 44, 0.45);
-  backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   border: 1px solid var(--glass-border);
   border-radius: var(--rad-sm);
 }
@@ -224,8 +224,8 @@ img, svg {
   gap: 6px;
   padding: 4px 12px;
   background: rgba(6, 182, 212, 0.09);
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(6, 182, 212, 0.25);
   color: var(--cyan);
   border-radius: var(--pill);
@@ -246,8 +246,8 @@ img, svg {
   gap: 6px;
   padding: 5px 11px;
   background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   border: 1px solid var(--glass-border);
   border-radius: var(--pill);
   color: var(--text-2);
@@ -282,8 +282,8 @@ img, svg {
 
 .glass-btn {
   background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border);
   color: var(--text-1);
 }
@@ -330,8 +330,8 @@ img, svg {
   border-radius: var(--rad);
   padding: 8px 18px;
   background: var(--glass-bg);
-  backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
   border: 1px solid var(--glass-border);
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4), var(--glass-highlight);
   position: relative;
@@ -401,8 +401,8 @@ img, svg {
   align-items: center;
   justify-content: center;
   background: rgba(6, 182, 212, 0.07);
-  backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   flex-shrink: 0;
   transition: all var(--smooth);
 }
@@ -603,8 +603,8 @@ img, svg {
   position: fixed;
   inset: 0;
   background: rgba(2, 4, 10, 0.82);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   z-index: 10000;
   opacity: 0;
   visibility: hidden;
@@ -627,8 +627,8 @@ img, svg {
   max-width: 85vw;
   height: 100vh;
   background: rgba(8, 14, 30, 0.96);
-  backdrop-filter: blur(35px);
   -webkit-backdrop-filter: blur(35px);
+  backdrop-filter: blur(35px);
   border-left: 1px solid rgba(6, 182, 212, 0.25);
   box-shadow: -15px 0 50px rgba(0, 0, 0, 0.8), var(--glass-highlight);
   z-index: 10001;
@@ -797,7 +797,7 @@ img, svg {
 
 /* ═══ HERO SECTION (Narrow & Compact) ═══ */
 .hero {
-  min-height: auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1705,6 +1705,7 @@ img, svg {
   padding: 28px 0;
   border-top: 1px solid var(--glass-border);
   background: rgba(4, 8, 20, 0.75);
+  -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   z-index: 2;
   position: relative;
@@ -1856,7 +1857,7 @@ img, svg {
   }
   .hero {
     padding: 85px 14px 35px;
-    min-height: auto;
+    min-height: 0;
   }
   .hero-title {
     font-size: clamp(25px, 6.8vw, 36px);
