@@ -31,31 +31,10 @@
 </head>
 
 <body
-  class="h-screen w-screen overflow-hidden bg-[#F8FAFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200 antialiased selection:bg-blue-500 selection:text-white flex flex-col">
-
-  <!-- Top Portfolio Return Bar -->
-  <header class="no-print w-full bg-slate-900/95 text-slate-200 border-b border-slate-800 px-4 py-2 flex items-center justify-between text-xs z-50 shrink-0 select-none backdrop-blur-md shadow-md">
-    <div class="flex items-center gap-3">
-      <a href="projects.html" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 hover:text-blue-300 font-bold border border-blue-500/40 transition">
-        <span>←</span>
-        <span>Back to Projects</span>
-      </a>
-      <span class="text-slate-600">|</span>
-      <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span class="font-medium text-slate-300">Live Application Demo:</span>
-        <span class="font-bold text-white">StitchSync Tag Generator v3.2</span>
-      </div>
-    </div>
-    <div class="flex items-center gap-3">
-      <a href="index.html" class="text-slate-400 hover:text-white transition font-medium">Portfolio Home</a>
-      <span class="text-slate-700">•</span>
-      <a href="mailto:kihpranto@yahoo.com" class="text-blue-400 hover:text-blue-300 transition font-semibold">Contact Kazi Md Ikramul Hassan</a>
-    </div>
-  </header>
+  class="h-screen w-screen overflow-hidden bg-[#F8FAFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-200 antialiased selection:bg-blue-500 selection:text-white">
 
   <!-- Main Flex Layout Container -->
-  <div id="app-root-container" class="flex-1 w-full flex flex-row overflow-hidden bg-[#F8FAFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100">
+  <div id="app-root-container" class="h-screen w-full flex flex-row overflow-hidden bg-[#F8FAFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100">
 
     <!-- Left Side Panel Navigation (Sidebar) -->
     <aside id="app-sidebar" class="no-print w-64 shrink-0 bg-white/95 dark:bg-slate-900/95 border-r border-slate-200/90 dark:border-slate-800/90 flex flex-col justify-between h-screen z-40 transition-all duration-300 shadow-sm backdrop-blur-md overflow-hidden">
@@ -72,6 +51,9 @@
               <span class="px-1 py-0.2 rounded text-[8px] font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">v3.2</span>
             </div>
             <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">Garment Bundle Tag Engine</p>
+            <a href="projects.html" class="text-[10px] text-blue-500 hover:text-blue-400 font-bold flex items-center gap-1 mt-0.5" title="Back to Portfolio">
+              <span>← Back to Portfolio</span>
+            </a>
           </div>
         </div>
         <button type="button" onclick="toggleSidebar()" id="btn-sidebar-collapse" title="Collapse / Expand Sidebar"
@@ -281,6 +263,12 @@
 
           <!-- Right Quick Actions & Theme Toggle -->
           <div class="flex items-center gap-2 shrink-0">
+            <!-- Return to Portfolio Catalog -->
+            <a href="projects.html" title="Return to Kazi Md Ikramul Hassan's Projects Catalog"
+              class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-500 text-white transition cursor-pointer flex items-center gap-1.5 shadow-2xs">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+              <span>Projects Catalog</span>
+            </a>
             <!-- Suite Cross-Link: Switch to StitchSync Rack -->
             <a href="LocationManager.html" target="_blank" title="Open StitchSync Rack (Warehouse Floor Manager)"
               class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition cursor-pointer flex items-center gap-1.5 shadow-2xs">
