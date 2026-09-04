@@ -1365,6 +1365,12 @@ async function checkAndInitJSONConnection() {
     console.warn('[BROWSER-DIRECT] Could not auto-restore directory handle:', e.message);
   }
 
+  // Auto-connect to live demo data if running in browser / demo mode
+  if (typeof initDemoDataLoader === 'function') {
+    initDemoDataLoader();
+    return;
+  }
+
   isJSONConnected = false;
   isMasterCSVConnected = false;
   appState.logs = [];
@@ -1558,6 +1564,9 @@ function startRealtimeStream() {
       // BROWSER DIRECT MODE: Do NOT wipe data when server is unreachable
       if (isBrowserDirectMode && activeDirectoryHandle) {
         return;
+      }
+      if (window.isDemoMode) {
+        return; // Maintain active demo mode
       }
       // STRICT ZERO-CACHE: If live connection fails, immediately disable connection and wipe in-memory data
       if (isJSONConnected || isMasterCSVConnected) {
